@@ -1,6 +1,15 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, ArrowRight, ShieldCheck } from 'lucide-react';
+import {
+  Eye,
+  EyeOff,
+  ArrowRight,
+  ShieldCheck,
+  CheckCircle2,
+  Lock,
+  Mail,
+  User,
+} from 'lucide-react';
 import Button from '../components/common/Button';
 import Input from '../components/common/Input';
 import Card from '../components/common/Card';
@@ -21,6 +30,29 @@ const Signup = () => {
 
   const { signup } = useAuth();
   const navigate = useNavigate();
+
+  // Password Strength Calculation
+  const getPasswordStrength = (pass) => {
+    let score = 0;
+    if (pass.length >= 8) score++;
+    if (/[a-z]/.test(pass)) score++;
+    if (/[A-Z]/.test(pass)) score++;
+    if (/\d/.test(pass)) score++;
+    if (/[^a-zA-Z0-9]/.test(pass)) score++;
+    return score;
+  };
+
+  const passwordScore = getPasswordStrength(formData.password);
+
+  const getStrengthLabel = (score) => {
+    if (!formData.password) return { text: '', color: 'bg-transparent' };
+    if (score <= 2) return { text: 'Weak', color: 'bg-[#C44545]' };
+    if (score === 3) return { text: 'Fair', color: 'bg-amber-500' };
+    if (score === 4) return { text: 'Good', color: 'bg-blue-600' };
+    return { text: 'Strong', color: 'bg-[#21845B]' };
+  };
+
+  const strength = getStrengthLabel(passwordScore);
 
   const validate = () => {
     const errs = {};
@@ -76,13 +108,13 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-tech-dots">
       <div className="w-full max-w-md space-y-6">
         <div className="text-center space-y-2">
-          <div className="w-10 h-10 rounded-[5px] bg-[#17243A] text-white flex items-center justify-center font-display font-bold text-sm mx-auto">
+          <div className="w-10 h-10 rounded-[5px] bg-[#17243A] text-[#D6A64F] flex items-center justify-center font-display font-extrabold text-sm mx-auto shadow-sm border border-[#243653]">
             CAN
           </div>
-          <h1 className="text-2xl font-extrabold text-[#17243A] tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#17243A] tracking-tight font-display">
             Create Participant Account
           </h1>
           <p className="text-xs text-[#6B7280]">
@@ -90,7 +122,7 @@ const Signup = () => {
           </p>
         </div>
 
-        <Card className="shadow-sm">
+        <Card className="shadow-md border-[#E5E7EB] bg-white">
           <form onSubmit={handleSubmit} className="space-y-4">
             <Input
               label="Full Name"
@@ -109,7 +141,7 @@ const Signup = () => {
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               error={errors.email}
-              helperText="You will receive an OTP at this address for verification."
+              helperText="A single-use 6-digit OTP will be dispatched to this address."
             />
 
             <div className="relative">
@@ -121,7 +153,6 @@ const Signup = () => {
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 error={errors.password}
-                helperText="Requires uppercase, lowercase, and a number."
               />
               <button
                 type="button"
@@ -132,6 +163,40 @@ const Signup = () => {
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
             </div>
+
+            {/* Password Strength Indicator */}
+            {formData.password && (
+              <div className="space-y-1.5 pt-1">
+                <div className="flex items-center justify-between text-[10px] font-mono">
+                  <span className="text-[#6B7280]">Password Complexity:</span>
+                  <span className="font-bold text-[#17243A]">{strength.text}</span>
+                </div>
+                <div className="w-full bg-[#E5E7EB] h-1 rounded-full overflow-hidden flex gap-0.5">
+                  {[1, 2, 3, 4, 5].map((i) => (
+                    <div
+                      key={i}
+                      className={`h-full flex-1 transition-colors ${
+                        i <= passwordScore ? strength.color : 'bg-transparent'
+                      }`}
+                    />
+                  ))}
+                </div>
+                <div className="flex flex-wrap gap-2 text-[10px] text-[#6B7280]">
+                  <span className={formData.password.length >= 8 ? 'text-[#21845B]' : ''}>
+                    ✓ 8+ chars
+                  </span>
+                  <span className={/[A-Z]/.test(formData.password) ? 'text-[#21845B]' : ''}>
+                    ✓ Uppercase
+                  </span>
+                  <span className={/[a-z]/.test(formData.password) ? 'text-[#21845B]' : ''}>
+                    ✓ Lowercase
+                  </span>
+                  <span className={/\d/.test(formData.password) ? 'text-[#21845B]' : ''}>
+                    ✓ Number
+                  </span>
+                </div>
+              </div>
+            )}
 
             <Input
               label="Confirm Password"
@@ -149,7 +214,7 @@ const Signup = () => {
                 variant="primary"
                 size="md"
                 isLoading={isLoading}
-                className="w-full gap-2"
+                className="w-full gap-2 font-bold shadow-sm"
               >
                 <span>Continue to OTP Verification</span>
                 <ArrowRight className="w-4 h-4" />
@@ -160,8 +225,8 @@ const Signup = () => {
           <div className="mt-6 border-t border-[#E5E7EB] pt-4 text-center">
             <p className="text-xs text-[#6B7280]">
               Already have an account?{' '}
-              <Link to="/login" className="font-semibold text-[#17243A] hover:underline">
-                Sign in here
+              <Link to="/login" className="font-bold text-[#17243A] hover:underline">
+                Sign in here &rarr;
               </Link>
             </p>
           </div>

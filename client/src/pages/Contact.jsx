@@ -1,10 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { Mail, Send, CheckCircle2, AlertCircle } from 'lucide-react';
+import {
+  Mail,
+  Send,
+  CheckCircle2,
+  AlertCircle,
+  Clock,
+  MapPin,
+  MessageSquare,
+  HelpCircle,
+  ExternalLink,
+} from 'lucide-react';
 import Button from '../components/common/Button';
 import Input from '../components/common/Input';
 import Card from '../components/common/Card';
 import { contactService } from '../services/contact.service';
 import toast from 'react-hot-toast';
+import { Link } from 'react-router-dom';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -73,11 +84,11 @@ const Contact = () => {
         <div className="md:col-span-5 space-y-6">
           <div className="space-y-3">
             <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#17243A]/5 border border-[#17243A]/15 rounded-[4px]">
-              <span className="text-xs font-semibold tracking-wider uppercase text-[#17243A]">
-                Organizing Committee
+              <span className="text-xs font-semibold tracking-wider uppercase text-[#17243A] font-mono">
+                Organizing Secretariat
               </span>
             </div>
-            <h1 className="text-3xl font-extrabold text-[#17243A] tracking-tight">
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-[#17243A] tracking-tight font-display">
               Get in Touch
             </h1>
             <p className="text-sm text-[#4B5563] leading-relaxed">
@@ -85,60 +96,94 @@ const Contact = () => {
             </p>
           </div>
 
-          <div className="bg-white border border-[#E5E7EB] rounded-[7px] p-6 space-y-4">
+          <div className="bg-white border border-[#E5E7EB] rounded-[7px] p-6 space-y-5 shadow-sm">
             <div className="flex items-start gap-3">
-              <div className="w-8 h-8 rounded-[5px] bg-[#F7F7F4] border border-[#E5E7EB] flex items-center justify-center shrink-0">
-                <Mail className="w-4 h-4 text-[#17243A]" />
+              <div className="w-9 h-9 rounded-[5px] bg-[#17243A] text-white flex items-center justify-center shrink-0">
+                <Mail className="w-4 h-4 text-[#D6A64F]" />
               </div>
               <div>
-                <div className="text-xs font-bold uppercase tracking-wider text-[#6B7280]">
-                  Official Contact Email
+                <div className="text-[10px] font-bold uppercase tracking-wider text-[#6B7280] font-mono">
+                  Official Communication
                 </div>
                 <a
                   href={`mailto:${contactInfo.contactEmail}`}
-                  className="text-sm font-semibold text-[#17243A] hover:underline"
+                  className="text-sm font-bold text-[#17243A] hover:underline font-mono"
                 >
                   {contactInfo.contactEmail}
                 </a>
-                <div className="text-[11px] text-[#9CA3AF] mt-0.5">
-                  Expected reply time: within 24 hours
+                <div className="text-[11px] text-[#6B7280] mt-0.5">
+                  Expected reply window: within 24 hours
                 </div>
               </div>
             </div>
 
             <div className="border-t border-[#F7F7F4] pt-4 space-y-2 text-xs text-[#6B7280]">
-              <div className="font-semibold text-[#17243A]">Participant Office Hours:</div>
-              <div>Monday &ndash; Saturday: 09:00 AM &ndash; 07:00 PM IST</div>
-              <div>Emergency helpline active during the 36-hour sprint.</div>
+              <div className="font-bold text-[#17243A] font-mono uppercase text-[10px]">
+                Support Hours
+              </div>
+              <div className="flex items-center gap-2">
+                <Clock className="w-3.5 h-3.5 text-[#17243A]" />
+                <span>Monday &ndash; Saturday: 09:00 AM &ndash; 07:00 PM IST</span>
+              </div>
+              <div className="text-[11px] text-[#21845B] font-semibold">
+                ● Emergency technical helpline active during 36-hr finale sprint
+              </div>
+            </div>
+
+            <div className="border-t border-[#F7F7F4] pt-4 space-y-1.5 text-xs">
+              <div className="font-bold text-[#17243A] font-mono uppercase text-[10px]">
+                Quick Links
+              </div>
+              <div>
+                <Link to="/about#rules" className="text-[#17243A] hover:underline flex items-center gap-1">
+                  &bull; Official Scoring Rubric &rarr;
+                </Link>
+              </div>
+              <div>
+                <Link to="/#timeline" className="text-[#17243A] hover:underline flex items-center gap-1">
+                  &bull; Competition Timeline &amp; Deadlines &rarr;
+                </Link>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Right Form Column */}
         <div className="md:col-span-7">
-          <Card className="shadow-sm">
+          <Card className="shadow-sm border-[#E5E7EB]">
             {isSubmitted ? (
-              <div className="py-8 text-center space-y-4">
+              <div className="py-12 text-center space-y-4">
                 <div className="w-12 h-12 bg-[#21845B]/10 rounded-full flex items-center justify-center mx-auto text-[#21845B]">
                   <CheckCircle2 className="w-6 h-6" />
                 </div>
-                <h3 className="text-xl font-bold text-[#17243A]">Message Sent Successfully</h3>
-                <p className="text-xs text-[#6B7280] max-w-sm mx-auto">
-                  Thank you for reaching out. A committee member will review your message and reply to your email address shortly.
+                <h3 className="text-xl font-bold text-[#17243A] font-display">Inquiry Transmitted</h3>
+                <p className="text-xs text-[#6B7280] max-w-sm mx-auto leading-relaxed">
+                  Thank you for reaching out. A committee member will review your inquiry and reply to your email address promptly.
                 </p>
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  onClick={() => setIsSubmitted(false)}
-                >
-                  Send Another Message
-                </Button>
+                <div className="pt-2">
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => setIsSubmitted(false)}
+                  >
+                    Submit Another Inquiry
+                  </Button>
+                </div>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="border-b border-[#F7F7F4] pb-2">
+                  <h3 className="text-base font-bold text-[#17243A] font-display">
+                    Send a Message to the Committee
+                  </h3>
+                  <p className="text-xs text-[#6B7280]">
+                    Inquiries are recorded and routed to relevant track leads.
+                  </p>
+                </div>
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <Input
-                    label="Your Full Name"
+                    label="Full Name"
                     required
                     placeholder="e.g. Alex Sharma"
                     value={formData.name}
@@ -146,7 +191,7 @@ const Contact = () => {
                     error={errors.name}
                   />
                   <Input
-                    label="Your Email Address"
+                    label="Email Address"
                     required
                     type="email"
                     placeholder="alex@college.edu"
@@ -158,21 +203,21 @@ const Contact = () => {
 
                 <Input
                   label="Subject (Optional)"
-                  placeholder="e.g. Question regarding track eligibility"
+                  placeholder="e.g. Inquiry regarding hardware specifications for IoT track"
                   value={formData.subject}
                   onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
                 />
 
                 <div className="space-y-1">
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-[#17243A] mb-1.5">
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-[#17243A] mb-1.5 font-mono">
                     Your Message <span className="text-[#C44545]">*</span>
                   </label>
                   <textarea
-                    rows={5}
-                    placeholder="Please specify your query in detail..."
+                    rows={6}
+                    placeholder="Please specify your query or challenge in detail..."
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    className={`w-full rounded-[5px] border px-3.5 py-2 text-sm text-[#20242B] placeholder-[#9CA3AF] bg-white transition-colors duration-150 focus:outline-none focus:ring-1 focus:ring-[#17243A] ${
+                    className={`w-full rounded-[5px] border px-3.5 py-2.5 text-sm text-[#20242B] placeholder-[#9CA3AF] bg-white transition-colors duration-150 focus:outline-none focus:ring-1 focus:ring-[#17243A] ${
                       errors.message
                         ? 'border-[#C44545] focus:border-[#C44545]'
                         : 'border-[#E5E7EB] hover:border-[#D1D5DB] focus:border-[#17243A]'
@@ -188,10 +233,10 @@ const Contact = () => {
                     type="submit"
                     variant="primary"
                     isLoading={isSubmitting}
-                    className="w-full sm:w-auto"
+                    className="w-full sm:w-auto font-bold shadow-sm"
                   >
                     <Send className="w-4 h-4 mr-1.5" />
-                    Submit Inquiry
+                    Transmit Inquiry
                   </Button>
                 </div>
               </form>

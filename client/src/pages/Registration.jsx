@@ -11,6 +11,16 @@ import {
   AlertCircle,
   ExternalLink,
   ShieldCheck,
+  Check,
+  Globe,
+  FileText,
+  FolderGit2,
+  Video,
+  Brain,
+  Cpu,
+  Shield,
+  Layers,
+  Sparkles,
 } from 'lucide-react';
 import Button from '../components/common/Button';
 import Input from '../components/common/Input';
@@ -33,12 +43,12 @@ const Registration = () => {
   const [searchParams] = useSearchParams();
   const initialTrack = searchParams.get('track') || '';
 
-  // Current Step: 1 = Participant Info, 2 = Project Info, 3 = Team Info, 4 = Review & Submit
+  // Steps: 1 = Participant, 2 = Project & Deliverables, 3 = Dynamic Team, 4 = Review Docket
   const [currentStep, setCurrentStep] = useState(1);
+  const [certifiedTruth, setCertifiedTruth] = useState(false);
 
   // Form State
   const [formData, setFormData] = useState({
-    // Step 1: Participant Info
     participantName: user?.fullName || '',
     email: user?.email || '',
     mobileNumber: user?.mobileNumber || '',
@@ -48,25 +58,24 @@ const Registration = () => {
     branch: user?.branch || 'CSE',
     yearOfStudy: user?.year || '3rd Year',
 
-    // Step 2: Project Info
     domain: initialTrack || 'AI / Machine Learning',
     projectName: '',
     pptLink: '',
     prototypeLink: '',
     demoVideoLink: '',
 
-    // Step 3: Team Info
     teamSize: 1, // Default solo
     teamMembers: [], // [{ name: '', email: '' }]
   });
 
+  const [collegeSearch, setCollegeSearch] = useState('');
+  const [showCollegeDropdown, setShowCollegeDropdown] = useState(false);
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [alreadyRegistered, setAlreadyRegistered] = useState(false);
   const [existingRegId, setExistingRegId] = useState('');
   const [checkingExisting, setCheckingExisting] = useState(true);
 
-  // Check if participant already registered
   useEffect(() => {
     registrationService
       .getMyEntry()
@@ -80,7 +89,6 @@ const Registration = () => {
       .finally(() => setCheckingExisting(false));
   }, []);
 
-  // Sync user defaults when user data loads
   useEffect(() => {
     if (user) {
       setFormData((prev) => ({
@@ -93,7 +101,6 @@ const Registration = () => {
     }
   }, [user]);
 
-  // Handle Dynamic Team Size change (1 to 5)
   const handleTeamSizeChange = (newSize) => {
     const size = parseInt(newSize, 10);
     const requiredAdditional = size - 1;
@@ -103,12 +110,10 @@ const Registration = () => {
       let updatedMembers = [];
 
       if (requiredAdditional > currentMembers.length) {
-        // Add empty member slots while preserving existing entries
         const toAdd = requiredAdditional - currentMembers.length;
         const newSlots = Array.from({ length: toAdd }, () => ({ name: '', email: '' }));
         updatedMembers = [...currentMembers, ...newSlots];
       } else {
-        // Truncate to new required additional members
         updatedMembers = currentMembers.slice(0, requiredAdditional);
       }
 
@@ -128,7 +133,61 @@ const Registration = () => {
     });
   };
 
-  // Validation per step
+  // URL Helper to detect platform icon
+  const getUrlBadge = (url) => {
+    if (!url) return null;
+    if (url.includes('github.com') || url.includes('gitlab.com')) {
+      return (
+        <span className="inline-flex items-center gap-1 text-[11px] text-[#17243A] font-mono bg-[#F7F7F4] px-2 py-0.5 rounded border border-[#E5E7EB]">
+          <FolderGit2 className="w-3 h-3 text-[#17243A]" /> Repository
+        </span>
+      );
+    }
+    if (url.includes('drive.google.com') || url.includes('onedrive') || url.includes('slides')) {
+      return (
+        <span className="inline-flex items-center gap-1 text-[11px] text-blue-700 font-mono bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
+          <FileText className="w-3 h-3 text-blue-600" /> Slides / Deck
+        </span>
+      );
+    }
+    if (url.includes('figma.com')) {
+      return (
+        <span className="inline-flex items-center gap-1 text-[11px] text-purple-700 font-mono bg-purple-50 px-2 py-0.5 rounded border border-purple-200">
+          <Sparkles className="w-3 h-3 text-purple-600" /> Figma Design
+        </span>
+      );
+    }
+    if (url.includes('youtube.com') || url.includes('youtu.be') || url.includes('loom.com')) {
+      return (
+        <span className="inline-flex items-center gap-1 text-[11px] text-red-700 font-mono bg-red-50 px-2 py-0.5 rounded border border-red-200">
+          <Video className="w-3 h-3 text-red-600" /> Video Demo
+        </span>
+      );
+    }
+    return (
+      <span className="inline-flex items-center gap-1 text-[11px] text-[#6B7280] font-mono bg-[#F7F7F4] px-2 py-0.5 rounded border border-[#E5E7EB]">
+        <Globe className="w-3 h-3" /> Web URL
+      </span>
+    );
+  };
+
+  const getTrackIcon = (id) => {
+    switch (id) {
+      case 'AI / Machine Learning':
+        return <Brain className="w-4 h-4 text-[#17243A]" />;
+      case 'Web Development':
+        return <Globe className="w-4 h-4 text-[#17243A]" />;
+      case 'Internet of Things':
+        return <Cpu className="w-4 h-4 text-[#17243A]" />;
+      case 'Cyber Security':
+        return <Shield className="w-4 h-4 text-[#17243A]" />;
+      case 'Blockchain':
+        return <Layers className="w-4 h-4 text-[#17243A]" />;
+      default:
+        return <FilePlus2 className="w-4 h-4 text-[#17243A]" />;
+    }
+  };
+
   const validateStep = (step) => {
     const errs = {};
 
@@ -145,10 +204,10 @@ const Registration = () => {
           : formData.collegeName.trim();
 
       if (!effectiveCollege) {
-        errs.collegeName = 'Please select or enter your college/institution';
+        errs.collegeName = 'Please select or specify your college/institution';
       }
       if (!formData.course) errs.course = 'Please select your degree/course';
-      if (!formData.branch) errs.branch = 'Please select your engineering branch';
+      if (!formData.branch) errs.branch = 'Please select your branch';
       if (!formData.yearOfStudy) errs.yearOfStudy = 'Please select year of study';
     }
 
@@ -210,7 +269,12 @@ const Registration = () => {
 
   const handleFinalSubmit = async () => {
     if (!validateStep(1) || !validateStep(2) || !validateStep(3)) {
-      toast.error('Please resolve validation errors in prior sections.');
+      toast.error('Please resolve validation errors in previous sections.');
+      return;
+    }
+
+    if (!certifiedTruth) {
+      toast.error('Please verify and confirm the certification checkbox.');
       return;
     }
 
@@ -229,7 +293,7 @@ const Registration = () => {
 
       const res = await registrationService.register(payload);
       const regId = res?.data?.registration?.registrationId;
-      toast.success('Registration submitted successfully! Confirmation email dispatched.');
+      toast.success('Registration submitted! Confirmation email dispatched.');
       navigate(`/registration/success?id=${encodeURIComponent(regId || '')}`);
     } catch (err) {
       const msg = err.response?.data?.message || 'Submission failed. Please check your data.';
@@ -247,25 +311,24 @@ const Registration = () => {
 
   if (checkingExisting) {
     return (
-      <div className="max-w-3xl mx-auto py-12 text-center text-xs text-[#6B7280]">
-        Verifying registration status...
+      <div className="max-w-3xl mx-auto py-16 text-center text-xs text-[#6B7280]">
+        Verifying participant status...
       </div>
     );
   }
 
-  // If already registered, prevent duplicate submission
   if (alreadyRegistered) {
     return (
-      <div className="max-w-2xl mx-auto py-8">
-        <Card className="text-center p-8 space-y-4">
+      <div className="max-w-2xl mx-auto py-12">
+        <Card className="text-center p-8 space-y-4 shadow-md border-[#E5E7EB]">
           <div className="w-12 h-12 bg-[#21845B]/10 rounded-full flex items-center justify-center mx-auto text-[#21845B]">
             <CheckCircle2 className="w-6 h-6" />
           </div>
-          <h2 className="text-2xl font-bold text-[#17243A]">
+          <h2 className="text-2xl font-extrabold text-[#17243A] font-display">
             Registration Already Submitted
           </h2>
-          <p className="text-xs text-[#6B7280] max-w-md mx-auto">
-            You have already registered for Code-a-Nova under this participant account (ID:{' '}
+          <p className="text-xs text-[#6B7280] max-w-md mx-auto leading-relaxed">
+            You have already registered for Code-a-Nova under this participant account (Reference ID:{' '}
             <strong className="text-[#17243A] font-mono">{existingRegId}</strong>). Only one submission per candidate is permitted in the MVP.
           </p>
           <div className="pt-2 flex justify-center gap-3">
@@ -286,26 +349,41 @@ const Registration = () => {
   }
 
   const stepsList = [
-    { num: 1, title: 'Leader Info' },
-    { num: 2, title: 'Project & Links' },
-    { num: 3, title: 'Team Roster' },
+    { num: 1, title: 'Leader & College' },
+    { num: 2, title: 'Track & Artifacts' },
+    { num: 3, title: 'Team Configuration' },
     { num: 4, title: 'Review & Submit' },
   ];
 
+  const progressPercent = ((currentStep - 1) / 3) * 100;
+
   return (
-    <div className="max-w-4xl mx-auto py-4 space-y-8">
-      {/* Title & Progress Wizard */}
+    <div className="max-w-4xl mx-auto py-4 space-y-6">
+      {/* Header with Step Progress */}
       <div className="space-y-4">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#17243A] tracking-tight">
-            Hackathon Registration
-          </h1>
-          <p className="text-xs sm:text-sm text-[#6B7280]">
-            Complete all required sections to register your project for Code-a-Nova.
-          </p>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#E5E7EB] pb-4">
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#17243A] tracking-tight font-display">
+              Hackathon Registration
+            </h1>
+            <p className="text-xs text-[#6B7280]">
+              Official submission entry &bull; Code-a-Nova National Hackathon 2026-27
+            </p>
+          </div>
+          <div className="text-xs font-mono font-bold text-[#D6A64F] uppercase tracking-wider">
+            Step {currentStep} of 4 ({Math.round(progressPercent)}% Complete)
+          </div>
         </div>
 
-        {/* Progress Stepper */}
+        {/* Dynamic Progress Indicator Bar */}
+        <div className="w-full bg-[#E5E7EB] h-1.5 rounded-full overflow-hidden">
+          <div
+            className="bg-[#17243A] h-full transition-all duration-300"
+            style={{ width: `${progressPercent === 0 ? 8 : progressPercent}%` }}
+          />
+        </div>
+
+        {/* Stepper Pills */}
         <div className="grid grid-cols-4 gap-2">
           {stepsList.map((step) => {
             const isCompleted = currentStep > step.num;
@@ -322,7 +400,7 @@ const Registration = () => {
                 }`}
               >
                 <div className="text-[10px] uppercase tracking-wider font-mono">
-                  {isCompleted ? 'Done' : `Step 0${step.num}`}
+                  {isCompleted ? 'Done ✓' : `0${step.num}`}
                 </div>
                 <div className="truncate">{step.title}</div>
               </div>
@@ -331,17 +409,17 @@ const Registration = () => {
         </div>
       </div>
 
-      {/* Multi-Section Form Card */}
+      {/* Main Form Body */}
       <Card className="shadow-sm">
         {/* STEP 1: PARTICIPANT INFORMATION */}
         {currentStep === 1 && (
           <div className="space-y-6">
             <div className="border-b border-[#F7F7F4] pb-3">
-              <h3 className="text-base font-bold text-[#17243A]">
-                Section 1: Team Leader / Participant Information
+              <h3 className="text-base font-bold text-[#17243A] font-display">
+                Section 1: Team Leader &amp; Institution Details
               </h3>
               <p className="text-xs text-[#6B7280]">
-                As the authenticated user submitting this entry, you will be designated as Team Leader.
+                You are registered as the designated team leader. Your verified email will receive official confirmation receipts.
               </p>
             </div>
 
@@ -357,11 +435,11 @@ const Registration = () => {
               />
 
               <Input
-                label="Email Address"
+                label="Verified Account Email"
                 required
                 disabled
                 value={formData.email}
-                helperText="Pre-filled from your authenticated account."
+                helperText="Pre-filled from your authenticated session."
               />
 
               <Input
@@ -378,7 +456,7 @@ const Registration = () => {
 
               <div>
                 <Select
-                  label="College / University"
+                  label="College / Institution"
                   required
                   value={formData.collegeName}
                   onChange={(e) =>
@@ -411,7 +489,7 @@ const Registration = () => {
               />
 
               <Select
-                label="Branch of Study"
+                label="Engineering Branch"
                 required
                 value={formData.branch}
                 onChange={(e) => setFormData({ ...formData, branch: e.target.value })}
@@ -433,28 +511,68 @@ const Registration = () => {
           </div>
         )}
 
-        {/* STEP 2: PROJECT INFORMATION */}
+        {/* STEP 2: PROJECT & DELIVERABLES */}
         {currentStep === 2 && (
           <div className="space-y-6">
             <div className="border-b border-[#F7F7F4] pb-3">
-              <h3 className="text-base font-bold text-[#17243A]">
-                Section 2: Project Submission Information
+              <h3 className="text-base font-bold text-[#17243A] font-display">
+                Section 2: Competition Track &amp; Artifacts
               </h3>
               <p className="text-xs text-[#6B7280]">
                 Choose your track and supply verified links to your design deck and repository prototype.
               </p>
             </div>
 
-            <div className="space-y-4">
-              <Select
-                label="Competition Domain / Track"
-                required
-                value={formData.domain}
-                onChange={(e) => setFormData({ ...formData, domain: e.target.value })}
-                options={DOMAINS.map((d) => d.id)}
-                error={errors.domain}
-              />
+            {/* Track Selector Buttons */}
+            <div className="space-y-2">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-[#17243A] mb-1.5 font-mono">
+                Select Track <span className="text-[#C44545]">*</span>
+              </label>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+                {DOMAINS.map((domain) => {
+                  const isSelected = formData.domain === domain.id;
+                  return (
+                    <button
+                      key={domain.id}
+                      type="button"
+                      onClick={() => setFormData({ ...formData, domain: domain.id })}
+                      className={`p-3 text-left rounded-[5px] border transition-all flex items-start gap-2.5 ${
+                        isSelected
+                          ? 'bg-[#17243A] text-white border-[#17243A] shadow-sm'
+                          : 'bg-white text-[#20242B] border-[#E5E7EB] hover:border-[#17243A]/40'
+                      }`}
+                    >
+                      <div
+                        className={`p-1.5 rounded-[3px] border ${
+                          isSelected
+                            ? 'bg-white/10 border-white/20 text-[#D6A64F]'
+                            : 'bg-[#F7F7F4] border-[#E5E7EB] text-[#17243A]'
+                        }`}
+                      >
+                        {getTrackIcon(domain.id)}
+                      </div>
+                      <div className="min-w-0">
+                        <div className="text-xs font-bold font-display truncate">
+                          {domain.title}
+                        </div>
+                        <div
+                          className={`text-[10px] truncate ${
+                            isSelected ? 'text-[#D1D5DB]' : 'text-[#6B7280]'
+                          }`}
+                        >
+                          {domain.shortDesc}
+                        </div>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+              {errors.domain && (
+                <p className="text-xs text-[#C44545] font-medium">{errors.domain}</p>
+              )}
+            </div>
 
+            <div className="space-y-4 pt-2">
               <Input
                 label="Project Title"
                 required
@@ -467,98 +585,130 @@ const Registration = () => {
                 helperText="Minimum 5 characters describing your hackathon project."
               />
 
-              <Input
-                label="Presentation Deck (PPT / Slides Link)"
-                required
-                type="url"
-                placeholder="https://drive.google.com/file/... or OneDrive link"
-                value={formData.pptLink}
-                onChange={(e) => setFormData({ ...formData, pptLink: e.target.value })}
-                error={errors.pptLink}
-                helperText="Ensure link permissions are set to viewable by anyone with the link."
-              />
+              <div>
+                <Input
+                  label="Presentation Deck (PPT / Slides Link)"
+                  required
+                  type="url"
+                  placeholder="https://drive.google.com/file/... or OneDrive link"
+                  value={formData.pptLink}
+                  onChange={(e) => setFormData({ ...formData, pptLink: e.target.value })}
+                  error={errors.pptLink}
+                  helperText="Google Drive, OneDrive, or Pitch link. Set permissions to anyone with link can view."
+                />
+                {formData.pptLink && (
+                  <div className="mt-1 flex items-center justify-between text-xs">
+                    {getUrlBadge(formData.pptLink)}
+                  </div>
+                )}
+              </div>
 
-              <Input
-                label="Prototype / Code Repository Link"
-                required
-                type="url"
-                placeholder="https://github.com/your-team/repo or Figma link"
-                value={formData.prototypeLink}
-                onChange={(e) =>
-                  setFormData({ ...formData, prototypeLink: e.target.value })
-                }
-                error={errors.prototypeLink}
-                helperText="GitHub, GitLab, Figma, or deployed demo link."
-              />
+              <div>
+                <Input
+                  label="Prototype / Code Repository Link"
+                  required
+                  type="url"
+                  placeholder="https://github.com/your-team/repo or Figma link"
+                  value={formData.prototypeLink}
+                  onChange={(e) =>
+                    setFormData({ ...formData, prototypeLink: e.target.value })
+                  }
+                  error={errors.prototypeLink}
+                  helperText="GitHub, GitLab, or Figma prototype URL."
+                />
+                {formData.prototypeLink && (
+                  <div className="mt-1 flex items-center justify-between text-xs">
+                    {getUrlBadge(formData.prototypeLink)}
+                  </div>
+                )}
+              </div>
 
-              <Input
-                label="Demo Video Link (Optional)"
-                type="url"
-                placeholder="https://youtube.com/watch?v=... or Loom / Drive link"
-                value={formData.demoVideoLink}
-                onChange={(e) =>
-                  setFormData({ ...formData, demoVideoLink: e.target.value })
-                }
-                error={errors.demoVideoLink}
-                helperText="Optional 2-3 minute demonstration walkthrough."
-              />
+              <div>
+                <Input
+                  label="Demo Video Link (Optional)"
+                  type="url"
+                  placeholder="https://youtube.com/watch?v=... or Loom / Drive link"
+                  value={formData.demoVideoLink}
+                  onChange={(e) =>
+                    setFormData({ ...formData, demoVideoLink: e.target.value })
+                  }
+                  error={errors.demoVideoLink}
+                  helperText="Optional 2-3 minute demonstration walkthrough."
+                />
+                {formData.demoVideoLink && (
+                  <div className="mt-1 flex items-center justify-between text-xs">
+                    {getUrlBadge(formData.demoVideoLink)}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         )}
 
-        {/* STEP 3: DYNAMIC TEAM INFORMATION */}
+        {/* STEP 3: DYNAMIC TEAM CONFIGURATION */}
         {currentStep === 3 && (
           <div className="space-y-6">
             <div className="border-b border-[#F7F7F4] pb-3">
-              <h3 className="text-base font-bold text-[#17243A]">
-                Section 3: Team Configuration & Members
+              <h3 className="text-base font-bold text-[#17243A] font-display">
+                Section 3: Team Configuration &amp; Member Slots
               </h3>
               <p className="text-xs text-[#6B7280]">
-                Specify your total team size (1 to 5, including leader). Additional member fields are generated dynamically.
+                Select your total team size (1 to 5, including leader). Additional member fields are generated dynamically.
               </p>
             </div>
 
-            {/* Team Size Selector */}
+            {/* Team Size Selector Cards */}
             <div className="bg-[#F7F7F4] border border-[#E5E7EB] rounded-[6px] p-4 space-y-3">
-              <label className="block text-xs font-semibold uppercase tracking-wider text-[#17243A]">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-[#17243A] font-mono">
                 Total Team Size (Including Leader)
               </label>
               <div className="grid grid-cols-5 gap-2">
-                {[1, 2, 3, 4, 5].map((size) => (
+                {[
+                  { size: 1, label: 'Solo' },
+                  { size: 2, label: 'Duo' },
+                  { size: 3, label: 'Trio' },
+                  { size: 4, label: 'Squad (4)' },
+                  { size: 5, label: 'Max (5)' },
+                ].map((item) => (
                   <button
-                    key={size}
+                    key={item.size}
                     type="button"
-                    onClick={() => handleTeamSizeChange(size)}
-                    className={`py-2 px-3 text-xs sm:text-sm font-semibold rounded-[5px] border transition-all ${
-                      formData.teamSize === size
-                        ? 'bg-[#17243A] text-white border-[#17243A]'
+                    onClick={() => handleTeamSizeChange(item.size)}
+                    className={`py-2 px-2 sm:px-3 text-center rounded-[5px] border transition-all ${
+                      formData.teamSize === item.size
+                        ? 'bg-[#17243A] text-white border-[#17243A] shadow-sm'
                         : 'bg-white text-[#20242B] border-[#E5E7EB] hover:border-[#D1D5DB]'
                     }`}
                   >
-                    {size} {size === 1 ? 'Solo' : 'Members'}
+                    <div className="font-mono font-bold text-sm sm:text-base">
+                      {item.size}
+                    </div>
+                    <div className="text-[10px] uppercase tracking-wider font-semibold opacity-80">
+                      {item.label}
+                    </div>
                   </button>
                 ))}
               </div>
             </div>
 
             {/* Team Leader Banner */}
-            <div className="p-3 bg-white border border-[#E5E7EB] rounded-[5px] flex items-center justify-between">
+            <div className="p-3.5 bg-white border border-[#E5E7EB] rounded-[5px] flex items-center justify-between">
               <div>
                 <div className="text-xs font-bold text-[#17243A] flex items-center gap-2">
                   <span>1. {formData.participantName}</span>
-                  <span className="text-[10px] bg-[#17243A] text-white px-1.5 py-0.5 rounded-[3px] font-bold uppercase">
+                  <span className="text-[10px] bg-[#17243A] text-white px-1.5 py-0.5 rounded-[3px] font-bold uppercase font-mono">
                     Team Leader
                   </span>
                 </div>
-                <div className="text-[11px] text-[#6B7280]">{formData.email}</div>
+                <div className="text-[11px] text-[#6B7280] font-mono">{formData.email}</div>
               </div>
-              <span className="text-xs text-[#21845B] font-semibold">Self</span>
+              <span className="text-xs text-[#21845B] font-semibold">Self &bull; Lead</span>
             </div>
 
-            {/* Dynamic Additional Member Fields */}
+            {/* Dynamic Member Inputs */}
             {formData.teamSize > 1 ? (
               <div className="space-y-4 pt-2">
-                <div className="text-xs font-semibold text-[#17243A]">
+                <div className="text-xs font-bold uppercase tracking-wider text-[#17243A] font-mono">
                   Additional Team Members ({formData.teamSize - 1} required):
                 </div>
 
@@ -575,7 +725,7 @@ const Registration = () => {
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <Input
-                        label="Member Full Name"
+                        label="Full Name"
                         required
                         placeholder="e.g. Rhea Patel"
                         value={member.name}
@@ -585,7 +735,7 @@ const Registration = () => {
                         error={errors[`member_${index}_name`]}
                       />
                       <Input
-                        label="Member Email Address"
+                        label="Email Address"
                         required
                         type="email"
                         placeholder="rhea@college.edu"
@@ -601,29 +751,29 @@ const Registration = () => {
               </div>
             ) : (
               <div className="p-4 bg-[#FAFAFA] border border-[#E5E7EB] rounded-[5px] text-xs text-[#6B7280] text-center">
-                Solo registration selected. No additional team members required.
+                Solo registration selected. No additional member slots required.
               </div>
             )}
           </div>
         )}
 
-        {/* STEP 4: REVIEW & CONFIRMATION */}
+        {/* STEP 4: REVIEW & CONFIRMATION DOCKET */}
         {currentStep === 4 && (
           <div className="space-y-6">
             <div className="border-b border-[#F7F7F4] pb-3">
-              <h3 className="text-base font-bold text-[#17243A]">
-                Section 4: Review Summary Before Submission
+              <h3 className="text-base font-bold text-[#17243A] font-display">
+                Section 4: Official Registration Docket Review
               </h3>
               <p className="text-xs text-[#6B7280]">
-                Carefully review all submitted information. Once submitted, your registration reference will be generated and confirmation dispatched.
+                Carefully review all submitted information before finalizing your entry. Once submitted, your registration reference ID will be generated.
               </p>
             </div>
 
             <div className="space-y-4 text-xs">
               {/* Leader & Academic */}
               <div className="bg-[#F7F7F4] p-4 rounded-[6px] border border-[#E5E7EB] space-y-2">
-                <div className="font-bold text-[#17243A] text-sm mb-1 uppercase tracking-wider">
-                  Leader & Academic Details
+                <div className="font-bold text-[#17243A] text-sm uppercase tracking-wider font-mono">
+                  Leader &amp; Academic Credentials
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   <div>
@@ -634,12 +784,14 @@ const Registration = () => {
                   </div>
                   <div>
                     <span className="text-[#6B7280]">Email:</span>{' '}
-                    <span className="font-semibold text-[#17243A]">{formData.email}</span>
+                    <span className="font-semibold text-[#17243A] font-mono">
+                      {formData.email}
+                    </span>
                   </div>
                   <div>
                     <span className="text-[#6B7280]">Mobile:</span>{' '}
-                    <span className="font-semibold text-[#17243A]">
-                      {formData.mobileNumber}
+                    <span className="font-semibold text-[#17243A] font-mono">
+                      +91 {formData.mobileNumber}
                     </span>
                   </div>
                   <div>
@@ -651,7 +803,7 @@ const Registration = () => {
                     </span>
                   </div>
                   <div>
-                    <span className="text-[#6B7280]">Academic Course:</span>{' '}
+                    <span className="text-[#6B7280]">Degree &amp; Branch:</span>{' '}
                     <span className="font-semibold text-[#17243A]">
                       {formData.course} ({formData.branch}) &bull; {formData.yearOfStudy}
                     </span>
@@ -661,13 +813,13 @@ const Registration = () => {
 
               {/* Project & Track */}
               <div className="bg-[#F7F7F4] p-4 rounded-[6px] border border-[#E5E7EB] space-y-2">
-                <div className="font-bold text-[#17243A] text-sm mb-1 uppercase tracking-wider">
-                  Project Submission Details
+                <div className="font-bold text-[#17243A] text-sm uppercase tracking-wider font-mono">
+                  Project Submission Deliverables
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   <div>
                     <span className="text-[#6B7280]">Domain / Track:</span>{' '}
-                    <span className="font-semibold text-[#17243A]">{formData.domain}</span>
+                    <span className="font-bold text-[#17243A]">{formData.domain}</span>
                   </div>
                   <div>
                     <span className="text-[#6B7280]">Project Name:</span>{' '}
@@ -681,7 +833,7 @@ const Registration = () => {
                       href={formData.pptLink}
                       target="_blank"
                       rel="noreferrer"
-                      className="text-[#17243A] font-semibold underline truncate inline-block max-w-md"
+                      className="text-[#17243A] font-semibold underline truncate inline-block max-w-md ml-1"
                     >
                       {formData.pptLink}
                     </a>
@@ -692,7 +844,7 @@ const Registration = () => {
                       href={formData.prototypeLink}
                       target="_blank"
                       rel="noreferrer"
-                      className="text-[#17243A] font-semibold underline truncate inline-block max-w-md"
+                      className="text-[#17243A] font-semibold underline truncate inline-block max-w-md ml-1"
                     >
                       {formData.prototypeLink}
                     </a>
@@ -702,8 +854,8 @@ const Registration = () => {
 
               {/* Team Roster */}
               <div className="bg-[#F7F7F4] p-4 rounded-[6px] border border-[#E5E7EB] space-y-2">
-                <div className="font-bold text-[#17243A] text-sm mb-1 uppercase tracking-wider">
-                  Team Members ({formData.teamSize})
+                <div className="font-bold text-[#17243A] text-sm uppercase tracking-wider font-mono">
+                  Team Members Roster ({formData.teamSize})
                 </div>
                 <div className="space-y-1">
                   <div className="font-semibold text-[#17243A]">
@@ -715,6 +867,21 @@ const Registration = () => {
                     </div>
                   ))}
                 </div>
+              </div>
+
+              {/* Truth Certification Checkbox */}
+              <div className="pt-2">
+                <label className="flex items-start gap-2.5 p-3 bg-white border border-[#E5E7EB] rounded-[5px] cursor-pointer hover:bg-[#F7F7F4]">
+                  <input
+                    type="checkbox"
+                    checked={certifiedTruth}
+                    onChange={(e) => setCertifiedTruth(e.target.checked)}
+                    className="mt-0.5 rounded-[3px] text-[#17243A] focus:ring-[#17243A]"
+                  />
+                  <span className="text-xs text-[#4B5563]">
+                    I confirm that the submitted project details, participant names, and deliverable links are authentic, original, and comply with Code-a-Nova rules.
+                  </span>
+                </label>
               </div>
             </div>
           </div>
@@ -732,7 +899,7 @@ const Registration = () => {
           )}
 
           {currentStep < 4 ? (
-            <Button variant="primary" onClick={nextStep} size="sm" className="gap-1.5">
+            <Button variant="primary" onClick={nextStep} size="sm" className="gap-1.5 font-bold">
               Next Section
               <ArrowRight className="w-3.5 h-3.5" />
             </Button>
@@ -742,10 +909,11 @@ const Registration = () => {
               onClick={handleFinalSubmit}
               isLoading={isSubmitting}
               size="md"
-              className="gap-2 bg-[#21845B] hover:bg-[#1b6b49]"
+              disabled={!certifiedTruth}
+              className="gap-2 bg-[#21845B] hover:bg-[#1b6b49] font-bold"
             >
               <CheckCircle2 className="w-4 h-4" />
-              Confirm & Submit Registration
+              Confirm &amp; Submit Registration
             </Button>
           )}
         </div>

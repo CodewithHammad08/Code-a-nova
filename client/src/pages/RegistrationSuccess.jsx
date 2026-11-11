@@ -107,3 +107,4 @@ const RegistrationSuccess = () => {
 };
 
 export default RegistrationSuccess;
+

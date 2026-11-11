@@ -115,3 +115,4 @@ const registrationValidator = [
 module.exports = {
   registrationValidator,
 };
+

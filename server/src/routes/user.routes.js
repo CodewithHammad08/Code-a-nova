@@ -8,3 +8,4 @@ router.get('/me', authenticate, userController.getProfile);
 router.put('/update', authenticate, userController.updateProfile);
 
 module.exports = router;
+

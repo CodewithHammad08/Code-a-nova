@@ -46,3 +46,4 @@ const Modal = ({ isOpen, onClose, title, children, maxWidth = 'max-w-md' }) => {
 };
 
 export default Modal;
+

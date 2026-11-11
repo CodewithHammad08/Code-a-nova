@@ -11,3 +11,4 @@ const generateRegistrationId = () => {
 };
 
 module.exports = generateRegistrationId;
+

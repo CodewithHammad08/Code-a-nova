@@ -54,3 +54,4 @@ const createMailTransporter = async () => {
 module.exports = {
   getTransporter: createMailTransporter,
 };
+

@@ -1,6 +1,14 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Eye, EyeOff, ArrowRight, ShieldCheck, AlertCircle } from 'lucide-react';
+import {
+  Eye,
+  EyeOff,
+  ArrowRight,
+  ShieldCheck,
+  AlertCircle,
+  KeyRound,
+  CheckCircle2,
+} from 'lucide-react';
 import Button from '../components/common/Button';
 import Input from '../components/common/Input';
 import Card from '../components/common/Card';
@@ -65,26 +73,26 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-tech-dots">
       <div className="w-full max-w-md space-y-6">
         <div className="text-center space-y-2">
-          <div className="w-10 h-10 rounded-[5px] bg-[#17243A] text-white flex items-center justify-center font-display font-bold text-sm mx-auto">
+          <div className="w-10 h-10 rounded-[5px] bg-[#17243A] text-[#D6A64F] flex items-center justify-center font-display font-extrabold text-sm mx-auto shadow-sm border border-[#243653]">
             CAN
           </div>
-          <h1 className="text-2xl font-extrabold text-[#17243A] tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#17243A] tracking-tight font-display">
             Sign In to Code-a-Nova
           </h1>
           <p className="text-xs text-[#6B7280]">
-            Access your team registration, project submission, and participant dashboard.
+            Access your team registration, project deliverables, and participant portal.
           </p>
         </div>
 
-        {/* Unverified account banner */}
+        {/* Unverified account warning banner */}
         {unverifiedEmail && (
-          <div className="bg-amber-50 border border-amber-200 rounded-[6px] p-4 flex items-start gap-3">
+          <div className="bg-amber-50 border border-amber-200 rounded-[6px] p-4 flex items-start gap-3 shadow-sm animate-in fade-in">
             <AlertCircle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
-            <div className="space-y-2 text-xs">
-              <p className="text-amber-800 font-semibold">Email Verification Required</p>
+            <div className="space-y-1.5 text-xs">
+              <p className="text-amber-800 font-bold">Email Verification Required</p>
               <p className="text-amber-700">
                 Your account is pending verification. Please enter the OTP sent to your email to activate it.
               </p>
@@ -98,7 +106,7 @@ const Login = () => {
           </div>
         )}
 
-        <Card className="shadow-sm">
+        <Card className="shadow-md border-[#E5E7EB] bg-white">
           <form onSubmit={handleSubmit} className="space-y-4">
             <Input
               label="Email Address"
@@ -138,7 +146,7 @@ const Login = () => {
                 variant="primary"
                 size="md"
                 isLoading={isLoading}
-                className="w-full gap-2"
+                className="w-full gap-2 font-bold shadow-sm"
               >
                 <span>Sign In to Dashboard</span>
                 <ArrowRight className="w-4 h-4" />
@@ -146,11 +154,11 @@ const Login = () => {
             </div>
           </form>
 
-          <div className="mt-6 border-t border-[#E5E7EB] pt-4 text-center space-y-2">
+          <div className="mt-6 border-t border-[#E5E7EB] pt-4 text-center">
             <p className="text-xs text-[#6B7280]">
-              Don't have an account?{' '}
-              <Link to="/signup" className="font-semibold text-[#17243A] hover:underline">
-                Create participant account
+              Don't have an account yet?{' '}
+              <Link to="/signup" className="font-bold text-[#17243A] hover:underline">
+                Create participant account &rarr;
               </Link>
             </p>
           </div>

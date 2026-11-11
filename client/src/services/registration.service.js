@@ -42,3 +42,4 @@ export const registrationService = {
     return `${baseURL}/admin/export-csv`;
   },
 };
+

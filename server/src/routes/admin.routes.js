@@ -12,3 +12,4 @@ router.get('/registrations', adminController.listRegistrations);
 router.get('/export-csv', adminController.exportCsv);
 
 module.exports = router;
+

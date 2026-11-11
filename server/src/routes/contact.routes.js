@@ -10,3 +10,4 @@ router.get('/info', contactController.getContactInfo);
 router.post('/', contactLimiter, contactValidator, validate, contactController.submitContact);
 
 module.exports = router;
+

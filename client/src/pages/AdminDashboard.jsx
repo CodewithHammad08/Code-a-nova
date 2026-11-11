@@ -10,6 +10,9 @@ import {
   ChevronRight,
   Download,
   Layers,
+  Database,
+  BarChart3,
+  Award,
 } from 'lucide-react';
 import Button from '../components/common/Button';
 import Card from '../components/common/Card';
@@ -82,15 +85,15 @@ const AdminDashboard = () => {
       {/* Admin Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E5E7EB] pb-5">
         <div>
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-[#17243A] text-white text-[10px] font-bold uppercase tracking-wider rounded-[3px] mb-2">
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-[#17243A] text-white text-[10px] font-bold uppercase tracking-wider rounded-[3px] font-mono mb-2">
             <ShieldAlert className="w-3 h-3 text-[#D6A64F]" />
-            Administrative Console
+            Administrative Command
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#17243A] tracking-tight">
-            Participant & Registration Management
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#17243A] tracking-tight font-display">
+            Registrations &amp; Participant Console
           </h1>
           <p className="text-xs text-[#6B7280]">
-            Review all submitted hackathon registrations, filter tracks, and export CSV reports.
+            Global participant records &bull; Real-time domain breakdown &bull; One-click CSV export
           </p>
         </div>
 
@@ -99,56 +102,55 @@ const AdminDashboard = () => {
             variant="primary"
             size="sm"
             onClick={handleExportCsv}
-            className="gap-2 bg-[#21845B] hover:bg-[#1b6b49]"
+            className="gap-2 bg-[#21845B] hover:bg-[#1b6b49] font-bold shadow-sm"
           >
             <Download className="w-4 h-4" />
-            Export Registrations (CSV)
+            Export All Entries (CSV)
           </Button>
         </div>
       </div>
 
       {/* Metrics Row */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-        <Card className="p-5 space-y-1">
-          <div className="text-[11px] uppercase tracking-wider font-semibold text-[#6B7280]">
-            Total Team Entries
+        <Card className="p-5 space-y-1 bg-white border-[#E5E7EB] shadow-sm">
+          <div className="text-[11px] uppercase tracking-wider font-semibold text-[#6B7280] font-mono">
+            Total Team Projects
           </div>
           <div className="text-3xl font-extrabold text-[#17243A] font-display">
             {stats ? stats.totalRegistrations : '--'}
           </div>
-          <div className="text-xs text-[#6B7280]">Distinct project submissions</div>
+          <div className="text-xs text-[#6B7280]">Verified MongoDB entries</div>
         </Card>
 
-        <Card className="p-5 space-y-1">
-          <div className="text-[11px] uppercase tracking-wider font-semibold text-[#6B7280]">
-            Total Participants
+        <Card className="p-5 space-y-1 bg-white border-[#E5E7EB] shadow-sm">
+          <div className="text-[11px] uppercase tracking-wider font-semibold text-[#6B7280] font-mono">
+            Total Enrolled Innovators
           </div>
           <div className="text-3xl font-extrabold text-[#17243A] font-display">
             {stats ? stats.totalParticipants : '--'}
           </div>
-          <div className="text-xs text-[#6B7280]">Enrolled leaders + team members</div>
+          <div className="text-xs text-[#6B7280]">Leaders + team members count</div>
         </Card>
 
-        <Card className="p-5 space-y-1">
-          <div className="text-[11px] uppercase tracking-wider font-semibold text-[#6B7280]">
-            Tracks Represented
+        <Card className="p-5 space-y-1 bg-white border-[#E5E7EB] shadow-sm">
+          <div className="text-[11px] uppercase tracking-wider font-semibold text-[#6B7280] font-mono">
+            Active Domains
           </div>
-          <div className="text-3xl font-extrabold text-[#17243A] font-display">
+          <div className="text-3xl font-extrabold text-[#D6A64F] font-display">
             {stats?.domainBreakdown?.length || 5} / 5
           </div>
-          <div className="text-xs text-[#6B7280]">Across all engineering categories</div>
+          <div className="text-xs text-[#6B7280]">All competition tracks active</div>
         </Card>
       </div>
 
       {/* Filter and Search Bar */}
-      <Card className="p-4">
+      <Card className="p-4 shadow-sm border-[#E5E7EB]">
         <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
-          {/* Search Input */}
           <form onSubmit={handleSearchSubmit} className="flex-1 w-full flex gap-2">
             <div className="relative flex-1">
               <input
                 type="text"
-                placeholder="Search by candidate name, project, email, ID, or college..."
+                placeholder="Search candidate name, project title, email, ref ID, or college..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="w-full rounded-[5px] border border-[#E5E7EB] pl-9 pr-3.5 py-2 text-xs sm:text-sm text-[#20242B] focus:outline-none focus:ring-1 focus:ring-[#17243A]"
@@ -160,7 +162,6 @@ const AdminDashboard = () => {
             </Button>
           </form>
 
-          {/* Domain Dropdown */}
           <div className="w-full sm:w-64">
             <select
               value={selectedDomain}
@@ -185,7 +186,7 @@ const AdminDashboard = () => {
       <div className="bg-white border border-[#E5E7EB] rounded-[7px] overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-[#FAFAFA] border-b border-[#E5E7EB] text-[#17243A] uppercase font-semibold">
+            <thead className="bg-[#17243A] text-white uppercase font-mono text-[11px]">
               <tr>
                 <th className="py-3 px-4">Ref ID</th>
                 <th className="py-3 px-4">Team Leader</th>
@@ -194,33 +195,33 @@ const AdminDashboard = () => {
                 <th className="py-3 px-4">Size</th>
                 <th className="py-3 px-4">College</th>
                 <th className="py-3 px-4">Links</th>
-                <th className="py-3 px-4">Date</th>
+                <th className="py-3 px-4">Submitted</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[#E5E7EB] text-[#4B5563]">
               {isLoading ? (
                 <tr>
-                  <td colSpan="8" className="py-8 text-center">
+                  <td colSpan="8" className="py-10 text-center">
                     <Skeleton className="h-6 w-48 mx-auto" />
                   </td>
                 </tr>
               ) : registrations.length === 0 ? (
                 <tr>
-                  <td colSpan="8" className="py-8 text-center text-[#6B7280]">
-                    No registrations found matching the specified query.
+                  <td colSpan="8" className="py-10 text-center text-[#6B7280]">
+                    No registrations found matching the specified search parameters.
                   </td>
                 </tr>
               ) : (
                 registrations.map((reg) => (
-                  <tr key={reg._id} className="hover:bg-[#F7F7F4]/80 transition-colors">
+                  <tr key={reg._id} className="hover:bg-[#F7F7F4] transition-colors">
                     <td className="py-3 px-4 font-mono font-bold text-[#17243A]">
                       {reg.registrationId}
                     </td>
                     <td className="py-3 px-4">
-                      <div className="font-semibold text-[#17243A]">
+                      <div className="font-bold text-[#17243A]">
                         {reg.participantName}
                       </div>
-                      <div className="text-[11px] text-[#6B7280]">{reg.email}</div>
+                      <div className="text-[11px] text-[#6B7280] font-mono">{reg.email}</div>
                     </td>
                     <td className="py-3 px-4 font-semibold text-[#17243A] max-w-xs truncate">
                       {reg.projectName}
@@ -243,8 +244,8 @@ const AdminDashboard = () => {
                             href={reg.pptLink}
                             target="_blank"
                             rel="noreferrer"
-                            className="text-[#17243A] hover:underline"
-                            title="PPT"
+                            className="text-[#17243A] hover:underline font-mono text-[11px]"
+                            title="PPT Link"
                           >
                             PPT
                           </a>
@@ -254,15 +255,15 @@ const AdminDashboard = () => {
                             href={reg.prototypeLink}
                             target="_blank"
                             rel="noreferrer"
-                            className="text-[#17243A] hover:underline"
-                            title="Code"
+                            className="text-[#17243A] hover:underline font-mono text-[11px]"
+                            title="Code Link"
                           >
                             Code
                           </a>
                         )}
                       </div>
                     </td>
-                    <td className="py-3 px-4 text-[11px] text-[#6B7280] whitespace-nowrap">
+                    <td className="py-3 px-4 text-[11px] text-[#6B7280] font-mono whitespace-nowrap">
                       {new Date(reg.submittedAt).toLocaleDateString()}
                     </td>
                   </tr>
@@ -275,11 +276,11 @@ const AdminDashboard = () => {
         {/* Pagination controls */}
         <div className="p-4 border-t border-[#E5E7EB] flex items-center justify-between text-xs text-[#6B7280] bg-[#FAFAFA]">
           <div>
-            Showing{' '}
+            Displaying{' '}
             <strong className="text-[#17243A] font-semibold">
               {registrations.length}
             </strong>{' '}
-            of <strong className="text-[#17243A]">{pagination.total}</strong> entries
+            of <strong className="text-[#17243A]">{pagination.total}</strong> total entries
           </div>
 
           <div className="flex items-center gap-2">
@@ -292,7 +293,7 @@ const AdminDashboard = () => {
             >
               <ChevronLeft className="w-4 h-4" />
             </Button>
-            <span>
+            <span className="font-mono">
               Page {pagination.page} of {pagination.totalPages || 1}
             </span>
             <Button

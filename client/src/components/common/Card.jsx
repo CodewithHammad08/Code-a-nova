@@ -22,3 +22,4 @@ const Card = ({ children, className = '', header, footer, ...props }) => {
 };
 
 export default Card;
+

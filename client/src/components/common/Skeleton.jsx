@@ -15,3 +15,4 @@ const Skeleton = ({ className = '', variant = 'rectangular' }) => {
 };
 
 export default Skeleton;
+

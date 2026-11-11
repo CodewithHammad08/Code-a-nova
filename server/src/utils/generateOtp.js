@@ -9,3 +9,4 @@ const generateOtp = () => {
 };
 
 module.exports = generateOtp;
+

@@ -1,147 +1,214 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, CheckCircle2, ShieldCheck, Terminal, Award, Users } from 'lucide-react';
+import {
+  ArrowRight,
+  CheckCircle2,
+  ShieldCheck,
+  Terminal,
+  Award,
+  Users,
+  Target,
+  FileCheck,
+  Cpu,
+  Layers,
+  Sparkles,
+} from 'lucide-react';
 import Button from '../components/common/Button';
+import Card from '../components/common/Card';
 
 const About = () => {
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 space-y-16">
       {/* Header */}
-      <div className="space-y-4">
+      <div className="space-y-4 border-b border-[#E5E7EB] pb-8">
         <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#17243A]/5 border border-[#17243A]/15 rounded-[4px]">
-          <span className="text-xs font-semibold tracking-wider uppercase text-[#17243A]">
-            Code-a-Nova Architecture & Vision
+          <span className="text-xs font-semibold tracking-wider uppercase text-[#17243A] font-mono">
+            Event Charter &bull; Code-a-Nova 2026-27
           </span>
         </div>
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-[#17243A] tracking-tight">
-          About Code-a-Nova
+        <h1 className="text-3xl sm:text-5xl font-extrabold text-[#17243A] tracking-tight font-display">
+          Engineered for Real Technical Merit
         </h1>
-        <p className="text-base text-[#4B5563] max-w-3xl leading-relaxed">
-          Code-a-Nova is a national hackathon platform designed to provide a rigorous, transparent, and professionally managed competition environment for student engineers.
+        <p className="text-base sm:text-lg text-[#4B5563] max-w-3xl leading-relaxed">
+          Code-a-Nova is a national student hackathon platform built on modern production standards. We provide a transparent, rigorous, and meritocratic environment for engineering talent.
         </p>
       </div>
 
-      {/* Core Mission */}
+      {/* Core Architectural Pillars */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white p-6 border border-[#E5E7EB] rounded-[7px] space-y-3">
-          <Terminal className="w-6 h-6 text-[#17243A]" />
-          <h3 className="font-bold text-base text-[#17243A]">Real Engineering</h3>
+        <div className="bg-white p-6 border border-[#E5E7EB] rounded-[7px] space-y-3 shadow-sm card-hover">
+          <div className="w-10 h-10 rounded-[5px] bg-[#17243A] text-white flex items-center justify-center">
+            <Terminal className="w-5 h-5 text-[#D6A64F]" />
+          </div>
+          <h3 className="font-bold text-lg text-[#17243A] font-display">Working Code Over Decks</h3>
           <p className="text-xs text-[#6B7280] leading-relaxed">
-            We prioritize fully functioning code, reliable backend services, database persistence, and robust error handling over decorative presentations.
+            We evaluate fully functioning code, backend APIs, verified databases, and graceful error handling rather than decorative pitch decks.
           </p>
         </div>
 
-        <div className="bg-white p-6 border border-[#E5E7EB] rounded-[7px] space-y-3">
-          <ShieldCheck className="w-6 h-6 text-[#17243A]" />
-          <h3 className="font-bold text-base text-[#17243A]">Security & Verification</h3>
+        <div className="bg-white p-6 border border-[#E5E7EB] rounded-[7px] space-y-3 shadow-sm card-hover">
+          <div className="w-10 h-10 rounded-[5px] bg-[#17243A] text-white flex items-center justify-center">
+            <ShieldCheck className="w-5 h-5 text-[#21845B]" />
+          </div>
+          <h3 className="font-bold text-lg text-[#17243A] font-display">Cryptographic Verification</h3>
           <p className="text-xs text-[#6B7280] leading-relaxed">
-            Every participant account is protected with salted bcrypt hashing, cryptographically secure OTP verification, and JWT authentication sessions.
+            Every account is secured with salted bcrypt hashing, cryptographically random OTP generation with 10-minute expiry, and JWT session handling.
           </p>
         </div>
 
-        <div className="bg-white p-6 border border-[#E5E7EB] rounded-[7px] space-y-3">
-          <Users className="w-6 h-6 text-[#17243A]" />
-          <h3 className="font-bold text-base text-[#17243A]">Dynamic Team Collaboration</h3>
+        <div className="bg-white p-6 border border-[#E5E7EB] rounded-[7px] space-y-3 shadow-sm card-hover">
+          <div className="w-10 h-10 rounded-[5px] bg-[#17243A] text-white flex items-center justify-center">
+            <Users className="w-5 h-5 text-[#D6A64F]" />
+          </div>
+          <h3 className="font-bold text-lg text-[#17243A] font-display">Dynamic Team Scaling</h3>
           <p className="text-xs text-[#6B7280] leading-relaxed">
-            Solo developers or multi-member teams (up to 5 members) can register dynamically with conflict detection and automated confirmation receipts.
+            Support for 1 to 5 participants per team with dynamic roster generation, internal email collision detection, and automated confirmation receipts.
           </p>
         </div>
       </div>
 
-      {/* Official Evaluation Rubric */}
-      <div id="rules" className="bg-white border border-[#E5E7EB] rounded-[7px] p-6 sm:p-8 space-y-6">
+      {/* Official 100-Mark Evaluation Framework */}
+      <div id="rules" className="bg-white border-2 border-[#17243A] rounded-[8px] p-6 sm:p-8 space-y-6 shadow-md">
         <div className="space-y-1">
-          <div className="text-xs font-bold uppercase tracking-wider text-[#D6A64F]">
-            Official Evaluation Framework
+          <div className="text-xs font-bold uppercase tracking-wider text-[#D6A64F] font-mono">
+            Scoring Transparency
           </div>
-          <h2 className="text-2xl font-bold text-[#17243A]">
-            Internship & Competition Scoring Rubric
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#17243A] font-display">
+            Official 100-Mark Internship &amp; Hackathon Rubric
           </h2>
           <p className="text-xs text-[#6B7280]">
-            All submitted projects are systematically scored out of 100 points based on the following transparent criteria:
+            Every project submitted to Code-a-Nova is systematically evaluated against these transparent criteria:
           </p>
         </div>
 
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs border border-[#E5E7EB] rounded-[5px] overflow-hidden">
-            <thead className="bg-[#FAFAFA] border-b border-[#E5E7EB] text-[#17243A] uppercase font-semibold">
+            <thead className="bg-[#17243A] text-white uppercase font-mono text-[11px]">
               <tr>
-                <th className="py-3 px-4">Category</th>
-                <th className="py-3 px-4">Marks</th>
-                <th className="py-3 px-4">Evaluation Focus</th>
-                <th className="py-3 px-4">Priority</th>
+                <th className="py-3 px-4">Evaluation Category</th>
+                <th className="py-3 px-4">Points</th>
+                <th className="py-3 px-4">Technical Focus &amp; Requirements</th>
+                <th className="py-3 px-4">Priority Level</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[#E5E7EB] text-[#4B5563]">
-              <tr>
-                <td className="py-3 px-4 font-semibold text-[#17243A]">Functional Completeness</td>
-                <td className="py-3 px-4 font-mono font-bold text-[#17243A]">30</td>
-                <td className="py-3 px-4">All MVP flows working: signup, OTP, login, dynamic registration, links, dashboard, CRUD.</td>
-                <td className="py-3 px-4 text-[#21845B] font-semibold">Critical</td>
+              <tr className="hover:bg-[#F7F7F4]/60">
+                <td className="py-3.5 px-4 font-bold text-[#17243A]">Functional Completeness</td>
+                <td className="py-3.5 px-4 font-mono font-extrabold text-base text-[#17243A]">30</td>
+                <td className="py-3.5 px-4">
+                  All MVP workflows working: user signup, 10-minute OTP verification, login, dynamic 1-5 team registration, deliverables links, and CRUD functionality.
+                </td>
+                <td className="py-3.5 px-4 text-[#21845B] font-bold font-mono">CRITICAL</td>
               </tr>
-              <tr>
-                <td className="py-3 px-4 font-semibold text-[#17243A]">Code Quality & Structure</td>
-                <td className="py-3 px-4 font-mono font-bold text-[#17243A]">20</td>
-                <td className="py-3 px-4">Clean MVC pattern, services separation, error middleware, reusable React components, no messy inline styles.</td>
-                <td className="py-3 px-4 text-[#21845B] font-semibold">Critical</td>
+              <tr className="hover:bg-[#F7F7F4]/60">
+                <td className="py-3.5 px-4 font-bold text-[#17243A]">Code Quality &amp; Structure</td>
+                <td className="py-3.5 px-4 font-mono font-extrabold text-base text-[#17243A]">20</td>
+                <td className="py-3.5 px-4">
+                  Clean modular architecture, separation of concerns (Controllers, Services, Validators), centralized error middleware, and reusable UI components.
+                </td>
+                <td className="py-3.5 px-4 text-[#21845B] font-bold font-mono">CRITICAL</td>
               </tr>
-              <tr>
-                <td className="py-3 px-4 font-semibold text-[#17243A]">UI/UX & Responsiveness</td>
-                <td className="py-3 px-4 font-mono font-bold text-[#17243A]">20</td>
-                <td className="py-3 px-4">Editorial developer design, mobile-to-desktop responsiveness, zero horizontal scroll, restrained typography.</td>
-                <td className="py-3 px-4 text-[#21845B] font-semibold">Critical</td>
+              <tr className="hover:bg-[#F7F7F4]/60">
+                <td className="py-3.5 px-4 font-bold text-[#17243A]">UI / UX &amp; Responsiveness</td>
+                <td className="py-3.5 px-4 font-mono font-extrabold text-base text-[#17243A]">20</td>
+                <td className="py-3.5 px-4">
+                  Editorial developer visual language, responsive across 360px to 1440px+, zero horizontal scroll, restrained rectangular shapes (4-6px radius), and clean typography.
+                </td>
+                <td className="py-3.5 px-4 text-[#21845B] font-bold font-mono">CRITICAL</td>
               </tr>
-              <tr>
-                <td className="py-3 px-4 font-semibold text-[#17243A]">Authentication & Security</td>
-                <td className="py-3 px-4 font-mono font-bold text-[#17243A]">15</td>
-                <td className="py-3 px-4">bcrypt hashing, 10-min expiring OTP, JWT HTTP-only cookies, Helmet headers, rate limiting, no secrets in logs.</td>
-                <td className="py-3 px-4 text-[#21845B] font-semibold">Critical</td>
+              <tr className="hover:bg-[#F7F7F4]/60">
+                <td className="py-3.5 px-4 font-bold text-[#17243A]">Authentication &amp; Security</td>
+                <td className="py-3.5 px-4 font-mono font-extrabold text-base text-[#17243A]">15</td>
+                <td className="py-3.5 px-4">
+                  Salted bcrypt hashing, single-use hashed OTP storage, 10-minute expiry, JWT HTTP-only cookies, Helmet headers, rate limiting, and zero plaintext credentials in logs.
+                </td>
+                <td className="py-3.5 px-4 text-[#21845B] font-bold font-mono">CRITICAL</td>
               </tr>
-              <tr>
-                <td className="py-3 px-4 font-semibold text-[#17243A]">Nodemailer Integration</td>
-                <td className="py-3 px-4 font-mono font-bold text-[#17243A]">10</td>
-                <td className="py-3 px-4">Branded OTP emails, confirmation receipt emails, non-blocking resilient delivery fallback.</td>
-                <td className="py-3 px-4 text-[#D6A64F] font-semibold">High</td>
+              <tr className="hover:bg-[#F7F7F4]/60">
+                <td className="py-3.5 px-4 font-bold text-[#17243A]">Nodemailer Integration</td>
+                <td className="py-3.5 px-4 font-mono font-extrabold text-base text-[#17243A]">10</td>
+                <td className="py-3.5 px-4">
+                  Sender Name: "Code-a-Nova", branded responsive HTML templates for OTP and registration confirmation, non-blocking asynchronous dispatch, and graceful fallback.
+                </td>
+                <td className="py-3.5 px-4 text-[#D6A64F] font-bold font-mono">HIGH</td>
               </tr>
-              <tr>
-                <td className="py-3 px-4 font-semibold text-[#17243A]">README, Deployment & Demo</td>
-                <td className="py-3 px-4 font-mono font-bold text-[#17243A]">5</td>
-                <td className="py-3 px-4">Exhaustive architectural README, .env.example, deployment configs, demonstration workflow.</td>
-                <td className="py-3 px-4 text-[#D6A64F] font-semibold">High</td>
+              <tr className="hover:bg-[#F7F7F4]/60">
+                <td className="py-3.5 px-4 font-bold text-[#17243A]">README, Deployment &amp; Demo</td>
+                <td className="py-3.5 px-4 font-mono font-extrabold text-base text-[#17243A]">5</td>
+                <td className="py-3.5 px-4">
+                  Comprehensive architectural README, clean Git history, environment templates, deployment instructions for Vercel + Render, and 3-5 minute demo walkthrough script.
+                </td>
+                <td className="py-3.5 px-4 text-[#D6A64F] font-bold font-mono">HIGH</td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
 
-      {/* Code of Conduct */}
-      <div className="space-y-4">
-        <h2 className="text-2xl font-bold text-[#17243A]">Participation Rules & Ethics</h2>
+      {/* Code of Conduct & Rules */}
+      <div className="space-y-6">
+        <div className="border-b border-[#E5E7EB] pb-3">
+          <h2 className="text-2xl font-bold text-[#17243A] font-display">
+            Competition Rules &amp; Ethical Standards
+          </h2>
+          <p className="text-xs text-[#6B7280]">
+            Guidelines ensuring a fair and constructive competition for all participating institutions.
+          </p>
+        </div>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs text-[#4B5563]">
-          <div className="bg-white p-4 border border-[#E5E7EB] rounded-[5px] space-y-1.5">
-            <h4 className="font-semibold text-[#17243A] text-sm">Original Work</h4>
+          <div className="bg-white p-5 border border-[#E5E7EB] rounded-[6px] space-y-2 shadow-sm">
+            <h4 className="font-bold text-[#17243A] text-sm font-display flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-[#21845B]" />
+              Original Engineering
+            </h4>
             <p className="leading-relaxed">
-              All submitted source code must be written specifically for or enhanced meaningfully during the competition cycle. Plagiarism results in immediate disqualification.
+              All submitted source code must be written specifically for or enhanced meaningfully during the hackathon cycle. Direct plagiarism or uncredited reproduction results in automatic disqualification.
             </p>
           </div>
-          <div className="bg-white p-4 border border-[#E5E7EB] rounded-[5px] space-y-1.5">
-            <h4 className="font-semibold text-[#17243A] text-sm">Valid Information</h4>
+
+          <div className="bg-white p-5 border border-[#E5E7EB] rounded-[6px] space-y-2 shadow-sm">
+            <h4 className="font-bold text-[#17243A] text-sm font-display flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-[#21845B]" />
+              Accurate Credentials
+            </h4>
             <p className="leading-relaxed">
-              All team member emails, college affiliations, and presentation links must be authentic. Duplicate registrations under multiple accounts will be purged.
+              All team member emails, university affiliations, and presentation URLs must be authentic. Duplicate registrations under multiple accounts will be removed by automated checks.
+            </p>
+          </div>
+
+          <div className="bg-white p-5 border border-[#E5E7EB] rounded-[6px] space-y-2 shadow-sm">
+            <h4 className="font-bold text-[#17243A] text-sm font-display flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-[#21845B]" />
+              Interdisciplinary Teams
+            </h4>
+            <p className="leading-relaxed">
+              Cross-college collaborations and multi-disciplinary teams combining frontend engineers, systems architects, and designers are encouraged across all 5 competition tracks.
+            </p>
+          </div>
+
+          <div className="bg-white p-5 border border-[#E5E7EB] rounded-[6px] space-y-2 shadow-sm">
+            <h4 className="font-bold text-[#17243A] text-sm font-display flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-[#21845B]" />
+              Transparent Scoring
+            </h4>
+            <p className="leading-relaxed">
+              Every participant receives an official verifiable participation certificate. Shortlisted teams receive detailed evaluator notes and mentor guidance.
             </p>
           </div>
         </div>
       </div>
 
-      {/* CTA */}
-      <div className="pt-4 flex items-center justify-between border-t border-[#E5E7EB]">
+      {/* Bottom CTA */}
+      <div className="pt-6 border-t border-[#E5E7EB] flex flex-col sm:flex-row items-center justify-between gap-4">
         <div>
-          <h3 className="font-bold text-base text-[#17243A]">Have more questions?</h3>
-          <p className="text-xs text-[#6B7280]">Our organizing committee is ready to assist you.</p>
+          <h3 className="font-bold text-base text-[#17243A] font-display">Ready to enter your submission?</h3>
+          <p className="text-xs text-[#6B7280]">Join hundreds of student developers building for the future.</p>
         </div>
-        <Link to="/contact">
-          <Button variant="secondary" size="sm">
-            Contact Committee
+        <Link to="/signup">
+          <Button variant="primary" size="md" className="gap-2 font-bold">
+            Create Participant Account
+            <ArrowRight className="w-4 h-4" />
           </Button>
         </Link>
       </div>

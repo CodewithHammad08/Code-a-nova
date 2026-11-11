@@ -16,3 +16,4 @@ router.put('/my-entry', authenticate, hackathonController.updateMyEntry);
 router.delete('/:id', authenticate, hackathonController.deleteEntry);
 
 module.exports = router;
+

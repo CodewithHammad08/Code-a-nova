@@ -16,6 +16,26 @@
   }
 }
 
+/* Subtle architectural developer grid patterns */
+.bg-tech-grid {
+  background-size: 32px 32px;
+  background-image: 
+    linear-gradient(to right, rgba(23, 36, 58, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(23, 36, 58, 0.04) 1px, transparent 1px);
+}
+
+.bg-tech-dots {
+  background-size: 20px 20px;
+  background-image: radial-gradient(rgba(23, 36, 58, 0.07) 1px, transparent 1px);
+}
+
+.bg-dark-grid {
+  background-size: 32px 32px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+}
+
 /* Custom restrained scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
@@ -35,6 +55,22 @@
   background: #9CA3AF;
 }
 
+/* Selection color */
+::selection {
+  background-color: #17243A;
+  color: #F7F7F4;
+}
+
+/* Subtle card lift */
+.card-hover {
+  transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.card-hover:hover {
+  transform: translateY(-2px);
+  border-color: #17243A;
+  box-shadow: 0 4px 12px rgba(23, 36, 58, 0.06);
+}
+
 /* Print styles for Registration Pass */
 @media print {
   body * {
@@ -49,8 +85,9 @@
     top: 0;
     width: 100%;
     margin: 0;
-    padding: 20px;
+    padding: 24px;
     box-shadow: none;
-    border: 1px solid #17243A;
+    border: 2px solid #17243A;
+    background: white !important;
   }
 }

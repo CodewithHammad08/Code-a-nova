@@ -139,3 +139,4 @@ const hackathonRegistrationSchema = new mongoose.Schema(
 );
 
 module.exports = mongoose.model('HackathonRegistration', hackathonRegistrationSchema);
+

@@ -184,3 +184,4 @@ module.exports = {
   generateToken,
   getCookieOptions,
 };
+

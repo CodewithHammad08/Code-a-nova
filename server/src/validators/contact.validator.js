@@ -27,3 +27,4 @@ const contactValidator = [
 module.exports = {
   contactValidator,
 };
+
