@@ -1,15 +1,20 @@
 const rateLimit = require('express-rate-limit');
+const config = require('../config/environment');
 const { errorResponse } = require('../utils/apiResponse');
+
+const isDev = config.env === 'development' || config.env === 'test';
 
 const createLimiter = (windowMs, max, message) => {
   return rateLimit({
     windowMs,
-    max,
+    // In local development/testing, relax limits significantly to prevent lockouts
+    max: isDev ? 1000 : max,
     standardHeaders: true,
     legacyHeaders: false,
     handler: (req, res) => {
       return errorResponse(res, 429, message);
     },
+    skip: () => config.env === 'test',
   });
 };
 

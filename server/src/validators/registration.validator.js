@@ -7,6 +7,7 @@ const registrationValidator = [
     .isLength({ min: 3 }).withMessage('Participant name must be at least 3 characters'),
 
   body('mobileNumber')
+    .customSanitizer((val) => (typeof val === 'string' ? val.replace(/\D/g, '').slice(-10) : val))
     .trim()
     .notEmpty().withMessage('Mobile number is required')
     .matches(/^[6-9]\d{9}$/).withMessage('Mobile number must be a valid 10-digit Indian number'),
@@ -51,12 +52,24 @@ const registrationValidator = [
     .isLength({ min: 5 }).withMessage('Project name must be at least 5 characters long'),
 
   body('pptLink')
+    .customSanitizer((val) => {
+      if (typeof val === 'string' && val.trim() && !/^https?:\/\//i.test(val.trim())) {
+        return 'https://' + val.trim();
+      }
+      return typeof val === 'string' ? val.trim() : val;
+    })
     .trim()
     .notEmpty().withMessage('PPT / Presentation link is required')
     .isURL({ protocols: ['http', 'https'], require_protocol: true })
     .withMessage('PPT link must be a valid HTTP or HTTPS URL'),
 
   body('prototypeLink')
+    .customSanitizer((val) => {
+      if (typeof val === 'string' && val.trim() && !/^https?:\/\//i.test(val.trim())) {
+        return 'https://' + val.trim();
+      }
+      return typeof val === 'string' ? val.trim() : val;
+    })
     .trim()
     .notEmpty().withMessage('Prototype or repository link is required')
     .isURL({ protocols: ['http', 'https'], require_protocol: true })
@@ -64,6 +77,12 @@ const registrationValidator = [
 
   body('demoVideoLink')
     .optional({ checkFalsy: true })
+    .customSanitizer((val) => {
+      if (typeof val === 'string' && val.trim() && !/^https?:\/\//i.test(val.trim())) {
+        return 'https://' + val.trim();
+      }
+      return typeof val === 'string' ? val.trim() : val;
+    })
     .trim()
     .isURL({ protocols: ['http', 'https'], require_protocol: true })
     .withMessage('Demo video link must be a valid HTTP or HTTPS URL'),

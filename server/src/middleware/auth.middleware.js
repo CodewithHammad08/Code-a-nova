@@ -18,6 +18,10 @@ const authenticate = async (req, res, next) => {
     ) {
       token = req.headers.authorization.split(' ')[1];
     }
+    // Support token query parameter for file downloads / exports
+    else if (req.query && req.query.token) {
+      token = req.query.token;
+    }
 
     if (!token) {
       return errorResponse(

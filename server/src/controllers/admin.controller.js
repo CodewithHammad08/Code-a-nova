@@ -69,25 +69,25 @@ const exportCsv = async (req, res, next) => {
 
     const rows = registrations.map((r) => {
       const membersStr = (r.teamMembers || [])
-        .map((m) => `${m.name} (${m.email})`)
+        .map((m) => `${m.name || ''} (${m.email || ''})`)
         .join('; ');
 
       return [
-        `"${r.registrationId}"`,
-        `"${r.participantName.replace(/"/g, '""')}"`,
-        `"${r.email}"`,
-        `"${r.mobileNumber}"`,
+        `"${r.registrationId || ''}"`,
+        `"${(r.participantName || '').replace(/"/g, '""')}"`,
+        `"${r.email || ''}"`,
+        `"${r.mobileNumber || ''}"`,
         `"${(r.collegeName || '').replace(/"/g, '""')}"`,
-        `"${r.course}"`,
-        `"${r.branch}"`,
-        `"${r.yearOfStudy}"`,
-        `"${r.domain}"`,
+        `"${r.course || ''}"`,
+        `"${r.branch || ''}"`,
+        `"${r.yearOfStudy || ''}"`,
+        `"${r.domain || ''}"`,
         `"${(r.projectName || '').replace(/"/g, '""')}"`,
-        r.teamSize,
+        r.teamSize || 1,
         `"${membersStr.replace(/"/g, '""')}"`,
-        `"${r.pptLink}"`,
-        `"${r.prototypeLink}"`,
-        `"${r.status}"`,
+        `"${r.pptLink || ''}"`,
+        `"${r.prototypeLink || ''}"`,
+        `"${r.status || ''}"`,
         `"${r.submittedAt ? r.submittedAt.toISOString() : ''}"`,
       ].join(',');
     });

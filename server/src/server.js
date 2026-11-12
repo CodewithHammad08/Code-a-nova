@@ -33,6 +33,35 @@ const startServer = async () => {
       console.log(`====================================================`);
     });
 
+    server.on('error', async (err) => {
+      if (err.code === 'EADDRINUSE') {
+        try {
+          // Check if an existing Code-a-Nova server is already active on this port
+          const healthCheck = await fetch(`http://localhost:${config.port}/api/health`, {
+            signal: AbortSignal.timeout(1500),
+          });
+          if (healthCheck.ok) {
+            console.log(`\n====================================================`);
+            console.log(`  [Notice] Code-a-Nova API is already running on port ${config.port}.`);
+            console.log(`  Active service is healthy. Ready at ${config.clientUrl}`);
+            console.log(`====================================================\n`);
+            // Keep process idling peacefully so nodemon/concurrently does not report a crash
+            setInterval(() => {}, 1000 * 60 * 60);
+            return;
+          }
+        } catch {
+          // Fall through to error
+        }
+
+        console.error(`\n[Server Startup Error] Port ${config.port} is already in use by another process.`);
+        console.error(`Kill conflicting process or set PORT=5001 in server/.env.\n`);
+        process.exit(1);
+      } else {
+        console.error('[Server Startup Error]:', err);
+        process.exit(1);
+      }
+    });
+
     // Graceful Shutdown
     const handleShutdown = (signal) => {
       console.log(`\n[Server] Received ${signal}. Closing HTTP server...`);

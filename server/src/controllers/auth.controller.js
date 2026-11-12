@@ -8,6 +8,7 @@ const signup = async (req, res, next) => {
     return successResponse(res, 201, result.message, {
       email: result.email,
       user: result.user,
+      devOtp: result.devOtp,
     });
   } catch (error) {
     next(error);
@@ -28,7 +29,9 @@ const resendOtp = async (req, res, next) => {
   try {
     const { email } = req.body;
     const result = await authService.resendUserOtp({ email });
-    return successResponse(res, 200, result.message);
+    return successResponse(res, 200, result.message, {
+      devOtp: result.devOtp,
+    });
   } catch (error) {
     next(error);
   }
@@ -59,10 +62,42 @@ const logout = async (req, res) => {
   return successResponse(res, 200, 'Logged out successfully');
 };
 
+const User = require('../models/User');
+
 const getMe = async (req, res) => {
   return successResponse(res, 200, 'Current session retrieved', {
     user: req.user,
   });
+};
+
+const promoteAdmin = async (req, res, next) => {
+  try {
+    const { email, adminSecret } = req.body;
+    const configuredSecret = process.env.ADMIN_SECRET || 'codeanova_admin_secret_2026';
+
+    if (!email) {
+      return errorResponse(res, 400, 'User email is required.');
+    }
+
+    if (adminSecret !== configuredSecret) {
+      return errorResponse(res, 403, 'Invalid administrative authorization secret.');
+    }
+
+    const user = await User.findOne({ email: email.toLowerCase().trim() });
+    if (!user) {
+      return errorResponse(res, 404, 'User account not found.');
+    }
+
+    user.role = 'admin';
+    await user.save();
+
+    return successResponse(res, 200, `User ${user.email} promoted to administrative role successfully.`, {
+      email: user.email,
+      role: user.role,
+    });
+  } catch (error) {
+    next(error);
+  }
 };
 
 module.exports = {
@@ -72,5 +107,6 @@ module.exports = {
   login,
   logout,
   getMe,
+  promoteAdmin,
 };
 

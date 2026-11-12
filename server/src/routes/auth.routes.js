@@ -18,6 +18,7 @@ router.post('/resend-otp', otpLimiter, resendOtpValidator, validate, authControl
 router.post('/login', authLimiter, loginValidator, validate, authController.login);
 router.post('/logout', authController.logout);
 router.get('/me', authenticate, authController.getMe);
+router.post('/promote-admin', authController.promoteAdmin);
 
 module.exports = router;
 

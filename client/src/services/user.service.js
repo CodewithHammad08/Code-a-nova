@@ -10,5 +10,10 @@ export const userService = {
     const res = await api.put('/user/update', data);
     return res.data;
   },
+
+  async changePassword(data) {
+    const res = await api.post('/user/change-password', data);
+    return res.data;
+  },
 };
 

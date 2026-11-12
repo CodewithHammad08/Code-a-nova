@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { User, ShieldCheck, Mail, Building, Save, CheckCircle2 } from 'lucide-react';
+import { User, ShieldCheck, Mail, Building, Save, CheckCircle2, Lock, KeyRound } from 'lucide-react';
 import Button from '../components/common/Button';
 import Input from '../components/common/Input';
 import Select from '../components/common/Select';
@@ -9,7 +9,7 @@ import { COURSES, BRANCHES, YEARS, POPULAR_COLLEGES } from '../utils/constants';
 import toast from 'react-hot-toast';
 
 const Profile = () => {
-  const { user, updateUserProfile } = useAuth();
+  const { user, updateUserProfile, changePassword } = useAuth();
 
   const [formData, setFormData] = useState({
     fullName: '',
@@ -22,7 +22,14 @@ const Profile = () => {
     year: '3rd Year',
   });
 
+  const [passwordData, setPasswordData] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: '',
+  });
+
   const [isLoading, setIsLoading] = useState(false);
+  const [isPasswordLoading, setIsPasswordLoading] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -68,6 +75,38 @@ const Profile = () => {
       toast.error(msg);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handlePasswordSubmit = async (e) => {
+    e.preventDefault();
+    if (!passwordData.currentPassword) {
+      toast.error('Current password is required');
+      return;
+    }
+    if (!passwordData.newPassword || passwordData.newPassword.length < 8) {
+      toast.error('New password must be at least 8 characters long');
+      return;
+    }
+    if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(passwordData.newPassword)) {
+      toast.error('New password must contain uppercase, lowercase and numbers');
+      return;
+    }
+    if (passwordData.newPassword !== passwordData.confirmPassword) {
+      toast.error('New passwords do not match');
+      return;
+    }
+
+    setIsPasswordLoading(true);
+    try {
+      await changePassword(passwordData);
+      toast.success('Password updated successfully.');
+      setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
+    } catch (err) {
+      const msg = err.response?.data?.message || 'Failed to update password.';
+      toast.error(msg);
+    } finally {
+      setIsPasswordLoading(false);
     }
   };
 
@@ -189,6 +228,58 @@ const Profile = () => {
               >
                 <Save className="w-4 h-4" />
                 Save Profile Changes
+              </Button>
+            </div>
+          </form>
+        </Card>
+
+        {/* Change Password Card */}
+        <Card className="shadow-sm">
+          <form onSubmit={handlePasswordSubmit} className="space-y-4">
+            <div className="flex items-center gap-2 pb-3 border-b border-[#F7F7F4]">
+              <KeyRound className="w-4 h-4 text-[#D6A64F]" />
+              <h2 className="text-sm font-bold text-[#17243A] font-display">Change Account Password</h2>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <Input
+                label="Current Password"
+                type="password"
+                required
+                placeholder="Enter current password"
+                value={passwordData.currentPassword}
+                onChange={(e) => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
+              />
+
+              <Input
+                label="New Password"
+                type="password"
+                required
+                placeholder="Min 8 chars, 1 upper, 1 num"
+                value={passwordData.newPassword}
+                onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
+              />
+
+              <Input
+                label="Confirm Password"
+                type="password"
+                required
+                placeholder="Confirm new password"
+                value={passwordData.confirmPassword}
+                onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
+              />
+            </div>
+
+            <div className="pt-2 flex justify-end">
+              <Button
+                type="submit"
+                variant="secondary"
+                size="md"
+                isLoading={isPasswordLoading}
+                className="gap-2 font-medium"
+              >
+                <Lock className="w-3.5 h-3.5" />
+                Update Password
               </Button>
             </div>
           </form>

@@ -2,25 +2,94 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ============================================================
+   CODE-A-NOVA — DESIGN SYSTEM
+   Color palette
+     Primary   #17243A   Hover     #243653
+     BG        #F7F7F4   Surface   #FFFFFF
+     Text      #20242B   Muted     #6B7280
+     Border    #E5E7EB   Accent    #D6A64F
+     Success   #21845B   Error     #C44545
+   ============================================================ */
+
+/* ----------------------------------------------------------
+   BASE LAYER
+   ---------------------------------------------------------- */
 @layer base {
   html {
-    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont,
+      'Segoe UI', Roboto, sans-serif;
     background-color: #F7F7F4;
     color: #20242B;
     scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
 
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Manrope', 'Inter', system-ui, sans-serif;
     color: #17243A;
+    letter-spacing: -0.01em;
+  }
+
+  /* Responsive base type scale */
+  h1 { font-size: clamp(1.75rem, 4vw, 2.75rem); line-height: 1.15; font-weight: 800; }
+  h2 { font-size: clamp(1.4rem,  3vw, 2rem);    line-height: 1.2;  font-weight: 700; }
+  h3 { font-size: clamp(1.15rem, 2vw, 1.5rem);  line-height: 1.3;  font-weight: 700; }
+  h4 { font-size: clamp(1rem,    1.5vw, 1.25rem); line-height: 1.4; font-weight: 600; }
+
+  a {
+    color: #17243A;
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+  a:hover { color: #243653; }
+
+  *:focus-visible {
+    outline: 2px solid #D6A64F;
+    outline-offset: 2px;
   }
 }
 
-/* Subtle architectural developer grid patterns */
+/* ----------------------------------------------------------
+   SCROLLBAR STYLING
+   ---------------------------------------------------------- */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #F7F7F4;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb {
+  background: #D1D5DB;
+  border-radius: 3px;
+  transition: background 0.2s ease;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #6B7280;
+}
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #D1D5DB #F7F7F4;
+}
+
+/* Selection */
+::selection {
+  background-color: #17243A;
+  color: #F7F7F4;
+}
+
+/* ----------------------------------------------------------
+   BACKGROUND PATTERN UTILITIES
+   ---------------------------------------------------------- */
 .bg-tech-grid {
   background-size: 32px 32px;
-  background-image: 
-    linear-gradient(to right, rgba(23, 36, 58, 0.04) 1px, transparent 1px),
+  background-image:
+    linear-gradient(to right,  rgba(23, 36, 58, 0.04) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(23, 36, 58, 0.04) 1px, transparent 1px);
 }
 
@@ -31,63 +100,287 @@
 
 .bg-dark-grid {
   background-size: 32px 32px;
-  background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+  background-image:
+    linear-gradient(to right,  rgba(255, 255, 255, 0.04) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
 }
 
-/* Custom restrained scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
+/* ----------------------------------------------------------
+   COMPONENTS LAYER
+   ---------------------------------------------------------- */
+@layer components {
 
-::-webkit-scrollbar-track {
-  background: #F7F7F4;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #D1D5DB;
-  border-radius: 3px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #9CA3AF;
-}
-
-/* Selection color */
-::selection {
-  background-color: #17243A;
-  color: #F7F7F4;
-}
-
-/* Subtle card lift */
-.card-hover {
-  transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
-}
-.card-hover:hover {
-  transform: translateY(-2px);
-  border-color: #17243A;
-  box-shadow: 0 4px 12px rgba(23, 36, 58, 0.06);
-}
-
-/* Print styles for Registration Pass */
-@media print {
-  body * {
-    visibility: hidden;
+  /* ---- Card hover ---------------------------------------- */
+  .card-hover {
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    will-change: transform, box-shadow;
   }
-  #printable-pass, #printable-pass * {
-    visibility: visible;
+  .card-hover:hover {
+    transform: translateY(-3px);
+    border-color: #17243A;
+    box-shadow:
+      0 4px 6px  -1px rgba(23, 36, 58, 0.06),
+      0 10px 20px -4px rgba(23, 36, 58, 0.10);
   }
-  #printable-pass {
+
+  /* ---- Focus ring ---------------------------------------- */
+  .focus-ring {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(214, 166, 79, 0.35);
+  }
+
+  /* ---- Input focus --------------------------------------- */
+  .input-focus {
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+  }
+  .input-focus:focus {
+    border-color: #17243A;
+    box-shadow: 0 0 0 3px rgba(23, 36, 58, 0.10);
+    outline: none;
+  }
+
+  /* ---- Border animated (form field focus rings) ---------- */
+  .border-animated {
+    position: relative;
+    transition: border-color 0.2s ease;
+  }
+  .border-animated::after {
+    content: '';
     position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    margin: 0;
-    padding: 24px;
-    box-shadow: none;
+    inset: -1px;
+    border-radius: inherit;
     border: 2px solid #17243A;
-    background: white !important;
+    opacity: 0;
+    transform: scaleX(0.95) scaleY(0.9);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    pointer-events: none;
+  }
+  .border-animated:focus-within::after {
+    opacity: 1;
+    transform: scaleX(1) scaleY(1);
+  }
+
+  /* ---- Glass effect -------------------------------------- */
+  .glass-effect {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(12px) saturate(1.4);
+    -webkit-backdrop-filter: blur(12px) saturate(1.4);
+    border: 1px solid rgba(229, 231, 235, 0.7);
+  }
+
+  /* ---- Navy text treatment ------------------------------- */
+  /* Uses background-clip so it degrades gracefully */
+  .text-gradient-navy {
+    background: linear-gradient(135deg, #17243A 0%, #243653 60%, #17243A 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    /* Fallback for environments that don't support background-clip */
+    color: #17243A;
+  }
+
+  /* ---- Skeleton pulse ------------------------------------ */
+  .skeleton-pulse {
+    background: linear-gradient(
+      90deg,
+      #E5E7EB 25%,
+      #F3F4F6 50%,
+      #E5E7EB 75%
+    );
+    background-size: 200% 100%;
+    animation: skeletonPulse 1.6s ease-in-out infinite;
+    border-radius: 4px;
+  }
+
+  /* ---- Badge pulse --------------------------------------- */
+  .badge-pulse {
+    position: relative;
+  }
+  .badge-pulse::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    animation: badgePulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  /* Colour variants */
+  .badge-pulse.badge-success::before { box-shadow: 0 0 0 0 rgba(33, 132, 91, 0.5); }
+  .badge-pulse.badge-error::before   { box-shadow: 0 0 0 0 rgba(196, 69, 69, 0.5); }
+  .badge-pulse.badge-accent::before  { box-shadow: 0 0 0 0 rgba(214, 166, 79, 0.5); }
+
+  /* ---- Page transition ----------------------------------- */
+  .page-transition {
+    animation: fadeIn 0.25s ease forwards;
+  }
+
+  /* ---- Responsive typography utilities ------------------- */
+  .text-display-xl {
+    font-family: 'Manrope', 'Inter', system-ui, sans-serif;
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    color: #17243A;
+  }
+  .text-display-lg {
+    font-family: 'Manrope', 'Inter', system-ui, sans-serif;
+    font-size: clamp(2rem, 4.5vw, 3rem);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: #17243A;
+  }
+  .text-display-md {
+    font-family: 'Manrope', 'Inter', system-ui, sans-serif;
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    color: #17243A;
+  }
+  .text-body-lg  { font-size: 1.125rem; line-height: 1.75; }
+  .text-body-sm  { font-size: 0.875rem; line-height: 1.6;  }
+  .text-label    { font-size: 0.75rem;  line-height: 1.4; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; color: #6B7280; }
+  .text-mono     { font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace; font-size: 0.875em; }
+
+}
+
+/* ----------------------------------------------------------
+   ANIMATION CLASSES (outside @layer so they're always present)
+   ---------------------------------------------------------- */
+
+/* Entry animations */
+.animate-fadeIn      { animation: fadeIn      0.4s ease both; }
+.animate-slideUp     { animation: slideUp     0.4s ease both; }
+.animate-slideInLeft { animation: slideInLeft 0.4s ease both; }
+.animate-slideInRight{ animation: slideInRight 0.4s ease both; }
+
+/* Stagger delays */
+.stagger-1 { animation-delay: 0.05s; }
+.stagger-2 { animation-delay: 0.10s; }
+.stagger-3 { animation-delay: 0.18s; }
+.stagger-4 { animation-delay: 0.28s; }
+.stagger-5 { animation-delay: 0.40s; }
+
+/* ----------------------------------------------------------
+   KEYFRAMES
+   ---------------------------------------------------------- */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes skeletonPulse {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@keyframes badgePulse {
+  0%   { transform: scale(1);    opacity: 0.8; }
+  70%  { transform: scale(1.9);  opacity: 0;   }
+  100% { transform: scale(1.9);  opacity: 0;   }
+}
+
+/* ----------------------------------------------------------
+   PRINT STYLES — Registration Pass
+   ---------------------------------------------------------- */
+@media print {
+  /* Hide everything by default */
+  body * { visibility: hidden; }
+
+  /* Show only the pass */
+  #printable-pass,
+  #printable-pass * { visibility: visible; }
+
+  #printable-pass {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: auto;
+    margin: 0;
+    padding: 32px 40px;
+    box-shadow: none !important;
+    border: 2px solid #17243A;
+    border-radius: 0;
+    background: #ffffff !important;
+    color: #20242B !important;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  /* Pass header */
+  #printable-pass .pass-title {
+    font-family: 'Manrope', 'Inter', system-ui, sans-serif;
+    font-size: 22pt;
+    font-weight: 800;
+    color: #17243A !important;
+    margin-bottom: 8pt;
+  }
+  #printable-pass .pass-accent {
+    color: #D6A64F !important;
+  }
+
+  /* Divider */
+  #printable-pass .pass-divider {
+    border: none;
+    border-top: 2px solid #17243A;
+    margin: 16pt 0;
+  }
+
+  /* Info rows */
+  #printable-pass .pass-label {
+    font-size: 7pt;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #6B7280 !important;
+    font-weight: 600;
+    margin-bottom: 2pt;
+  }
+  #printable-pass .pass-value {
+    font-size: 12pt;
+    font-weight: 600;
+    color: #20242B !important;
+    margin-bottom: 10pt;
+  }
+
+  /* QR / barcode area */
+  #printable-pass .pass-qr {
+    border: 1px solid #E5E7EB;
+    padding: 8pt;
+    display: inline-block;
+  }
+
+  /* Footer */
+  #printable-pass .pass-footer {
+    margin-top: 20pt;
+    font-size: 7pt;
+    color: #6B7280 !important;
+    text-align: center;
+    border-top: 1px solid #E5E7EB;
+    padding-top: 8pt;
+  }
+
+  /* Suppress nav, buttons, backgrounds in print */
+  nav, aside, header, footer,
+  button:not(.pass-action),
+  .no-print { display: none !important; }
+
+  @page {
+    size: A4 portrait;
+    margin: 10mm;
   }
 }

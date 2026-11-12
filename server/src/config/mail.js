@@ -9,14 +9,16 @@ const createMailTransporter = async () => {
   const { host, port, secure, user, pass } = config.email;
 
   if (user && pass) {
+    const cleanUser = user.trim();
+    const cleanPass = pass.replace(/\s+/g, '');
     try {
       transporter = nodemailer.createTransport({
         host,
         port,
         secure,
         auth: {
-          user,
-          pass,
+          user: cleanUser,
+          pass: cleanPass,
         },
       });
 

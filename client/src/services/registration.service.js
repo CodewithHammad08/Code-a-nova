@@ -39,7 +39,10 @@ export const registrationService = {
 
   getExportCsvUrl() {
     const baseURL = import.meta.env.VITE_API_URL || '/api';
-    return `${baseURL}/admin/export-csv`;
+    const token = localStorage.getItem('can_auth_token');
+    return token
+      ? `${baseURL}/admin/export-csv?token=${encodeURIComponent(token)}`
+      : `${baseURL}/admin/export-csv`;
   },
 };
 

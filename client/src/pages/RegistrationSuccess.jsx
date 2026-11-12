@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams, Link, useNavigate } from 'react-router-dom';
-import { CheckCircle2, ArrowRight, LayoutDashboard, FolderGit2, Download } from 'lucide-react';
+import { CheckCircle2, ArrowRight, LayoutDashboard, FolderGit2, Download, Copy, Check } from 'lucide-react';
 import Button from '../components/common/Button';
 import Card from '../components/common/Card';
 import { registrationService } from '../services/registration.service';
+import toast from 'react-hot-toast';
 
 const RegistrationSuccess = () => {
   const [searchParams] = useSearchParams();
@@ -11,6 +12,7 @@ const RegistrationSuccess = () => {
 
   const [registration, setRegistration] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [copied, setCopied] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -26,6 +28,13 @@ const RegistrationSuccess = () => {
   }, []);
 
   const referenceId = registration?.registrationId || regIdParam || 'CAN-2026-CONFIRMED';
+
+  const handleCopyId = () => {
+    navigator.clipboard.writeText(referenceId);
+    setCopied(true);
+    toast.success('Registration reference ID copied!');
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   return (
     <div className="max-w-2xl mx-auto py-12 px-4 sm:px-6">
@@ -48,12 +57,22 @@ const RegistrationSuccess = () => {
         </div>
 
         {/* Reference ID banner */}
-        <div className="bg-[#F7F7F4] border border-[#E5E7EB] rounded-[6px] p-5 max-w-md mx-auto space-y-1">
+        <div className="bg-[#F7F7F4] border border-[#E5E7EB] rounded-[6px] p-5 max-w-md mx-auto space-y-2">
           <div className="text-[11px] uppercase tracking-wider font-semibold text-[#6B7280]">
             Official Registration Reference
           </div>
-          <div className="text-2xl font-mono font-extrabold text-[#17243A] tracking-wider">
-            {referenceId}
+          <div className="flex items-center justify-center gap-3">
+            <span className="text-2xl font-mono font-extrabold text-[#17243A] tracking-wider">
+              {referenceId}
+            </span>
+            <button
+              type="button"
+              onClick={handleCopyId}
+              className="p-1.5 rounded-[4px] border border-[#E5E7EB] bg-white hover:bg-[#F7F7F4] text-[#17243A] transition-colors"
+              title="Copy Reference ID"
+            >
+              {copied ? <Check className="w-4 h-4 text-[#21845B]" /> : <Copy className="w-4 h-4" />}
+            </button>
           </div>
           <div className="text-[11px] text-[#9CA3AF]">
             Quote this reference ID for all queries and finale check-in.

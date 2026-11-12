@@ -1,3 +1,4 @@
+const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 const { successResponse, errorResponse } = require('../utils/apiResponse');
 
@@ -35,8 +36,53 @@ const updateProfile = async (req, res, next) => {
   }
 };
 
+const changePassword = async (req, res, next) => {
+  try {
+    const { currentPassword, newPassword, confirmPassword } = req.body;
+
+    if (!currentPassword || !newPassword) {
+      return errorResponse(res, 400, 'Current and new passwords are required.');
+    }
+
+    if (newPassword !== confirmPassword) {
+      return errorResponse(res, 400, 'New password and confirmation do not match.');
+    }
+
+    if (newPassword.length < 8) {
+      return errorResponse(res, 400, 'New password must be at least 8 characters long.');
+    }
+
+    if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(newPassword)) {
+      return errorResponse(
+        res,
+        400,
+        'New password must contain at least one uppercase letter, one lowercase letter, and one number.'
+      );
+    }
+
+    const user = await User.findById(req.user._id).select('+passwordHash');
+    if (!user) {
+      return errorResponse(res, 404, 'User not found.');
+    }
+
+    const isMatch = await user.comparePassword(currentPassword);
+    if (!isMatch) {
+      return errorResponse(res, 400, 'Current password is incorrect.');
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    user.passwordHash = await bcrypt.hash(newPassword, salt);
+    await user.save();
+
+    return successResponse(res, 200, 'Password updated successfully.');
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getProfile,
   updateProfile,
+  changePassword,
 };
 

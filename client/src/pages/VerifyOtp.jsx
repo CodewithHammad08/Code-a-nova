@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useSearchParams, useNavigate, Link } from 'react-router-dom';
-import { KeyRound, RotateCw, CheckCircle2, ArrowRight } from 'lucide-react';
+import { useSearchParams, useNavigate, useLocation, Link } from 'react-router-dom';
+import { KeyRound, RotateCw, CheckCircle2, ArrowRight, Sparkles } from 'lucide-react';
 import Button from '../components/common/Button';
 import Card from '../components/common/Card';
 import useAuth from '../hooks/useAuth';
@@ -8,9 +8,11 @@ import toast from 'react-hot-toast';
 
 const VerifyOtp = () => {
   const [searchParams] = useSearchParams();
+  const location = useLocation();
   const emailParam = searchParams.get('email') || '';
 
   const [email, setEmail] = useState(emailParam);
+  const [devOtp, setDevOtp] = useState(location.state?.devOtp || '');
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [isVerifying, setIsVerifying] = useState(false);
   const [isResending, setIsResending] = useState(false);
@@ -113,7 +115,10 @@ const VerifyOtp = () => {
 
     setIsResending(true);
     try {
-      await resendOtp({ email });
+      const res = await resendOtp({ email });
+      if (res?.data?.devOtp) {
+        setDevOtp(res.data.devOtp);
+      }
       toast.success('A new verification code has been dispatched.');
       setCooldownSeconds(60);
       setExpirySeconds(600);
@@ -180,6 +185,32 @@ const VerifyOtp = () => {
                 </div>
               )}
 
+              {/* Local Dev / Mock OTP Banner */}
+              {devOtp && (
+                <div className="p-3 bg-amber-50 border border-amber-200 rounded-[5px] text-xs text-amber-900 flex items-center justify-between animate-fadeIn">
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-amber-600 flex-shrink-0" />
+                    <div>
+                      <span className="font-semibold text-amber-950">Local Mode Code:</span>{' '}
+                      <span className="font-mono font-bold text-sm tracking-widest text-[#17243A] bg-amber-100 px-1.5 py-0.5 rounded">
+                        {devOtp}
+                      </span>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const digits = devOtp.split('');
+                      setOtp(digits);
+                      inputRefs.current[5]?.focus();
+                    }}
+                    className="text-[11px] font-bold text-[#17243A] uppercase tracking-wider bg-white border border-amber-300 hover:bg-amber-100 px-2 py-1 rounded-[4px] transition-colors"
+                  >
+                    Auto-Fill
+                  </button>
+                </div>
+              )}
+
               {/* 6 Individual OTP inputs */}
               <div className="space-y-2">
                 <label className="block text-center text-xs font-semibold uppercase tracking-wider text-[#17243A]">
@@ -237,13 +268,17 @@ const VerifyOtp = () => {
                   type="button"
                   onClick={handleResend}
                   disabled={cooldownSeconds > 0 || isResending}
-                  className="font-semibold text-[#17243A] hover:underline disabled:text-[#9CA3AF] disabled:no-underline inline-flex items-center gap-1"
+                  className="font-semibold text-[#17243A] hover:underline disabled:text-[#9CA3AF] disabled:no-underline inline-flex items-center gap-1 cursor-pointer"
                 >
                   <RotateCw className={`w-3.5 h-3.5 ${isResending ? 'animate-spin' : ''}`} />
                   {cooldownSeconds > 0
                     ? `Resend in ${cooldownSeconds}s`
                     : 'Resend Code'}
                 </button>
+              </div>
+
+              <div className="bg-[#F7F7F4] p-2.5 rounded-[4px] border border-[#E5E7EB] text-[11px] text-[#6B7280] text-center leading-normal">
+                Local testing: check server terminal logs for the code, or configure real Gmail credentials in <code className="font-mono text-[#17243A]">server/.env</code>.
               </div>
             </form>
           )}

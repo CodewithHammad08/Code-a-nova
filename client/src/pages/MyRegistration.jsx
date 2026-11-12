@@ -107,6 +107,17 @@ const MyRegistration = () => {
     window.print();
   };
 
+  const formatSafeDate = (dateVal) => {
+    if (!dateVal) return 'Recently Verified';
+    const d = new Date(dateVal);
+    if (isNaN(d.getTime())) return 'Recently Verified';
+    return d.toLocaleDateString('en-US', {
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric',
+    });
+  };
+
   if (isLoading) {
     return (
       <div className="space-y-6 max-w-4xl mx-auto py-6">
@@ -231,11 +242,7 @@ const MyRegistration = () => {
               <div className="text-xs text-[#6B7280]">
                 Submitted:{' '}
                 <strong className="text-[#17243A] font-mono">
-                  {new Date(registration.submittedAt).toLocaleDateString('en-US', {
-                    month: 'long',
-                    day: 'numeric',
-                    year: 'numeric',
-                  })}
+                  {formatSafeDate(registration.submittedAt || registration.createdAt)}
                 </strong>
               </div>
             </div>

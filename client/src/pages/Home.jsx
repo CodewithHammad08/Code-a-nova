@@ -21,6 +21,10 @@ import {
   Zap,
   Sparkles,
   Award,
+  Star,
+  Clock,
+  Building2,
+  Flame,
 } from 'lucide-react';
 import Button from '../components/common/Button';
 import Badge from '../components/common/Badge';
@@ -43,6 +47,34 @@ const Home = () => {
         if (res?.data?.config) setEventConfig(res.data.config);
       })
       .catch(() => {});
+  }, []);
+
+  // IntersectionObserver for scroll-in animations
+  useEffect(() => {
+    if (typeof window === 'undefined' || !('IntersectionObserver' in window)) {
+      document.querySelectorAll('.observe-anim').forEach((el) => {
+        el.classList.remove('opacity-0');
+      });
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate-fadeIn');
+            entry.target.classList.remove('opacity-0');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    const elements = document.querySelectorAll('.observe-anim');
+    elements.forEach((el) => observer.observe(el));
+
+    return () => observer.disconnect();
   }, []);
 
   const getTrackIcon = (id, className = 'w-5 h-5') => {
@@ -90,10 +122,15 @@ const Home = () => {
       q: 'How are participant accounts verified?',
       a: 'Accounts are protected via cryptographically secure 6-digit OTPs dispatched through Nodemailer with a 10-minute expiry window, and salted bcrypt password hashing.',
     },
+    {
+      category: 'Selection',
+      q: 'How does the shortlisting process work?',
+      a: 'Submissions are reviewed by our industry panel across 6 structured rubric categories (functional completeness, architecture, UI/UX, authentication, automated delivery, documentation). Top teams advance to the 36-hour sprint finale.',
+    },
   ];
 
   return (
-    <div className="space-y-24 pb-20">
+    <div className="space-y-20 pb-20 scroll-smooth">
       {/* 1. Hero Section with Architectural Grid */}
       <section className="relative pt-10 md:pt-16 pb-16 border-b border-[#E5E7EB] bg-white bg-tech-grid">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -122,13 +159,13 @@ const Home = () => {
               <div className="pt-2 flex flex-col sm:flex-row sm:items-center gap-4">
                 <div className="flex items-center gap-3">
                   <Link to={isAuthenticated ? '/register' : '/signup'}>
-                    <Button variant="primary" size="lg" className="gap-2 shadow-sm">
+                    <Button variant="primary" size="lg" className="gap-2 shadow-sm font-semibold">
                       {isAuthenticated ? 'Register Project' : 'Register Now'}
                       <ArrowRight className="w-4 h-4" />
                     </Button>
                   </Link>
                   <a href="#domains">
-                    <Button variant="secondary" size="lg">
+                    <Button variant="secondary" size="lg" className="font-semibold">
                       Explore Tracks
                     </Button>
                   </a>
@@ -143,7 +180,7 @@ const Home = () => {
               </div>
 
               {/* Trust Badges */}
-              <div className="pt-4 flex flex-wrap items-center gap-6 text-xs text-[#6B7280] font-medium border-t border-[#F7F7F4]">
+              <div className="pt-3 flex flex-wrap items-center gap-6 text-xs text-[#6B7280] font-medium border-t border-[#F7F7F4]">
                 <div className="flex items-center gap-1.5">
                   <CheckCircle2 className="w-4 h-4 text-[#21845B]" />
                   <span>Free Participation</span>
@@ -155,6 +192,26 @@ const Home = () => {
                 <div className="flex items-center gap-1.5">
                   <CheckCircle2 className="w-4 h-4 text-[#21845B]" />
                   <span>Verified Credentials</span>
+                </div>
+              </div>
+
+              {/* Mini-Stats Row within Hero */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-3 border-t border-[#E5E7EB]">
+                <div className="p-2.5 bg-[#F7F7F4] border border-[#E5E7EB] rounded-[5px]">
+                  <div className="text-xs text-[#6B7280] font-mono">TRACKS</div>
+                  <div className="text-base font-extrabold text-[#17243A] font-display">5 Specializations</div>
+                </div>
+                <div className="p-2.5 bg-[#F7F7F4] border border-[#E5E7EB] rounded-[5px]">
+                  <div className="text-xs text-[#6B7280] font-mono">TEAM SIZE</div>
+                  <div className="text-base font-extrabold text-[#17243A] font-display">1 to 5 Members</div>
+                </div>
+                <div className="p-2.5 bg-[#F7F7F4] border border-[#E5E7EB] rounded-[5px]">
+                  <div className="text-xs text-[#6B7280] font-mono">FINALE</div>
+                  <div className="text-base font-extrabold text-[#17243A] font-display">36-Hr Sprint</div>
+                </div>
+                <div className="p-2.5 bg-[#F7F7F4] border border-[#E5E7EB] rounded-[5px]">
+                  <div className="text-xs text-[#6B7280] font-mono">PRIZES</div>
+                  <div className="text-base font-extrabold text-[#D6A64F] font-mono">₹1,50,000+</div>
                 </div>
               </div>
             </div>
@@ -318,29 +375,100 @@ const Home = () => {
       </section>
 
       {/* 2. Event Highlights Strip */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-12">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-12 observe-anim opacity-0 transition-opacity duration-500">
         <div className="bg-white border border-[#E5E7EB] rounded-[7px] grid grid-cols-2 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-[#E5E7EB] shadow-sm">
-          <div className="p-6 text-center space-y-1">
-            <div className="text-3xl font-extrabold font-display text-[#17243A]">5 Tracks</div>
+          <div className="p-6 text-center space-y-2 border-l-4 border-l-[#17243A]">
+            <div className="w-8 h-8 rounded-[4px] bg-[#17243A]/5 text-[#17243A] flex items-center justify-center mx-auto">
+              <Layers className="w-4 h-4" />
+            </div>
+            <div className="text-4xl font-extrabold font-display text-[#17243A]">5 Tracks</div>
             <div className="text-xs text-[#6B7280] font-medium">Focused Engineering Domains</div>
           </div>
-          <div className="p-6 text-center space-y-1">
-            <div className="text-3xl font-extrabold font-display text-[#17243A]">1–5</div>
+
+          <div className="p-6 text-center space-y-2 border-l-4 border-l-[#17243A]">
+            <div className="w-8 h-8 rounded-[4px] bg-[#17243A]/5 text-[#17243A] flex items-center justify-center mx-auto">
+              <Users className="w-4 h-4" />
+            </div>
+            <div className="text-4xl font-extrabold font-display text-[#17243A]">1–5</div>
             <div className="text-xs text-[#6B7280] font-medium">Solo or Team Members</div>
           </div>
-          <div className="p-6 text-center space-y-1">
-            <div className="text-3xl font-extrabold font-display text-[#17243A]">36 Hours</div>
+
+          <div className="p-6 text-center space-y-2 border-l-4 border-l-[#17243A]">
+            <div className="w-8 h-8 rounded-[4px] bg-[#17243A]/5 text-[#17243A] flex items-center justify-center mx-auto">
+              <Clock className="w-4 h-4" />
+            </div>
+            <div className="text-4xl font-extrabold font-display text-[#17243A]">36 Hours</div>
             <div className="text-xs text-[#6B7280] font-medium">Continuous Finale Sprint</div>
           </div>
-          <div className="p-6 text-center space-y-1">
-            <div className="text-3xl font-extrabold font-display text-[#D6A64F]">₹1,50,000+</div>
+
+          <div className="p-6 text-center space-y-2 border-l-4 border-l-[#D6A64F]">
+            <div className="w-8 h-8 rounded-[4px] bg-[#D6A64F]/10 text-[#D6A64F] flex items-center justify-center mx-auto">
+              <Trophy className="w-4 h-4" />
+            </div>
+            <div className="text-4xl font-extrabold font-display text-[#D6A64F]">₹1,50,000+</div>
             <div className="text-xs text-[#6B7280] font-medium">Prize Pool &amp; Cloud Credits</div>
           </div>
         </div>
       </section>
 
+      {/* 2.5 Sponsors & Partner Ecosystem Bar */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 observe-anim opacity-0 transition-opacity duration-500">
+        <div className="border border-[#E5E7EB] rounded-[7px] bg-white p-6 shadow-sm space-y-5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#F7F7F4] pb-4">
+            <div>
+              <span className="text-[10px] font-mono uppercase tracking-wider font-bold text-[#6B7280]">
+                Event Ecosystem
+              </span>
+              <h3 className="text-sm font-bold text-[#17243A] font-display">
+                Supported by Engineering Communities &amp; Cloud Partners
+              </h3>
+            </div>
+            <div className="flex items-center gap-2 text-xs font-mono text-[#21845B]">
+              <span className="w-2 h-2 rounded-full bg-[#21845B] animate-pulse" />
+              <span>REGISTRATIONS ACTIVE NATIONWIDE</span>
+            </div>
+          </div>
+
+          {/* Placeholder Partner Strip */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div className="h-12 border border-[#E5E7EB] bg-[#F7F7F4] rounded-[5px] flex items-center justify-center text-xs font-mono font-bold text-[#6B7280] gap-2">
+              <Building2 className="w-4 h-4 text-[#17243A]" />
+              <span>NeuralStack Labs</span>
+            </div>
+            <div className="h-12 border border-[#E5E7EB] bg-[#F7F7F4] rounded-[5px] flex items-center justify-center text-xs font-mono font-bold text-[#6B7280] gap-2">
+              <Globe className="w-4 h-4 text-[#17243A]" />
+              <span>CloudVantage Infra</span>
+            </div>
+            <div className="h-12 border border-[#E5E7EB] bg-[#F7F7F4] rounded-[5px] flex items-center justify-center text-xs font-mono font-bold text-[#6B7280] gap-2">
+              <Shield className="w-4 h-4 text-[#17243A]" />
+              <span>Aegis Security</span>
+            </div>
+            <div className="h-12 border border-[#E5E7EB] bg-[#F7F7F4] rounded-[5px] flex items-center justify-center text-xs font-mono font-bold text-[#6B7280] gap-2">
+              <Cpu className="w-4 h-4 text-[#17243A]" />
+              <span>DecentraSys Mesh</span>
+            </div>
+          </div>
+
+          {/* Key Event Facts Row */}
+          <div className="pt-2 border-t border-[#F7F7F4] flex flex-wrap items-center justify-between text-xs text-[#6B7280] gap-4">
+            <div className="flex items-center gap-2">
+              <span className="font-semibold text-[#17243A]">Evaluation:</span>
+              <span>100-Point Transparent Rubric</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="font-semibold text-[#17243A]">Submission Format:</span>
+              <span>PPT Deck + Prototype Repository</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="font-semibold text-[#17243A]">Cost:</span>
+              <span className="text-[#21845B] font-bold">100% Free Registration</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* 3. Interactive Tracks & Domains Showcase */}
-      <section id="domains" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section id="domains" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 observe-anim opacity-0 transition-opacity duration-500">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4 border-b border-[#E5E7EB] pb-5">
           <div className="space-y-2">
             <div className="text-xs font-bold uppercase tracking-wider text-[#D6A64F] font-mono">
@@ -369,7 +497,7 @@ const Home = () => {
                 <button
                   key={domain.id}
                   onClick={() => setSelectedTrackIndex(index)}
-                  className={`w-full text-left p-4 rounded-[6px] border transition-all flex items-start justify-between ${
+                  className={`w-full text-left p-4 rounded-[6px] border transition-all flex items-start justify-between cursor-pointer ${
                     isSelected
                       ? 'bg-[#17243A] text-white border-[#17243A] shadow-sm'
                       : 'bg-white text-[#20242B] border-[#E5E7EB] hover:border-[#17243A]/40 hover:bg-[#FAFAFA]'
@@ -407,7 +535,10 @@ const Home = () => {
 
           {/* Right Column: Deep-Dive Details for Selected Track */}
           <div className="lg:col-span-7">
-            <div className="bg-white border border-[#E5E7EB] rounded-[7px] p-6 sm:p-8 space-y-6 shadow-sm">
+            <div
+              key={selectedTrackIndex}
+              className="bg-white border border-[#E5E7EB] rounded-[7px] p-6 sm:p-8 space-y-6 shadow-sm transition-all duration-300 animate-fadeIn"
+            >
               {/* Header */}
               <div className="flex items-center justify-between border-b border-[#F7F7F4] pb-4">
                 <div className="flex items-center gap-3">
@@ -431,7 +562,7 @@ const Home = () => {
                       : '/signup'
                   }
                 >
-                  <Button variant="primary" size="sm" className="gap-1.5">
+                  <Button variant="primary" size="sm" className="gap-1.5 font-semibold">
                     Register Track
                     <ArrowRight className="w-3.5 h-3.5" />
                   </Button>
@@ -496,7 +627,7 @@ const Home = () => {
       </section>
 
       {/* 4. Event Timeline & Stages */}
-      <section id="timeline" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section id="timeline" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 observe-anim opacity-0 transition-opacity duration-500">
         <div className="text-center max-w-2xl mx-auto space-y-3 mb-12">
           <div className="text-xs font-bold uppercase tracking-wider text-[#D6A64F] font-mono">
             02 &bull; Event Milestones
@@ -509,21 +640,28 @@ const Home = () => {
           </p>
         </div>
 
+        {/* Stepped Timeline */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           {EVENT_TIMELINE.map((item, idx) => (
             <div
               key={item.step}
-              className={`bg-white border rounded-[7px] p-6 relative flex flex-col justify-between card-hover ${
+              className={`bg-white border rounded-[7px] p-6 relative flex flex-col justify-between card-hover transition-all ${
                 item.active
-                  ? 'border-[#17243A] ring-2 ring-[#17243A]/10 shadow-sm'
+                  ? 'border-[#17243A] ring-2 ring-[#D6A64F]/30 shadow-md'
                   : 'border-[#E5E7EB]'
               }`}
             >
               <div>
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-xs font-mono font-bold text-[#6B7280]">
-                    STAGE {item.step}
-                  </span>
+                <div className="flex items-center justify-between mb-4">
+                  <div
+                    className={`w-10 h-10 rounded-[5px] flex items-center justify-center font-mono font-bold text-sm ${
+                      item.active
+                        ? 'bg-[#17243A] text-[#D6A64F] ring-2 ring-[#D6A64F] ring-offset-2'
+                        : 'bg-[#F7F7F4] text-[#17243A] border border-[#E5E7EB]'
+                    }`}
+                  >
+                    0{item.step}
+                  </div>
                   {item.active ? (
                     <Badge variant="primary" size="sm">
                       Active
@@ -555,7 +693,7 @@ const Home = () => {
       </section>
 
       {/* 5. Awards & Recognition Section */}
-      <section id="prizes" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section id="prizes" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 observe-anim opacity-0 transition-opacity duration-500">
         <div className="bg-[#17243A] text-white rounded-[8px] p-8 md:p-12 border border-[#243653] shadow-lg bg-dark-grid">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 border-b border-white/10 pb-6">
             <div className="space-y-3">
@@ -570,7 +708,7 @@ const Home = () => {
               </p>
             </div>
 
-            <div className="text-right">
+            <div className="text-left md:text-right">
               <div className="text-xs text-[#9CA3AF] uppercase tracking-wider">Total Prize Pool</div>
               <div className="text-3xl sm:text-4xl font-extrabold text-[#D6A64F] font-mono">
                 ₹1,50,000+
@@ -579,46 +717,56 @@ const Home = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {PRIZE_TIERS.map((tier, idx) => (
-              <div
-                key={idx}
-                className="bg-white/5 border border-white/10 rounded-[6px] p-6 space-y-4 hover:border-white/25 transition-colors"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono uppercase text-[#D6A64F] font-bold">
-                    {tier.rank}
-                  </span>
-                  <Trophy className="w-5 h-5 text-[#D6A64F]" />
-                </div>
+            {PRIZE_TIERS.map((tier, idx) => {
+              // Accent border color per rank: gold, silver, bronze
+              const rankBorderColor =
+                idx === 0
+                  ? 'border-l-4 border-l-[#D6A64F]'
+                  : idx === 1
+                  ? 'border-l-4 border-l-[#9CA3AF]'
+                  : 'border-l-4 border-l-[#21845B]';
 
-                <div>
-                  <h4 className="text-xl font-bold font-display text-white">{tier.title}</h4>
-                  <div className="text-2xl font-extrabold font-mono text-[#D6A64F] mt-1">
-                    {tier.amount}
+              return (
+                <div
+                  key={idx}
+                  className={`bg-white/5 border border-white/10 rounded-[6px] p-6 space-y-4 hover:border-white/25 transition-colors ${rankBorderColor}`}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-mono uppercase text-[#D6A64F] font-bold">
+                      {tier.rank}
+                    </span>
+                    <Trophy className="w-5 h-5 text-[#D6A64F]" />
+                  </div>
+
+                  <div>
+                    <h4 className="text-xl font-bold font-display text-white">{tier.title}</h4>
+                    <div className="text-2xl font-extrabold font-mono text-[#D6A64F] mt-1">
+                      {tier.amount}
+                    </div>
+                  </div>
+
+                  <div className="border-t border-white/10 pt-3 space-y-2">
+                    <div className="text-[11px] uppercase tracking-wider text-[#9CA3AF] font-bold">
+                      Package Includes:
+                    </div>
+                    <ul className="space-y-1.5 text-xs text-[#D1D5DB]">
+                      {tier.benefits.map((b, bIdx) => (
+                        <li key={bIdx} className="flex items-center gap-2">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-[#21845B] shrink-0" />
+                          <span>{b}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 </div>
-
-                <div className="border-t border-white/10 pt-3 space-y-2">
-                  <div className="text-[11px] uppercase tracking-wider text-[#9CA3AF] font-bold">
-                    Package Includes:
-                  </div>
-                  <ul className="space-y-1.5 text-xs text-[#D1D5DB]">
-                    {tier.benefits.map((b, bIdx) => (
-                      <li key={bIdx} className="flex items-center gap-2">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-[#21845B] shrink-0" />
-                        <span>{b}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
 
       {/* 6. Evaluation Framework Quick Matrix */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 observe-anim opacity-0 transition-opacity duration-500">
         <div className="bg-white border border-[#E5E7EB] rounded-[7px] p-6 sm:p-8 space-y-6 shadow-sm">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#F7F7F4] pb-4">
             <div>
@@ -630,7 +778,7 @@ const Home = () => {
               </h2>
             </div>
             <Link to="/about#rules">
-              <Button variant="outline" size="sm" className="gap-1.5">
+              <Button variant="outline" size="sm" className="gap-1.5 font-semibold">
                 Full Scoring Framework
                 <ArrowRight className="w-3.5 h-3.5" />
               </Button>
@@ -640,8 +788,8 @@ const Home = () => {
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
             <div className="p-3 bg-[#F7F7F4] border border-[#E5E7EB] rounded-[5px] text-center space-y-1">
               <div className="text-xl font-extrabold font-mono text-[#17243A]">30 pts</div>
-              <div className="text-xs font-semibold text-[#17243A]">Functional Completeness</div>
-              <div className="text-[10px] text-[#6B7280]">Full working MVP flows</div>
+              <div className="text-xs font-semibold text-[#17243A]">Functional MVP</div>
+              <div className="text-[10px] text-[#6B7280]">Complete working flows</div>
             </div>
 
             <div className="p-3 bg-[#F7F7F4] border border-[#E5E7EB] rounded-[5px] text-center space-y-1">
@@ -653,7 +801,7 @@ const Home = () => {
             <div className="p-3 bg-[#F7F7F4] border border-[#E5E7EB] rounded-[5px] text-center space-y-1">
               <div className="text-xl font-extrabold font-mono text-[#17243A]">20 pts</div>
               <div className="text-xs font-semibold text-[#17243A]">UI / UX Quality</div>
-              <div className="text-[10px] text-[#6B7280]">Design system &amp; mobile UX</div>
+              <div className="text-[10px] text-[#6B7280]">Design system adherence</div>
             </div>
 
             <div className="p-3 bg-[#F7F7F4] border border-[#E5E7EB] rounded-[5px] text-center space-y-1">
@@ -678,7 +826,7 @@ const Home = () => {
       </section>
 
       {/* 7. FAQs Accordion */}
-      <section className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 observe-anim opacity-0 transition-opacity duration-500">
         <div className="text-center space-y-3 mb-8">
           <div className="text-xs font-bold uppercase tracking-wider text-[#D6A64F] font-mono">
             05 &bull; Inquiries
@@ -686,6 +834,9 @@ const Home = () => {
           <h2 className="text-2xl sm:text-3xl font-extrabold text-[#17243A] tracking-tight font-display">
             Frequently Asked Questions
           </h2>
+          <p className="text-xs text-[#6B7280]">
+            Everything you need to know about participating, team assembly, and submissions.
+          </p>
         </div>
 
         <div className="space-y-3">
@@ -696,19 +847,24 @@ const Home = () => {
             >
               <button
                 onClick={() => setActiveFaq(activeFaq === idx ? null : idx)}
-                className="w-full flex items-center justify-between px-5 py-4 text-left focus:outline-none"
+                className="w-full flex items-center justify-between px-5 py-4 text-left focus:outline-none cursor-pointer"
               >
-                <span className="text-sm font-semibold text-[#17243A] pr-4">
-                  {faq.q}
-                </span>
+                <div className="flex items-center gap-3 pr-4">
+                  <span className="bg-[#17243A]/5 text-[#17243A] border border-[#17243A]/15 px-2 py-0.5 rounded-[3px] text-[10px] font-mono font-bold shrink-0">
+                    {faq.category}
+                  </span>
+                  <span className="text-sm font-semibold text-[#17243A]">
+                    {faq.q}
+                  </span>
+                </div>
                 <ChevronDown
-                  className={`w-4 h-4 text-[#6B7280] shrink-0 transition-transform ${
+                  className={`w-4 h-4 text-[#6B7280] shrink-0 transition-transform duration-200 ${
                     activeFaq === idx ? 'rotate-180 text-[#17243A]' : ''
                   }`}
                 />
               </button>
               {activeFaq === idx && (
-                <div className="px-5 pb-4 pt-1 text-xs text-[#4B5563] leading-relaxed border-t border-[#F7F7F4]">
+                <div className="px-5 pb-4 pt-1 text-xs text-[#4B5563] leading-relaxed border-t border-[#F7F7F4] animate-fadeIn">
                   {faq.a}
                 </div>
               )}
@@ -717,30 +873,58 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 8. Bottom CTA Banner */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-[#17243A] text-white rounded-[8px] p-8 md:p-12 text-center space-y-5 border border-[#243653] shadow-lg">
-          <div className="inline-block px-3 py-1 bg-white/10 rounded-[4px] text-xs font-mono text-[#D6A64F] font-bold uppercase">
-            Limited Submissions Window
-          </div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold font-display">
-            Ready to Engineer Something Extraordinary?
-          </h2>
-          <p className="text-sm text-[#D1D5DB] max-w-lg mx-auto leading-relaxed">
-            Create your account in seconds, verify with our 10-minute automated OTP system, and submit your project to the official docket.
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
-            <Link to={isAuthenticated ? '/register' : '/signup'}>
-              <Button variant="primary" size="lg" className="bg-[#D6A64F] text-[#17243A] hover:bg-[#e0b462] font-bold gap-2">
-                {isAuthenticated ? 'Submit Team Registration' : 'Register for Hackathon'}
-                <ArrowRight className="w-4 h-4" />
-              </Button>
-            </Link>
-            <Link to="/about">
-              <Button variant="outline" size="lg" className="border-white/30 text-white hover:bg-white/10">
-                Review Guidelines
-              </Button>
-            </Link>
+      {/* 8. Bottom CTA Banner (Two-Column on md+) */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 observe-anim opacity-0 transition-opacity duration-500">
+        <div className="bg-[#17243A] text-white rounded-[8px] p-8 md:p-12 border border-[#243653] shadow-lg">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+            {/* Left Column: CTA Content */}
+            <div className="md:col-span-8 space-y-4">
+              <div className="inline-block px-3 py-1 bg-white/10 rounded-[4px] text-xs font-mono text-[#D6A64F] font-bold uppercase">
+                Limited Submissions Window &bull; Closes Dec 20, 2026
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-extrabold font-display">
+                Ready to Engineer Something Extraordinary?
+              </h2>
+              <p className="text-sm text-[#D1D5DB] max-w-xl leading-relaxed">
+                Create your account in seconds, verify with our 10-minute automated OTP system, and submit your project to the official docket.
+              </p>
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 pt-2">
+                <Link to={isAuthenticated ? '/register' : '/signup'}>
+                  <Button variant="primary" size="lg" className="bg-[#D6A64F] text-[#17243A] hover:bg-[#e0b462] font-bold gap-2">
+                    {isAuthenticated ? 'Submit Team Registration' : 'Register for Hackathon'}
+                    <ArrowRight className="w-4 h-4" />
+                  </Button>
+                </Link>
+                <Link to="/about">
+                  <Button variant="outline" size="lg" className="border-white/30 text-white hover:bg-white/10 font-medium">
+                    Review Guidelines
+                  </Button>
+                </Link>
+              </div>
+            </div>
+
+            {/* Right Column: Mini Stats Summary Panel */}
+            <div className="md:col-span-4 bg-white/5 border border-white/10 rounded-[6px] p-5 space-y-3 font-mono text-xs">
+              <div className="text-[11px] text-[#D6A64F] font-bold uppercase tracking-wider">
+                Platform Snapshot
+              </div>
+              <div className="flex items-center justify-between border-b border-white/10 pb-2">
+                <span className="text-[#9CA3AF]">Status</span>
+                <span className="text-emerald-400 font-bold">REGISTRATIONS OPEN</span>
+              </div>
+              <div className="flex items-center justify-between border-b border-white/10 pb-2">
+                <span className="text-[#9CA3AF]">Active Tracks</span>
+                <span className="text-white font-bold">5 Specialized Tracks</span>
+              </div>
+              <div className="flex items-center justify-between border-b border-white/10 pb-2">
+                <span className="text-[#9CA3AF]">Team Bounds</span>
+                <span className="text-white font-bold">1–5 Members</span>
+              </div>
+              <div className="flex items-center justify-between pt-1">
+                <span className="text-[#9CA3AF]">Sprint Duration</span>
+                <span className="text-[#D6A64F] font-bold">36 Continuous Hours</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>

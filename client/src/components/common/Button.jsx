@@ -13,12 +13,13 @@ const Button = ({
   ...props
 }) => {
   const baseStyles =
-    'inline-flex items-center justify-center font-medium transition-colors duration-150 rounded-[5px] focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-[#17243A] select-none disabled:opacity-50 disabled:cursor-not-allowed';
+    'inline-flex items-center justify-center font-medium transition-all duration-150 rounded-[5px] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#17243A] select-none disabled:opacity-50 disabled:cursor-not-allowed';
 
   const sizeStyles = {
     sm: 'text-xs px-3 py-1.5 gap-1.5',
     md: 'text-sm px-4 py-2 gap-2',
     lg: 'text-base px-6 py-2.5 gap-2.5',
+    icon: 'p-2',
   };
 
   const variantStyles = {
@@ -32,6 +33,8 @@ const Button = ({
       'bg-[#C44545] text-white hover:bg-[#A83838] active:bg-[#8F2E2E] border border-transparent',
     ghost:
       'bg-transparent text-[#6B7280] hover:text-[#20242B] hover:bg-[#E5E7EB]/50 border border-transparent',
+    accent:
+      'bg-[#D6A64F] text-[#17243A] hover:bg-[#c49540] active:bg-[#b5892e] border border-transparent font-semibold',
   };
 
   return (
@@ -39,14 +42,13 @@ const Button = ({
       type={type}
       disabled={disabled || isLoading}
       onClick={onClick}
-      className={`${baseStyles} ${sizeStyles[size]} ${variantStyles[variant]} ${className}`}
+      className={`${baseStyles} ${sizeStyles[size] ?? sizeStyles.md} ${variantStyles[variant]} ${className}`}
       {...props}
     >
-      {isLoading && <Loader2 className="w-4 h-4 animate-spin text-current" />}
+      {isLoading && <Loader2 className="w-4 h-4 animate-spin text-current flex-shrink-0" />}
       {children}
     </button>
   );
 };
 
 export default Button;
-

@@ -15,8 +15,11 @@ const CountdownTimer = ({
 
   useEffect(() => {
     const calculateTime = () => {
-      const difference = new Date(targetDate) - new Date();
-      if (difference <= 0) {
+      const target = new Date(targetDate).getTime();
+      const now = Date.now();
+      const difference = target - now;
+
+      if (isNaN(difference) || difference <= 0) {
         setTimeLeft({ days: '00', hours: '00', minutes: '00', seconds: '00' });
         return;
       }
@@ -118,3 +121,4 @@ const CountdownTimer = ({
 };
 
 export default CountdownTimer;
+

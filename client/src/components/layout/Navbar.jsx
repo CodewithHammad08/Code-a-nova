@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import {
   Menu,
@@ -15,9 +15,24 @@ import Button from '../common/Button';
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const { user, isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Close mobile menu on route change
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [location.pathname]);
 
   const handleLogout = async () => {
     await logout();
@@ -32,23 +47,41 @@ const Navbar = () => {
     }`;
 
   return (
-    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-[#E5E7EB]">
+    <header
+      className={`sticky top-0 z-40 bg-white/95 backdrop-blur-md transition-shadow duration-200 ${
+        scrolled ? 'shadow-sm border-b border-[#E5E7EB]' : 'border-b border-[#E5E7EB]'
+      }`}
+    >
       {/* Top Announcement Bar */}
-      <div className="bg-[#17243A] text-white text-[11px] py-1.5 px-4 text-center font-medium border-b border-[#243653] flex items-center justify-center gap-2">
-        <span className="inline-block w-2 h-2 rounded-full bg-[#21845B] animate-pulse" />
-        <span className="text-[#D6A64F] font-bold tracking-wider uppercase text-[10px]">
-          Official Registration Portal:
-        </span>
-        <span className="hidden sm:inline text-white/90">
-          Code-a-Nova 2026-27 is live &bull; 10-minute automated OTP verification &bull;
-        </span>
-        <Link
-          to={isAuthenticated ? '/register' : '/signup'}
-          className="text-[#D6A64F] hover:underline font-bold inline-flex items-center gap-0.5 ml-1"
-        >
-          {isAuthenticated ? 'Register Project' : 'Register Now'}
-          <ChevronRight className="w-3 h-3" />
-        </Link>
+      <div className="bg-[#17243A] text-white text-[11px] py-2 px-4 border-b border-[#243653] flex items-center justify-between sm:justify-center gap-2 sm:gap-4">
+        {/* Left: LIVE Badge */}
+        <div className="flex items-center gap-1.5 shrink-0">
+          <span className="inline-block w-2 h-2 rounded-full bg-[#21845B] animate-pulse" />
+          <span className="text-[#21845B] font-bold tracking-wider uppercase text-[10px] bg-[#21845B]/15 px-1.5 py-0.5 rounded-[3px] border border-[#21845B]/30 font-mono">
+            LIVE
+          </span>
+        </div>
+
+        {/* Center: Event Info */}
+        <div className="flex items-center gap-2 text-center truncate">
+          <span className="text-[#D6A64F] font-bold tracking-wider uppercase text-[10px]">
+            Official Registration Portal:
+          </span>
+          <span className="hidden sm:inline text-white/90">
+            Code-a-Nova 2026-27 is live &bull; 10-minute automated OTP verification &bull;
+          </span>
+        </div>
+
+        {/* Right: CTA Link */}
+        <div className="shrink-0">
+          <Link
+            to={isAuthenticated ? '/register' : '/signup'}
+            className="text-[#D6A64F] hover:underline font-bold inline-flex items-center gap-0.5 ml-1 text-xs"
+          >
+            {isAuthenticated ? 'Register Project' : 'Register Now'}
+            <ChevronRight className="w-3 h-3" />
+          </Link>
+        </div>
       </div>
 
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -106,6 +139,13 @@ const Navbar = () => {
           <div className="hidden md:flex items-center gap-3">
             {isAuthenticated ? (
               <div className="flex items-center gap-3">
+                {/* User Avatar Circle */}
+                <Link to="/profile" title="View Profile">
+                  <div className="w-8 h-8 rounded-[4px] bg-[#17243A] text-white flex items-center justify-center text-xs font-bold font-mono hover:bg-[#243653] transition-colors border border-[#243653]">
+                    {user?.name?.[0]?.toUpperCase() || user?.fullName?.[0]?.toUpperCase() || user?.email?.[0]?.toUpperCase() || 'U'}
+                  </div>
+                </Link>
+
                 <Link to="/dashboard">
                   <Button variant="primary" size="sm" className="gap-2">
                     <LayoutDashboard className="w-4 h-4" />
@@ -152,93 +192,109 @@ const Navbar = () => {
         </div>
       </nav>
 
-      {/* Mobile Drawer */}
-      {mobileMenuOpen && (
-        <div className="md:hidden border-b border-[#E5E7EB] bg-white px-4 pt-2 pb-5 space-y-3">
-          <div className="flex flex-col space-y-2 pt-2 pb-3 border-b border-[#E5E7EB] text-sm">
-            <Link
-              to="/"
-              onClick={() => setMobileMenuOpen(false)}
-              className="px-3 py-2 font-semibold text-[#17243A] hover:bg-[#F7F7F4] rounded-[5px]"
-            >
-              Home
-            </Link>
-            <Link
-              to="/about"
-              onClick={() => setMobileMenuOpen(false)}
-              className="px-3 py-2 font-semibold text-[#17243A] hover:bg-[#F7F7F4] rounded-[5px]"
-            >
-              About & Rubric
-            </Link>
-            <a
-              href="/#domains"
-              onClick={() => setMobileMenuOpen(false)}
-              className="px-3 py-2 font-semibold text-[#17243A] hover:bg-[#F7F7F4] rounded-[5px]"
-            >
-              Tracks
-            </a>
-            <a
-              href="/#timeline"
-              onClick={() => setMobileMenuOpen(false)}
-              className="px-3 py-2 font-semibold text-[#17243A] hover:bg-[#F7F7F4] rounded-[5px]"
-            >
-              Timeline
-            </a>
-            <a
-              href="/#prizes"
-              onClick={() => setMobileMenuOpen(false)}
-              className="px-3 py-2 font-semibold text-[#17243A] hover:bg-[#F7F7F4] rounded-[5px]"
-            >
-              Prizes
-            </a>
-            <Link
-              to="/contact"
-              onClick={() => setMobileMenuOpen(false)}
-              className="px-3 py-2 font-semibold text-[#17243A] hover:bg-[#F7F7F4] rounded-[5px]"
-            >
-              Contact
-            </Link>
-          </div>
-
-          <div className="pt-2 flex flex-col gap-2">
-            {isAuthenticated ? (
-              <>
-                <div className="px-3 py-1.5 text-xs text-[#6B7280]">
-                  Signed in as <strong className="text-[#17243A]">{user?.email}</strong>
-                </div>
-                <Link to="/dashboard" onClick={() => setMobileMenuOpen(false)}>
-                  <Button variant="primary" className="w-full">
-                    Go to Dashboard
-                  </Button>
-                </Link>
-                <Button
-                  variant="secondary"
-                  className="w-full"
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    handleLogout();
-                  }}
-                >
-                  Sign Out
-                </Button>
-              </>
-            ) : (
-              <div className="grid grid-cols-2 gap-2">
-                <Link to="/login" onClick={() => setMobileMenuOpen(false)}>
-                  <Button variant="secondary" className="w-full">
-                    Sign In
-                  </Button>
-                </Link>
-                <Link to="/signup" onClick={() => setMobileMenuOpen(false)}>
-                  <Button variant="primary" className="w-full">
-                    Register
-                  </Button>
-                </Link>
-              </div>
-            )}
-          </div>
+      {/* Mobile Drawer with Slide Animation */}
+      <div
+        className={`md:hidden border-b border-[#E5E7EB] bg-white px-4 space-y-3 transition-all duration-300 ease-in-out transform ${
+          mobileMenuOpen
+            ? 'translate-y-0 opacity-100 pointer-events-auto max-h-[600px] pt-2 pb-5'
+            : '-translate-y-full opacity-0 pointer-events-none max-h-0 overflow-hidden py-0 border-b-0'
+        }`}
+      >
+        <div className="flex flex-col space-y-2 pt-2 pb-3 border-b border-[#E5E7EB] text-sm">
+          <Link
+            to="/"
+            onClick={() => setMobileMenuOpen(false)}
+            className="px-3 py-2 font-semibold text-[#17243A] hover:bg-[#F7F7F4] rounded-[5px] transition-colors"
+          >
+            Home
+          </Link>
+          <Link
+            to="/about"
+            onClick={() => setMobileMenuOpen(false)}
+            className="px-3 py-2 font-semibold text-[#17243A] hover:bg-[#F7F7F4] rounded-[5px] transition-colors"
+          >
+            About & Rubric
+          </Link>
+          <a
+            href="/#domains"
+            onClick={() => setMobileMenuOpen(false)}
+            className="px-3 py-2 font-semibold text-[#17243A] hover:bg-[#F7F7F4] rounded-[5px] transition-colors"
+          >
+            Tracks
+          </a>
+          <a
+            href="/#timeline"
+            onClick={() => setMobileMenuOpen(false)}
+            className="px-3 py-2 font-semibold text-[#17243A] hover:bg-[#F7F7F4] rounded-[5px] transition-colors"
+          >
+            Timeline
+          </a>
+          <a
+            href="/#prizes"
+            onClick={() => setMobileMenuOpen(false)}
+            className="px-3 py-2 font-semibold text-[#17243A] hover:bg-[#F7F7F4] rounded-[5px] transition-colors"
+          >
+            Prizes
+          </a>
+          <Link
+            to="/contact"
+            onClick={() => setMobileMenuOpen(false)}
+            className="px-3 py-2 font-semibold text-[#17243A] hover:bg-[#F7F7F4] rounded-[5px] transition-colors"
+          >
+            Contact
+          </Link>
         </div>
-      )}
+
+        <div className="pt-2 flex flex-col gap-2">
+          {isAuthenticated ? (
+            <>
+              {/* Mobile Authenticated User Info */}
+              <div className="flex items-center gap-2.5 px-3 py-2 bg-[#F7F7F4] rounded-[5px] border border-[#E5E7EB]">
+                <div className="w-8 h-8 rounded-[4px] bg-[#17243A] text-white flex items-center justify-center text-xs font-bold font-mono shrink-0">
+                  {user?.name?.[0]?.toUpperCase() || user?.fullName?.[0]?.toUpperCase() || user?.email?.[0]?.toUpperCase() || 'U'}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="text-xs font-semibold text-[#17243A] truncate">
+                    {user?.fullName || user?.name || 'Participant'}
+                  </div>
+                  <div className="text-[11px] text-[#6B7280] truncate font-mono">
+                    {user?.email}
+                  </div>
+                </div>
+              </div>
+
+              <Link to="/dashboard" onClick={() => setMobileMenuOpen(false)}>
+                <Button variant="primary" className="w-full">
+                  Go to Dashboard
+                </Button>
+              </Link>
+              <Button
+                variant="secondary"
+                className="w-full"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  handleLogout();
+                }}
+              >
+                Sign Out
+              </Button>
+            </>
+          ) : (
+            <div className="grid grid-cols-2 gap-2">
+              <Link to="/login" onClick={() => setMobileMenuOpen(false)}>
+                <Button variant="secondary" className="w-full">
+                  Sign In
+                </Button>
+              </Link>
+              <Link to="/signup" onClick={() => setMobileMenuOpen(false)}>
+                <Button variant="primary" className="w-full">
+                  Register
+                </Button>
+              </Link>
+            </div>
+          )}
+        </div>
+      </div>
     </header>
   );
 };

@@ -2,7 +2,13 @@ const { errorResponse } = require('../utils/apiResponse');
 const config = require('../config/environment');
 
 const errorHandler = (err, req, res, next) => {
-  console.error('[Unhandled Error]:', err);
+  const statusCode = err.statusCode || 500;
+
+  if (statusCode >= 500) {
+    console.error('[Internal Server Error]:', err);
+  } else if (config.env === 'development') {
+    console.log(`[Handled Client Error ${statusCode}]: ${err.message}`);
+  }
 
   // Mongoose duplicate key error
   if (err.code === 11000) {
@@ -24,7 +30,6 @@ const errorHandler = (err, req, res, next) => {
     return errorResponse(res, 401, 'Invalid authentication token');
   }
 
-  const statusCode = err.statusCode || 500;
   const message =
     config.env === 'production' && statusCode === 500
       ? 'An unexpected error occurred on the server. Please try again later.'

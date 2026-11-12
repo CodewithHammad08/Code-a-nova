@@ -468,6 +468,44 @@ const runAllTests = async () => {
     });
     assert(csvRes.status === 200 && csvRes.raw.includes('Registration ID,Leader Name'), 'Admin CSV export generates valid spreadsheet format');
 
+    // TEST 18: User Password Change
+    console.log('\n--- TEST 18: Password Change ---');
+    const pwdChangeRes = await makeRequest(
+      {
+        hostname: 'localhost',
+        port,
+        path: '/api/user/change-password',
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${authToken1}`,
+          'Content-Type': 'application/json',
+        },
+      },
+      {
+        currentPassword: 'SecurePass123!',
+        newPassword: 'NewPassword2026!',
+        confirmPassword: 'NewPassword2026!',
+      }
+    );
+    assert(pwdChangeRes.status === 200 && pwdChangeRes.body.success, 'User password changed successfully');
+
+    // TEST 19: Administrative Promotion Endpoint
+    console.log('\n--- TEST 19: Admin Promotion Endpoint ---');
+    const promoteRes = await makeRequest(
+      {
+        hostname: 'localhost',
+        port,
+        path: '/api/auth/promote-admin',
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      },
+      {
+        email: 'lead.team2@codeanova.test',
+        adminSecret: 'codeanova_admin_secret_2026',
+      }
+    );
+    assert(promoteRes.status === 200 && promoteRes.body.data.role === 'admin', 'Administrative promotion endpoint functions properly');
+
   } catch (err) {
     console.error('Test runner fatal error:', err);
     failed++;

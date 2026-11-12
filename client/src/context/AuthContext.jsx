@@ -65,6 +65,10 @@ export const AuthProvider = ({ children }) => {
     return response;
   };
 
+  const changePassword = async (data) => {
+    return userService.changePassword(data);
+  };
+
   const refreshUser = async () => {
     try {
       const response = await authService.getMe();
@@ -87,6 +91,7 @@ export const AuthProvider = ({ children }) => {
     login,
     logout,
     updateUserProfile,
+    changePassword,
     refreshUser,
   };
 

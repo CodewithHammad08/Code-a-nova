@@ -1,7 +1,15 @@
+const mongoose = require('mongoose');
 const HackathonRegistration = require('../models/HackathonRegistration');
 const User = require('../models/User');
 const generateRegistrationId = require('../utils/generateRegistrationId');
 const { sendConfirmationEmail } = require('./email.service');
+
+const normalizeUrl = (url) => {
+  if (!url || typeof url !== 'string') return '';
+  const trimmed = url.trim();
+  if (!trimmed) return '';
+  return /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+};
 
 /**
  * Creates a new hackathon registration for the authenticated user
@@ -27,21 +35,23 @@ const createRegistration = async (user, data) => {
   const teamSize = parseInt(data.teamSize, 10);
   const teamMembers = teamSize > 1 ? (data.teamMembers || []) : [];
 
+  const cleanMobile = (data.mobileNumber || '').replace(/\D/g, '').slice(-10);
+
   const registration = new HackathonRegistration({
     registrationId,
     userId: user._id,
     participantName: data.participantName || user.fullName,
     email: user.email,
-    mobileNumber: data.mobileNumber,
+    mobileNumber: cleanMobile || data.mobileNumber,
     collegeName: data.collegeName,
     course: data.course,
     branch: data.branch,
     yearOfStudy: data.yearOfStudy,
     domain: data.domain,
     projectName: data.projectName,
-    pptLink: data.pptLink,
-    prototypeLink: data.prototypeLink,
-    demoVideoLink: data.demoVideoLink || '',
+    pptLink: normalizeUrl(data.pptLink),
+    prototypeLink: normalizeUrl(data.prototypeLink),
+    demoVideoLink: normalizeUrl(data.demoVideoLink),
     teamSize,
     teamMembers,
     status: 'submitted',
@@ -56,7 +66,7 @@ const createRegistration = async (user, data) => {
     course: data.course,
     branch: data.branch,
     year: data.yearOfStudy,
-    mobileNumber: data.mobileNumber,
+    mobileNumber: cleanMobile || data.mobileNumber,
   }).catch((err) => console.warn('Non-critical profile sync error:', err.message));
 
   // Trigger confirmation email asynchronously (does NOT rollback on failure)
@@ -88,7 +98,11 @@ const updateRegistrationLinks = async (userId, updateData) => {
   const allowedFields = ['projectName', 'pptLink', 'prototypeLink', 'demoVideoLink'];
   allowedFields.forEach((field) => {
     if (updateData[field] !== undefined) {
-      registration[field] = updateData[field];
+      if (['pptLink', 'prototypeLink', 'demoVideoLink'].includes(field)) {
+        registration[field] = normalizeUrl(updateData[field]);
+      } else {
+        registration[field] = updateData[field];
+      }
     }
   });
 
@@ -99,8 +113,14 @@ const updateRegistrationLinks = async (userId, updateData) => {
 /**
  * Deletes a registration (admin or owner with validation)
  */
-const deleteRegistration = async (registrationId, user) => {
-  const query = { registrationId };
+const deleteRegistration = async (id, user) => {
+  // Support both registrationId (e.g. CAN-2026-XXXX) and MongoDB _id
+  const conditions = [{ registrationId: id }];
+  if (mongoose.isValidObjectId(id)) {
+    conditions.push({ _id: id });
+  }
+
+  const query = { $or: conditions };
   // If not admin, verify ownership
   if (user.role !== 'admin') {
     query.userId = user._id;

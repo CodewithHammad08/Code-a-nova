@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   ShieldAlert,
   Users,
@@ -13,25 +14,63 @@ import {
   Database,
   BarChart3,
   Award,
+  Eye,
+  Trash2,
+  AlertTriangle,
+  FileText,
+  Mail,
+  GraduationCap,
 } from 'lucide-react';
 import Button from '../components/common/Button';
 import Card from '../components/common/Card';
 import Badge from '../components/common/Badge';
+import Modal from '../components/common/Modal';
 import Skeleton from '../components/common/Skeleton';
 import { registrationService } from '../services/registration.service';
 import { DOMAINS } from '../utils/constants';
+import useAuth from '../hooks/useAuth';
 import toast from 'react-hot-toast';
 
 const AdminDashboard = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const [stats, setStats] = useState(null);
   const [registrations, setRegistrations] = useState([]);
   const [pagination, setPagination] = useState({ page: 1, totalPages: 1, total: 0 });
   const [isLoading, setIsLoading] = useState(true);
 
+  // Detail & Delete modals
+  const [selectedReg, setSelectedReg] = useState(null);
+  const [deletingId, setDeletingId] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+
   // Filters
   const [search, setSearch] = useState('');
   const [selectedDomain, setSelectedDomain] = useState('All');
   const [page, setPage] = useState(1);
+
+  // Enforce administrative access control
+  useEffect(() => {
+    if (user && user.role !== 'admin') {
+      toast.error('Access restricted to administrators only.');
+      navigate('/dashboard', { replace: true });
+    }
+  }, [user, navigate]);
+
+  const handleDelete = async (regId) => {
+    setIsDeleting(true);
+    try {
+      await registrationService.deleteEntry(regId);
+      toast.success('Registration removed successfully.');
+      setDeletingId(null);
+      fetchRegistrations();
+      fetchStats();
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to delete registration.');
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   const fetchStats = async () => {
     try {
@@ -196,18 +235,19 @@ const AdminDashboard = () => {
                 <th className="py-3 px-4">College</th>
                 <th className="py-3 px-4">Links</th>
                 <th className="py-3 px-4">Submitted</th>
+                <th className="py-3 px-4 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[#E5E7EB] text-[#4B5563]">
               {isLoading ? (
                 <tr>
-                  <td colSpan="8" className="py-10 text-center">
+                  <td colSpan="9" className="py-10 text-center">
                     <Skeleton className="h-6 w-48 mx-auto" />
                   </td>
                 </tr>
               ) : registrations.length === 0 ? (
                 <tr>
-                  <td colSpan="8" className="py-10 text-center text-[#6B7280]">
+                  <td colSpan="9" className="py-10 text-center text-[#6B7280]">
                     No registrations found matching the specified search parameters.
                   </td>
                 </tr>
@@ -264,7 +304,27 @@ const AdminDashboard = () => {
                       </div>
                     </td>
                     <td className="py-3 px-4 text-[11px] text-[#6B7280] font-mono whitespace-nowrap">
-                      {new Date(reg.submittedAt).toLocaleDateString()}
+                      {new Date(reg.submittedAt || reg.createdAt || Date.now()).toLocaleDateString()}
+                    </td>
+                    <td className="py-3 px-4 text-right">
+                      <div className="flex items-center justify-end gap-1.5">
+                        <button
+                          type="button"
+                          onClick={() => setSelectedReg(reg)}
+                          className="p-1.5 text-[#6B7280] hover:text-[#17243A] hover:bg-[#E5E7EB]/50 rounded-[4px] transition-colors"
+                          title="View Details"
+                        >
+                          <Eye className="w-4 h-4" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setDeletingId(reg.registrationId)}
+                          className="p-1.5 text-[#C44545] hover:bg-[#C44545]/10 rounded-[4px] transition-colors"
+                          title="Delete Registration"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))
@@ -308,6 +368,146 @@ const AdminDashboard = () => {
           </div>
         </div>
       </div>
+
+      {/* View Details Modal */}
+      {selectedReg && (
+        <Modal
+          isOpen={!!selectedReg}
+          onClose={() => setSelectedReg(null)}
+          title={`Entry Details: ${selectedReg.registrationId}`}
+          maxWidth="max-w-2xl"
+        >
+          <div className="space-y-5 text-xs text-[#4B5563]">
+            <div className="grid grid-cols-2 gap-4 pb-4 border-b border-[#E5E7EB]">
+              <div>
+                <span className="text-[10px] uppercase font-bold text-[#9CA3AF]">Project Title</span>
+                <p className="text-sm font-bold text-[#17243A]">{selectedReg.projectName}</p>
+              </div>
+              <div>
+                <span className="text-[10px] uppercase font-bold text-[#9CA3AF]">Domain / Track</span>
+                <p className="font-semibold text-[#17243A]">{selectedReg.domain}</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pb-4 border-b border-[#E5E7EB]">
+              <div>
+                <span className="text-[10px] uppercase font-bold text-[#9CA3AF]">Team Leader</span>
+                <p className="font-semibold text-[#17243A]">{selectedReg.participantName}</p>
+                <p className="font-mono text-[11px] text-[#6B7280]">{selectedReg.email}</p>
+              </div>
+              <div>
+                <span className="text-[10px] uppercase font-bold text-[#9CA3AF]">Contact Number</span>
+                <p className="font-mono text-[#17243A]">{selectedReg.mobileNumber}</p>
+              </div>
+              <div>
+                <span className="text-[10px] uppercase font-bold text-[#9CA3AF]">Institution</span>
+                <p className="font-medium text-[#17243A]">{selectedReg.collegeName}</p>
+                <p className="text-[11px] text-[#6B7280]">{selectedReg.course} &bull; {selectedReg.branch} ({selectedReg.yearOfStudy})</p>
+              </div>
+            </div>
+
+            {/* Team Roster */}
+            <div>
+              <span className="text-[10px] uppercase font-bold text-[#9CA3AF] block mb-2">
+                Team Roster ({selectedReg.teamSize} Member{selectedReg.teamSize > 1 ? 's' : ''})
+              </span>
+              <div className="bg-[#F7F7F4] rounded-[5px] p-3 space-y-2">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="font-bold text-[#17243A]">{selectedReg.participantName} (Leader)</span>
+                  <span className="font-mono text-[#6B7280]">{selectedReg.email}</span>
+                </div>
+                {selectedReg.teamMembers && selectedReg.teamMembers.map((m, idx) => (
+                  <div key={idx} className="flex items-center justify-between text-xs border-t border-[#E5E7EB] pt-1.5">
+                    <span className="text-[#17243A]">Member {idx + 2}: {m.name}</span>
+                    <span className="font-mono text-[#6B7280]">{m.email}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Deliverables */}
+            <div className="space-y-2 pt-2 border-t border-[#E5E7EB]">
+              <span className="text-[10px] uppercase font-bold text-[#9CA3AF] block">Submission Links</span>
+              <div className="flex flex-wrap gap-3">
+                {selectedReg.pptLink && (
+                  <a
+                    href={selectedReg.pptLink}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#F7F7F4] border border-[#E5E7EB] rounded-[4px] font-mono text-xs text-[#17243A] hover:bg-[#E5E7EB] transition-colors"
+                  >
+                    <span>Presentation Deck</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
+                )}
+                {selectedReg.prototypeLink && (
+                  <a
+                    href={selectedReg.prototypeLink}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#F7F7F4] border border-[#E5E7EB] rounded-[4px] font-mono text-xs text-[#17243A] hover:bg-[#E5E7EB] transition-colors"
+                  >
+                    <span>Code Repository / Prototype</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
+                )}
+                {selectedReg.demoVideoLink && (
+                  <a
+                    href={selectedReg.demoVideoLink}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#F7F7F4] border border-[#E5E7EB] rounded-[4px] font-mono text-xs text-[#17243A] hover:bg-[#E5E7EB] transition-colors"
+                  >
+                    <span>Demo Video</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
+                )}
+              </div>
+            </div>
+          </div>
+        </Modal>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {deletingId && (
+        <Modal
+          isOpen={!!deletingId}
+          onClose={() => setDeletingId(null)}
+          title="Confirm Registration Deletion"
+          maxWidth="max-w-md"
+        >
+          <div className="space-y-4 text-xs text-[#4B5563]">
+            <div className="flex items-start gap-3 p-3 bg-[#C44545]/10 border border-[#C44545]/20 rounded-[5px]">
+              <AlertTriangle className="w-5 h-5 text-[#C44545] shrink-0 mt-0.5" />
+              <div>
+                <p className="font-bold text-[#C44545]">Irreversible Administrative Action</p>
+                <p className="text-[#C44545]/90 mt-0.5">
+                  Are you sure you want to permanently delete registration <strong>{deletingId}</strong>? This cannot be undone.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end gap-2 pt-2">
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => setDeletingId(null)}
+                disabled={isDeleting}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="destructive"
+                size="sm"
+                isLoading={isDeleting}
+                onClick={() => handleDelete(deletingId)}
+              >
+                Confirm Delete
+              </Button>
+            </div>
+          </div>
+        </Modal>
+      )}
     </div>
   );
 };
