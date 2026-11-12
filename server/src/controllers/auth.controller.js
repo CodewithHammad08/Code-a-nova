@@ -8,7 +8,6 @@ const signup = async (req, res, next) => {
     return successResponse(res, 201, result.message, {
       email: result.email,
       user: result.user,
-      devOtp: result.devOtp,
     });
   } catch (error) {
     next(error);
@@ -29,9 +28,7 @@ const resendOtp = async (req, res, next) => {
   try {
     const { email } = req.body;
     const result = await authService.resendUserOtp({ email });
-    return successResponse(res, 200, result.message, {
-      devOtp: result.devOtp,
-    });
+    return successResponse(res, 200, result.message);
   } catch (error) {
     next(error);
   }

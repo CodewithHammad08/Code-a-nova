@@ -91,9 +91,7 @@ const Signup = () => {
     try {
       const res = await signup(formData);
       toast.success(res?.message || 'Verification code dispatched to your email.');
-      navigate(`/verify-otp?email=${encodeURIComponent(formData.email.trim().toLowerCase())}`, {
-        state: { devOtp: res?.data?.devOtp },
-      });
+      navigate(`/verify-otp?email=${encodeURIComponent(formData.email.trim().toLowerCase())}`);
     } catch (err) {
       const msg = err.response?.data?.message || 'Registration failed. Please try again.';
       toast.error(msg);

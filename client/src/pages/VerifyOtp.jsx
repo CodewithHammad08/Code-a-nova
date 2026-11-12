@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useSearchParams, useNavigate, useLocation, Link } from 'react-router-dom';
-import { KeyRound, RotateCw, CheckCircle2, ArrowRight, Sparkles } from 'lucide-react';
+import { KeyRound, RotateCw, CheckCircle2, ArrowRight } from 'lucide-react';
 import Button from '../components/common/Button';
 import Card from '../components/common/Card';
 import useAuth from '../hooks/useAuth';
@@ -12,7 +12,6 @@ const VerifyOtp = () => {
   const emailParam = searchParams.get('email') || '';
 
   const [email, setEmail] = useState(emailParam);
-  const [devOtp, setDevOtp] = useState(location.state?.devOtp || '');
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [isVerifying, setIsVerifying] = useState(false);
   const [isResending, setIsResending] = useState(false);
@@ -115,11 +114,8 @@ const VerifyOtp = () => {
 
     setIsResending(true);
     try {
-      const res = await resendOtp({ email });
-      if (res?.data?.devOtp) {
-        setDevOtp(res.data.devOtp);
-      }
-      toast.success('A new verification code has been dispatched.');
+      await resendOtp({ email });
+      toast.success('A new verification code has been dispatched to your email.');
       setCooldownSeconds(60);
       setExpirySeconds(600);
       setOtp(['', '', '', '', '', '']);
@@ -182,32 +178,6 @@ const VerifyOtp = () => {
                     placeholder="Enter the registered email"
                     className="w-full rounded-[5px] border border-[#E5E7EB] px-3.5 py-2 text-sm text-[#20242B]"
                   />
-                </div>
-              )}
-
-              {/* Local Dev / Mock OTP Banner */}
-              {devOtp && (
-                <div className="p-3 bg-amber-50 border border-amber-200 rounded-[5px] text-xs text-amber-900 flex items-center justify-between animate-fadeIn">
-                  <div className="flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-amber-600 flex-shrink-0" />
-                    <div>
-                      <span className="font-semibold text-amber-950">Local Mode Code:</span>{' '}
-                      <span className="font-mono font-bold text-sm tracking-widest text-[#17243A] bg-amber-100 px-1.5 py-0.5 rounded">
-                        {devOtp}
-                      </span>
-                    </div>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const digits = devOtp.split('');
-                      setOtp(digits);
-                      inputRefs.current[5]?.focus();
-                    }}
-                    className="text-[11px] font-bold text-[#17243A] uppercase tracking-wider bg-white border border-amber-300 hover:bg-amber-100 px-2 py-1 rounded-[4px] transition-colors"
-                  >
-                    Auto-Fill
-                  </button>
                 </div>
               )}
 

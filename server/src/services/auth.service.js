@@ -48,8 +48,7 @@ const signup = async ({ fullName, email, password }) => {
       return {
         user: existingUser.toJSON(),
         email: existingUser.email,
-        devOtp: config.env === 'development' || !config.email.user ? plainOtp : undefined,
-        message: 'Account was already registered but unverified. A new verification code has been dispatched.',
+        message: 'Account was already registered but unverified. A new verification code has been dispatched to your email.',
       };
     }
   }
@@ -74,7 +73,6 @@ const signup = async ({ fullName, email, password }) => {
   return {
     user: newUser.toJSON(),
     email: newUser.email,
-    devOtp: config.env === 'development' || !config.email.user ? plainOtp : undefined,
     message: 'Account created. Verification code sent to your email address.',
   };
 };
@@ -139,7 +137,6 @@ const resendUserOtp = async ({ email }) => {
   await sendOtpEmail(user.email, user.fullName, plainOtp);
 
   return {
-    devOtp: config.env === 'development' || !config.email.user ? plainOtp : undefined,
     message: 'A fresh verification code has been dispatched to your email.',
   };
 };
