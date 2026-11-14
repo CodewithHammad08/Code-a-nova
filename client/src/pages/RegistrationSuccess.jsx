@@ -39,9 +39,18 @@ const RegistrationSuccess = () => {
   return (
     <div className="max-w-2xl mx-auto py-12 px-4 sm:px-6">
       <Card className="text-center p-8 sm:p-12 space-y-6 shadow-md border-[#E5E7EB]">
-        {/* Success Icon */}
-        <div className="w-16 h-16 bg-[#21845B]/10 rounded-full flex items-center justify-center mx-auto text-[#21845B]">
-          <CheckCircle2 className="w-8 h-8" />
+        {/* Success Icon & Logo */}
+        <div className="flex flex-col items-center gap-3">
+          <Link to="/" className="inline-block group">
+            <img
+              src="/logo.png"
+              alt="Code-a-Nova Logo"
+              className="w-14 h-14 rounded-[10px] object-contain mx-auto shadow-md group-hover:scale-105 transition-transform"
+            />
+          </Link>
+          <div className="w-10 h-10 bg-[#21845B]/10 rounded-full flex items-center justify-center text-[#21845B]">
+            <CheckCircle2 className="w-6 h-6" />
+          </div>
         </div>
 
         <div className="space-y-2">

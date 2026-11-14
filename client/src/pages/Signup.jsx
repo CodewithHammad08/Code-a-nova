@@ -108,12 +108,20 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-tech-dots">
-      <div className="w-full max-w-md space-y-6">
+    <div className="relative min-h-[calc(100vh-4rem)] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-tech-dots overflow-hidden">
+      {/* Ambient background glows */}
+      <div className="ambient-glow-navy -top-20 -left-20 opacity-50" />
+      <div className="ambient-glow-gold -bottom-20 -right-20 opacity-40" />
+
+      <div className="relative w-full max-w-md space-y-6">
         <div className="text-center space-y-2">
-          <div className="w-10 h-10 rounded-[5px] bg-[#17243A] text-[#D6A64F] flex items-center justify-center font-display font-extrabold text-sm mx-auto shadow-sm border border-[#243653]">
-            CAN
-          </div>
+          <Link to="/" className="inline-block group">
+            <img
+              src="/logo.png"
+              alt="Code-a-Nova Logo"
+              className="w-14 h-14 rounded-[10px] object-contain mx-auto shadow-md group-hover:scale-105 transition-transform"
+            />
+          </Link>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-[#17243A] tracking-tight font-display">
             Create Participant Account
           </h1>
@@ -122,7 +130,7 @@ const Signup = () => {
           </p>
         </div>
 
-        <Card className="shadow-md border-[#E5E7EB] bg-white">
+        <Card className="shadow-lg border-[#E5E7EB] bg-white/95 backdrop-blur-md">
           <form onSubmit={handleSubmit} className="space-y-4">
             <Input
               label="Full Name"

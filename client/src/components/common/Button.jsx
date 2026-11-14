@@ -13,28 +13,28 @@ const Button = ({
   ...props
 }) => {
   const baseStyles =
-    'inline-flex items-center justify-center font-medium transition-all duration-150 rounded-[5px] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#17243A] select-none disabled:opacity-50 disabled:cursor-not-allowed';
+    'inline-flex items-center justify-center font-medium transition-all duration-200 rounded-[6px] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#17243A] select-none active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100 shadow-sm';
 
   const sizeStyles = {
-    sm: 'text-xs px-3 py-1.5 gap-1.5',
-    md: 'text-sm px-4 py-2 gap-2',
-    lg: 'text-base px-6 py-2.5 gap-2.5',
-    icon: 'p-2',
+    sm: 'text-xs px-3.5 py-1.5 gap-1.5 font-semibold',
+    md: 'text-sm px-4.5 py-2.5 gap-2 font-semibold',
+    lg: 'text-base px-6 py-3 gap-2.5 font-bold',
+    icon: 'p-2.5',
   };
 
   const variantStyles = {
     primary:
-      'bg-[#17243A] text-white hover:bg-[#243653] active:bg-[#121c2e] border border-transparent shadow-none',
+      'bg-gradient-to-b from-[#243653] to-[#17243A] text-white hover:from-[#2e4569] hover:to-[#1c2c47] active:from-[#17243A] active:to-[#121c2e] border border-[#334b73]/40 shadow-[0_2px_4px_rgba(23,36,58,0.15)] hover:shadow-[0_4px_12px_rgba(23,36,58,0.25)]',
     secondary:
-      'bg-white text-[#20242B] border border-[#E5E7EB] hover:bg-[#F7F7F4] hover:border-[#D1D5DB] active:bg-[#ECECE8]',
+      'bg-white text-[#17243A] border border-[#E5E7EB] hover:bg-[#F9FAFB] hover:border-[#D1D5DB] hover:text-[#111827] active:bg-[#F3F4F6] shadow-sm',
     outline:
-      'bg-transparent text-[#17243A] border border-[#17243A] hover:bg-[#17243A]/5 active:bg-[#17243A]/10',
+      'bg-transparent text-[#17243A] border border-[#17243A]/30 hover:border-[#17243A] hover:bg-[#17243A]/5 active:bg-[#17243A]/10',
     destructive:
-      'bg-[#C44545] text-white hover:bg-[#A83838] active:bg-[#8F2E2E] border border-transparent',
+      'bg-gradient-to-b from-[#D44C4C] to-[#C44545] text-white hover:from-[#bd3e3e] hover:to-[#A83838] active:from-[#A83838] active:to-[#8F2E2E] border border-transparent shadow-sm',
     ghost:
-      'bg-transparent text-[#6B7280] hover:text-[#20242B] hover:bg-[#E5E7EB]/50 border border-transparent',
+      'bg-transparent text-[#6B7280] hover:text-[#17243A] hover:bg-[#17243A]/5 border border-transparent shadow-none',
     accent:
-      'bg-[#D6A64F] text-[#17243A] hover:bg-[#c49540] active:bg-[#b5892e] border border-transparent font-semibold',
+      'bg-gradient-to-b from-[#e5b765] to-[#D6A64F] text-[#17243A] hover:from-[#dab05e] hover:to-[#c49540] active:from-[#c49540] active:to-[#b5892e] border border-[#e8c075]/60 font-bold shadow-[0_2px_8px_rgba(214,166,79,0.25)] hover:shadow-[0_4px_16px_rgba(214,166,79,0.35)]',
   };
 
   return (

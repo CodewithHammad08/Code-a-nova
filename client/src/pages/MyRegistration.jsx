@@ -153,13 +153,20 @@ const MyRegistration = () => {
     <div className="max-w-4xl mx-auto py-4 space-y-6">
       {/* Top Header Actions */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E5E7EB] pb-5">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#17243A] tracking-tight font-display">
-            Official Participant Pass
-          </h1>
-          <p className="text-xs text-[#6B7280]">
-            Validated registration credentials &bull; Code-a-Nova National Hackathon 2026-27
-          </p>
+        <div className="flex items-center gap-3">
+          <img
+            src="/logo.png"
+            alt="Code-a-Nova Logo"
+            className="w-10 h-10 rounded-[6px] object-contain shadow-sm shrink-0"
+          />
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#17243A] tracking-tight font-display">
+              Official Participant Pass
+            </h1>
+            <p className="text-xs text-[#6B7280]">
+              Validated registration credentials &bull; Code-a-Nova National Hackathon 2026-27
+            </p>
+          </div>
         </div>
 
         <div className="flex items-center gap-2">
@@ -190,18 +197,25 @@ const MyRegistration = () => {
         <Card className="border-2 border-[#17243A] shadow-md p-0 overflow-hidden bg-white">
           {/* Header Banner */}
           <div className="bg-[#17243A] text-white p-6 sm:p-8 border-b-4 border-[#D6A64F] flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-dark-grid">
-            <div>
-              <div className="text-[10px] font-mono tracking-widest uppercase text-[#D6A64F] font-bold">
-                OFFICIAL PARTICIPANT PASS &bull; CODE-A-NOVA 2026-27
-              </div>
-              <h2 className="text-2xl sm:text-3xl font-extrabold font-display tracking-tight text-white mt-1">
-                {registration.projectName}
-              </h2>
-              <div className="text-xs text-[#D1D5DB] mt-1 flex items-center gap-2">
-                <span>Domain Track:</span>
-                <span className="font-bold text-white bg-white/10 px-2 py-0.5 rounded text-[11px] font-mono">
-                  {registration.domain}
-                </span>
+            <div className="flex items-center gap-4">
+              <img
+                src="/logo.png"
+                alt="Code-a-Nova"
+                className="w-12 h-12 rounded-[8px] object-contain border border-white/20 shrink-0"
+              />
+              <div>
+                <div className="text-[10px] font-mono tracking-widest uppercase text-[#D6A64F] font-bold">
+                  OFFICIAL PARTICIPANT PASS &bull; CODE-A-NOVA 2026-27
+                </div>
+                <h2 className="text-2xl sm:text-3xl font-extrabold font-display tracking-tight text-white mt-1">
+                  {registration.projectName}
+                </h2>
+                <div className="text-xs text-[#D1D5DB] mt-1 flex items-center gap-2">
+                  <span>Domain Track:</span>
+                  <span className="font-bold text-white bg-white/10 px-2 py-0.5 rounded text-[11px] font-mono">
+                    {registration.domain}
+                  </span>
+                </div>
               </div>
             </div>
 

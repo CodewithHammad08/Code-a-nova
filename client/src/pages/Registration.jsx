@@ -362,13 +362,20 @@ const Registration = () => {
       {/* Header with Step Progress */}
       <div className="space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#E5E7EB] pb-4">
-          <div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#17243A] tracking-tight font-display">
-              Hackathon Registration
-            </h1>
-            <p className="text-xs text-[#6B7280]">
-              Official submission entry &bull; Code-a-Nova National Hackathon 2026-27
-            </p>
+          <div className="flex items-center gap-3">
+            <img
+              src="/logo.png"
+              alt="Code-a-Nova Logo"
+              className="w-10 h-10 rounded-[6px] object-contain shadow-sm shrink-0"
+            />
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-[#17243A] tracking-tight font-display">
+                Hackathon Registration
+              </h1>
+              <p className="text-xs text-[#6B7280]">
+                Official submission entry &bull; Code-a-Nova National Hackathon 2026-27
+              </p>
+            </div>
           </div>
           <div className="text-xs font-mono font-bold text-[#D6A64F] uppercase tracking-wider">
             Step {currentStep} of 4 ({Math.round(progressPercent)}% Complete)

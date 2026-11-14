@@ -123,7 +123,8 @@ const Dashboard = () => {
       {/* Header Greeting Banner with Countdown */}
       <div className="bg-white border border-[#E5E7EB] rounded-[7px] p-6 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-          <div className="inline-flex items-center gap-2 px-2.5 py-0.5 bg-[#17243A]/5 border border-[#17243A]/10 rounded-[4px] text-[10px] font-mono font-bold uppercase text-[#17243A] mb-2">
+          <div className="inline-flex items-center gap-2 px-2.5 py-1 bg-[#17243A]/5 border border-[#17243A]/10 rounded-[5px] text-[10px] font-mono font-bold uppercase text-[#17243A] mb-2">
+            <img src="/logo.png" alt="Code-a-Nova Logo" className="w-4 h-4 rounded-[3px] object-contain" />
             Participant Portal &bull; Code-a-Nova 2026-27
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-[#17243A] tracking-tight font-display">

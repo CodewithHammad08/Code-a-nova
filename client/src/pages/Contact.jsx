@@ -83,7 +83,8 @@ const Contact = () => {
         {/* Left info column */}
         <div className="md:col-span-5 space-y-6">
           <div className="space-y-3">
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#17243A]/5 border border-[#17243A]/15 rounded-[4px]">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#17243A]/5 border border-[#17243A]/15 rounded-[6px]">
+              <img src="/logo.png" alt="Code-a-Nova Logo" className="w-4 h-4 rounded-[3px] object-contain" />
               <span className="text-xs font-semibold tracking-wider uppercase text-[#17243A] font-mono">
                 Organizing Secretariat
               </span>

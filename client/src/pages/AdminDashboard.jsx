@@ -124,7 +124,8 @@ const AdminDashboard = () => {
       {/* Admin Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E5E7EB] pb-5">
         <div>
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-[#17243A] text-white text-[10px] font-bold uppercase tracking-wider rounded-[3px] font-mono mb-2">
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-[#17243A] text-white text-[10px] font-bold uppercase tracking-wider rounded-[4px] font-mono mb-2">
+            <img src="/logo.png" alt="Logo" className="w-3.5 h-3.5 rounded-[2px] object-contain" />
             <ShieldAlert className="w-3 h-3 text-[#D6A64F]" />
             Administrative Command
           </div>

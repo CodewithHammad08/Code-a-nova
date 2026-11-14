@@ -18,16 +18,24 @@ import Card from '../components/common/Card';
 
 const About = () => {
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 space-y-16">
+    <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 space-y-16 overflow-hidden">
+      {/* Ambient background glows */}
+      <div className="ambient-glow-navy -top-20 -left-20 opacity-50" />
+      <div className="ambient-glow-gold top-40 -right-20 opacity-60" />
+
       {/* Header */}
-      <div className="space-y-4 border-b border-[#E5E7EB] pb-8">
-        <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#17243A]/5 border border-[#17243A]/15 rounded-[4px]">
+      <div className="relative space-y-4 border-b border-[#E5E7EB] pb-8">
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#17243A]/5 border border-[#17243A]/15 rounded-[6px] shadow-xs">
+          <img src="/logo.png" alt="Code-a-Nova Logo" className="w-4 h-4 rounded-[3px] object-contain" />
           <span className="text-xs font-semibold tracking-wider uppercase text-[#17243A] font-mono">
             Event Charter &bull; Code-a-Nova 2026-27
           </span>
         </div>
         <h1 className="text-3xl sm:text-5xl font-extrabold text-[#17243A] tracking-tight font-display">
-          Engineered for Real Technical Merit
+          Engineered for{' '}
+          <span className="bg-gradient-to-r from-[#17243A] via-[#243653] to-[#D6A64F] bg-clip-text text-transparent">
+            Real Technical Merit
+          </span>
         </h1>
         <p className="text-base sm:text-lg text-[#4B5563] max-w-3xl leading-relaxed">
           Code-a-Nova is a national student hackathon platform built on modern production standards. We provide a transparent, rigorous, and meritocratic environment for engineering talent.
@@ -36,8 +44,8 @@ const About = () => {
 
       {/* Core Architectural Pillars */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white p-6 border border-[#E5E7EB] rounded-[7px] space-y-3 shadow-sm card-hover">
-          <div className="w-10 h-10 rounded-[5px] bg-[#17243A] text-white flex items-center justify-center">
+        <div className="bg-white p-6 border border-[#E5E7EB] rounded-[8px] space-y-3.5 shadow-sm hover:border-[#17243A]/40 hover:shadow-md transition-all">
+          <div className="w-10 h-10 rounded-[6px] bg-[#17243A] text-white flex items-center justify-center shadow-xs">
             <Terminal className="w-5 h-5 text-[#D6A64F]" />
           </div>
           <h3 className="font-bold text-lg text-[#17243A] font-display">Working Code Over Decks</h3>
@@ -46,8 +54,8 @@ const About = () => {
           </p>
         </div>
 
-        <div className="bg-white p-6 border border-[#E5E7EB] rounded-[7px] space-y-3 shadow-sm card-hover">
-          <div className="w-10 h-10 rounded-[5px] bg-[#17243A] text-white flex items-center justify-center">
+        <div className="bg-white p-6 border border-[#E5E7EB] rounded-[8px] space-y-3.5 shadow-sm hover:border-[#17243A]/40 hover:shadow-md transition-all">
+          <div className="w-10 h-10 rounded-[6px] bg-[#17243A] text-white flex items-center justify-center shadow-xs">
             <ShieldCheck className="w-5 h-5 text-[#21845B]" />
           </div>
           <h3 className="font-bold text-lg text-[#17243A] font-display">Cryptographic Verification</h3>
@@ -56,8 +64,8 @@ const About = () => {
           </p>
         </div>
 
-        <div className="bg-white p-6 border border-[#E5E7EB] rounded-[7px] space-y-3 shadow-sm card-hover">
-          <div className="w-10 h-10 rounded-[5px] bg-[#17243A] text-white flex items-center justify-center">
+        <div className="bg-white p-6 border border-[#E5E7EB] rounded-[8px] space-y-3.5 shadow-sm hover:border-[#17243A]/40 hover:shadow-md transition-all">
+          <div className="w-10 h-10 rounded-[6px] bg-[#17243A] text-white flex items-center justify-center shadow-xs">
             <Users className="w-5 h-5 text-[#D6A64F]" />
           </div>
           <h3 className="font-bold text-lg text-[#17243A] font-display">Dynamic Team Scaling</h3>

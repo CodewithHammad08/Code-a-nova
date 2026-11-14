@@ -18,21 +18,33 @@ const app = express();
 app.use(helmet());
 
 // CORS Configuration
-const allowedOrigins = [
-  config.clientUrl,
-  'http://localhost:5173',
-  'http://127.0.0.1:5173',
-];
+const rawClientUrls = (config.clientUrl || '')
+  .split(',')
+  .map((url) => url.trim().replace(/\/$/, ''))
+  .filter(Boolean);
+
+const allowedOrigins = Array.from(
+  new Set([
+    ...rawClientUrls,
+    'https://code-a-nova-kappa.vercel.app',
+    'http://localhost:5173',
+    'http://127.0.0.1:5173',
+  ])
+);
 
 app.use(
   cors({
     origin: (origin, callback) => {
       // Allow requests with no origin (e.g. mobile apps, curl, server-to-server)
       if (!origin) return callback(null, true);
-      if (allowedOrigins.indexOf(origin) !== -1 || config.env === 'development') {
+      const cleanOrigin = origin.replace(/\/$/, '');
+      if (
+        allowedOrigins.includes(cleanOrigin) ||
+        config.env === 'development'
+      ) {
         return callback(null, true);
       }
-      return callback(new Error('CORS Policy: Request origin not allowed.'));
+      return callback(new Error(`CORS Policy: Request origin ${origin} not allowed.`));
     },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],

@@ -25,6 +25,8 @@ import {
   Clock,
   Building2,
   Flame,
+  Copy,
+  Check,
 } from 'lucide-react';
 import Button from '../components/common/Button';
 import Badge from '../components/common/Badge';
@@ -39,6 +41,23 @@ const Home = () => {
   const [selectedTrackIndex, setSelectedTrackIndex] = useState(0);
   const [activeFaq, setActiveFaq] = useState(0);
   const [activeHeroTab, setActiveHeroTab] = useState('spec'); // 'spec' | 'pipeline' | 'security'
+  const [copiedCode, setCopiedCode] = useState(false);
+
+  const getHeroSnippetText = () => {
+    if (activeHeroTab === 'spec') {
+      return `{\n  "event": "Code-a-Nova 2026-27",\n  "format": "Hybrid (Online + Grand Finale)",\n  "team_bounds": { "min": 1, "max": 5 },\n  "tracks": ["AI/ML", "Web Dev", "IoT", "Cyber Security", "Blockchain"],\n  "deadline": "2026-12-20T23:59:59Z",\n  "prize_pool": "₹1,50,000+ INR"\n}`;
+    } else if (activeHeroTab === 'pipeline') {
+      return `// Participant Verification Pipeline\n> 01: SIGNUP      -> User account created\n> 02: OTP         -> 6-digit hashed OTP sent (10m TTL)\n> 03: VERIFY      -> OTP validated; account activated\n> 04: REGISTER    -> Team registered & CAN ID generated\n> 05: FINALE      -> 36-hr prototype sprint & judging`;
+    } else {
+      return `// Defensive Security Architecture\nPASSWORDS:   bcryptjs (10 salt rounds)\nOTP STORAGE: sha256/bcrypt hashed (600s TTL)\nSESSIONS:    JWT in HttpOnly, SameSite cookies\nHEADERS:     Helmet, strict CORS, rate-limits\nREVIEWS:     1 registration per candidate`;
+    }
+  };
+
+  const handleCopyCode = () => {
+    navigator.clipboard.writeText(getHeroSnippetText());
+    setCopiedCode(true);
+    setTimeout(() => setCopiedCode(false), 2000);
+  };
 
   useEffect(() => {
     registrationService
@@ -132,14 +151,19 @@ const Home = () => {
   return (
     <div className="space-y-20 pb-20 scroll-smooth">
       {/* 1. Hero Section with Architectural Grid */}
-      <section className="relative pt-10 md:pt-16 pb-16 border-b border-[#E5E7EB] bg-white bg-tech-grid">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="relative pt-12 md:pt-20 pb-20 border-b border-[#E5E7EB] bg-white bg-tech-grid overflow-hidden">
+        {/* Ambient atmospheric glows */}
+        <div className="ambient-glow-navy -top-24 -left-20 opacity-60" />
+        <div className="ambient-glow-gold top-20 right-10 opacity-70" />
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             {/* Left Content */}
             <div className="lg:col-span-7 space-y-6">
               {/* Event Badge */}
-              <div className="inline-flex items-center gap-2.5 px-3 py-1 bg-[#17243A]/5 border border-[#17243A]/15 rounded-[4px]">
-                <span className="w-2 h-2 rounded-full bg-[#D6A64F] animate-pulse" />
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#17243A]/5 border border-[#17243A]/15 rounded-[6px] shadow-xs">
+                <img src="/logo.png" alt="Code-a-Nova Logo" className="w-4 h-4 rounded-[3px] object-contain" />
+                <span className="w-1.5 h-1.5 rounded-full bg-[#21845B] animate-pulse" />
                 <span className="text-xs font-semibold tracking-wider uppercase text-[#17243A] font-mono">
                   Code-a-Nova &bull; National Hackathon 2026-27
                 </span>
@@ -147,7 +171,10 @@ const Home = () => {
 
               {/* Main Headline */}
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#17243A] tracking-tight leading-[1.08] font-display">
-                Build Something That Moves the Future.
+                Build Something That{' '}
+                <span className="bg-gradient-to-r from-[#17243A] via-[#243653] to-[#D6A64F] bg-clip-text text-transparent">
+                  Moves the Future.
+                </span>
               </h1>
 
               {/* Subtitle */}
@@ -159,7 +186,7 @@ const Home = () => {
               <div className="pt-2 flex flex-col sm:flex-row sm:items-center gap-4">
                 <div className="flex items-center gap-3">
                   <Link to={isAuthenticated ? '/register' : '/signup'}>
-                    <Button variant="primary" size="lg" className="gap-2 shadow-sm font-semibold">
+                    <Button variant="primary" size="lg" className="gap-2 font-bold shadow-md hover:shadow-lg transition-shadow">
                       {isAuthenticated ? 'Register Project' : 'Register Now'}
                       <ArrowRight className="w-4 h-4" />
                     </Button>
@@ -183,7 +210,7 @@ const Home = () => {
               <div className="pt-3 flex flex-wrap items-center gap-6 text-xs text-[#6B7280] font-medium border-t border-[#F7F7F4]">
                 <div className="flex items-center gap-1.5">
                   <CheckCircle2 className="w-4 h-4 text-[#21845B]" />
-                  <span>Free Participation</span>
+                  <span>100% Free Participation</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <CheckCircle2 className="w-4 h-4 text-[#21845B]" />
@@ -191,26 +218,26 @@ const Home = () => {
                 </div>
                 <div className="flex items-center gap-1.5">
                   <CheckCircle2 className="w-4 h-4 text-[#21845B]" />
-                  <span>Verified Credentials</span>
+                  <span>Cryptographically Hashed</span>
                 </div>
               </div>
 
               {/* Mini-Stats Row within Hero */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-3 border-t border-[#E5E7EB]">
-                <div className="p-2.5 bg-[#F7F7F4] border border-[#E5E7EB] rounded-[5px]">
-                  <div className="text-xs text-[#6B7280] font-mono">TRACKS</div>
-                  <div className="text-base font-extrabold text-[#17243A] font-display">5 Specializations</div>
+                <div className="p-3 bg-white border border-[#E5E7EB] rounded-[6px] shadow-xs hover:border-[#17243A]/40 transition-colors">
+                  <div className="text-[10px] text-[#6B7280] font-mono font-bold tracking-wider uppercase">TRACKS</div>
+                  <div className="text-base font-extrabold text-[#17243A] font-display">5 Arenas</div>
                 </div>
-                <div className="p-2.5 bg-[#F7F7F4] border border-[#E5E7EB] rounded-[5px]">
-                  <div className="text-xs text-[#6B7280] font-mono">TEAM SIZE</div>
-                  <div className="text-base font-extrabold text-[#17243A] font-display">1 to 5 Members</div>
+                <div className="p-3 bg-white border border-[#E5E7EB] rounded-[6px] shadow-xs hover:border-[#17243A]/40 transition-colors">
+                  <div className="text-[10px] text-[#6B7280] font-mono font-bold tracking-wider uppercase">TEAM SIZE</div>
+                  <div className="text-base font-extrabold text-[#17243A] font-display">1 to 5 Mbrs</div>
                 </div>
-                <div className="p-2.5 bg-[#F7F7F4] border border-[#E5E7EB] rounded-[5px]">
-                  <div className="text-xs text-[#6B7280] font-mono">FINALE</div>
+                <div className="p-3 bg-white border border-[#E5E7EB] rounded-[6px] shadow-xs hover:border-[#17243A]/40 transition-colors">
+                  <div className="text-[10px] text-[#6B7280] font-mono font-bold tracking-wider uppercase">FINALE</div>
                   <div className="text-base font-extrabold text-[#17243A] font-display">36-Hr Sprint</div>
                 </div>
-                <div className="p-2.5 bg-[#F7F7F4] border border-[#E5E7EB] rounded-[5px]">
-                  <div className="text-xs text-[#6B7280] font-mono">PRIZES</div>
+                <div className="p-3 bg-[#17243A] text-white border border-[#243653] rounded-[6px] shadow-sm">
+                  <div className="text-[10px] text-[#D6A64F] font-mono font-bold tracking-wider uppercase">PRIZES</div>
                   <div className="text-base font-extrabold text-[#D6A64F] font-mono">₹1,50,000+</div>
                 </div>
               </div>
@@ -218,57 +245,75 @@ const Home = () => {
 
             {/* Right Editorial Interactive Technical Terminal */}
             <div className="lg:col-span-5">
-              <div className="bg-[#17243A] text-white rounded-[7px] border border-[#243653] shadow-xl overflow-hidden font-mono text-xs">
-                {/* Window Header with Tabs */}
-                <div className="flex items-center justify-between border-b border-[#243653] bg-[#121c2e] px-4 py-2.5">
-                  <div className="flex items-center gap-1.5">
-                    <div className="w-2.5 h-2.5 rounded-full bg-[#C44545]" />
-                    <div className="w-2.5 h-2.5 rounded-full bg-[#D6A64F]" />
-                    <div className="w-2.5 h-2.5 rounded-full bg-[#21845B]" />
-                    <span className="ml-2 text-[11px] text-[#9CA3AF]">
-                      code-a-nova-engine
+              <div className="bg-[#111A2B] text-white rounded-[8px] border border-[#243653] shadow-2xl overflow-hidden font-mono text-xs">
+                {/* Window Header with Tabs & Copy button */}
+                <div className="flex items-center justify-between border-b border-[#243653] bg-[#0E1524] px-4 py-2.5">
+                  <div className="flex items-center gap-2">
+                    <img src="/logo.png" alt="Code-a-Nova" className="w-4 h-4 rounded-[3px] object-contain" />
+                    <div className="flex items-center gap-1.5 ml-1">
+                      <div className="w-2.5 h-2.5 rounded-full bg-[#C44545]" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-[#D6A64F]" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-[#21845B]" />
+                    </div>
+                    <span className="ml-1.5 text-[11px] text-[#9CA3AF] font-mono">
+                      engine-v2.4
                     </span>
                   </div>
 
-                  {/* Switcher Tabs */}
-                  <div className="flex items-center gap-1 text-[10px]">
+                  <div className="flex items-center gap-2">
+                    {/* Switcher Tabs */}
+                    <div className="flex items-center gap-1 text-[10px]">
+                      <button
+                        onClick={() => setActiveHeroTab('spec')}
+                        className={`px-2 py-0.5 rounded-[3px] transition-colors ${
+                          activeHeroTab === 'spec'
+                            ? 'bg-white/20 text-white font-bold'
+                            : 'text-[#9CA3AF] hover:text-white'
+                        }`}
+                      >
+                        manifest.json
+                      </button>
+                      <button
+                        onClick={() => setActiveHeroTab('pipeline')}
+                        className={`px-2 py-0.5 rounded-[3px] transition-colors ${
+                          activeHeroTab === 'pipeline'
+                            ? 'bg-white/20 text-white font-bold'
+                            : 'text-[#9CA3AF] hover:text-white'
+                        }`}
+                      >
+                        pipeline.sh
+                      </button>
+                      <button
+                        onClick={() => setActiveHeroTab('security')}
+                        className={`px-2 py-0.5 rounded-[3px] transition-colors ${
+                          activeHeroTab === 'security'
+                            ? 'bg-white/20 text-white font-bold'
+                            : 'text-[#9CA3AF] hover:text-white'
+                        }`}
+                      >
+                        security.lock
+                      </button>
+                    </div>
+
+                    {/* Copy Button */}
                     <button
-                      onClick={() => setActiveHeroTab('spec')}
-                      className={`px-2 py-0.5 rounded-[3px] transition-colors ${
-                        activeHeroTab === 'spec'
-                          ? 'bg-white/20 text-white font-bold'
-                          : 'text-[#9CA3AF] hover:text-white'
-                      }`}
+                      onClick={handleCopyCode}
+                      className="text-[#9CA3AF] hover:text-white p-1 rounded hover:bg-white/10 transition-colors"
+                      title="Copy code snippet"
                     >
-                      manifest.json
-                    </button>
-                    <button
-                      onClick={() => setActiveHeroTab('pipeline')}
-                      className={`px-2 py-0.5 rounded-[3px] transition-colors ${
-                        activeHeroTab === 'pipeline'
-                          ? 'bg-white/20 text-white font-bold'
-                          : 'text-[#9CA3AF] hover:text-white'
-                      }`}
-                    >
-                      pipeline.sh
-                    </button>
-                    <button
-                      onClick={() => setActiveHeroTab('security')}
-                      className={`px-2 py-0.5 rounded-[3px] transition-colors ${
-                        activeHeroTab === 'security'
-                          ? 'bg-white/20 text-white font-bold'
-                          : 'text-[#9CA3AF] hover:text-white'
-                      }`}
-                    >
-                      security.lock
+                      {copiedCode ? (
+                        <Check className="w-3.5 h-3.5 text-emerald-400" />
+                      ) : (
+                        <Copy className="w-3.5 h-3.5" />
+                      )}
                     </button>
                   </div>
                 </div>
 
                 {/* Tab 1: Manifest Spec */}
                 {activeHeroTab === 'spec' && (
-                  <div className="p-5 space-y-3 leading-relaxed">
-                    <div className="text-[#9CA3AF]">
+                  <div className="p-5 space-y-2.5 leading-relaxed bg-[#111A2B]/90">
+                    <div className="text-[#64748B]">
                       &#47;&#47; Code-a-Nova Hackathon Parameters v2.0
                     </div>
                     <div>
@@ -303,8 +348,8 @@ const Home = () => {
 
                 {/* Tab 2: Pipeline */}
                 {activeHeroTab === 'pipeline' && (
-                  <div className="p-5 space-y-2.5 leading-relaxed text-xs">
-                    <div className="text-[#9CA3AF]">&#47;&#47; Participant Verification Pipeline</div>
+                  <div className="p-5 space-y-2.5 leading-relaxed text-xs bg-[#111A2B]/90">
+                    <div className="text-[#64748B]">&#47;&#47; Participant Verification Pipeline</div>
                     <div className="flex items-center gap-2 text-emerald-400">
                       <span>&gt; 01: SIGNUP</span>
                       <span className="text-white/60">&rarr; user account created in unverified state</span>
@@ -330,8 +375,8 @@ const Home = () => {
 
                 {/* Tab 3: Security */}
                 {activeHeroTab === 'security' && (
-                  <div className="p-5 space-y-2.5 leading-relaxed text-xs">
-                    <div className="text-[#9CA3AF]">&#47;&#47; Defensive Security Architecture</div>
+                  <div className="p-5 space-y-2.5 leading-relaxed text-xs bg-[#111A2B]/90">
+                    <div className="text-[#64748B]">&#47;&#47; Defensive Security Architecture</div>
                     <div className="text-[#D6A64F]">
                       PASSWORDS:{' '}
                       <span className="text-white">bcryptjs (10 salt rounds)</span>
@@ -356,14 +401,14 @@ const Home = () => {
                 )}
 
                 {/* Bottom status bar */}
-                <div className="border-t border-[#243653] bg-[#121c2e] px-4 py-2 flex items-center justify-between text-[11px] text-[#9CA3AF]">
+                <div className="border-t border-[#243653] bg-[#0E1524] px-4 py-2.5 flex items-center justify-between text-[11px] text-[#9CA3AF]">
                   <span className="flex items-center gap-1.5 text-emerald-400">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                     LIVE PRODUCTION PIPELINE
                   </span>
                   <Link
                     to={isAuthenticated ? '/register' : '/signup'}
-                    className="text-[#D6A64F] hover:underline font-sans font-semibold text-[10px] uppercase"
+                    className="text-[#D6A64F] hover:text-[#f3cc83] font-sans font-semibold text-[10px] uppercase transition-colors"
                   >
                     Enter Platform &rarr;
                   </Link>
@@ -375,45 +420,45 @@ const Home = () => {
       </section>
 
       {/* 2. Event Highlights Strip */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-12 observe-anim opacity-0 transition-opacity duration-500">
-        <div className="bg-white border border-[#E5E7EB] rounded-[7px] grid grid-cols-2 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-[#E5E7EB] shadow-sm">
-          <div className="p-6 text-center space-y-2 border-l-4 border-l-[#17243A]">
-            <div className="w-8 h-8 rounded-[4px] bg-[#17243A]/5 text-[#17243A] flex items-center justify-center mx-auto">
-              <Layers className="w-4 h-4" />
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 observe-anim opacity-0 transition-opacity duration-500">
+        <div className="bg-white/95 backdrop-blur-md border border-[#E5E7EB] rounded-[8px] grid grid-cols-2 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-[#E5E7EB] shadow-lg">
+          <div className="p-6 text-center space-y-2 border-l-4 border-l-[#17243A] group hover:bg-[#F9FAFB] transition-colors">
+            <div className="w-9 h-9 rounded-[6px] bg-[#17243A]/5 text-[#17243A] flex items-center justify-center mx-auto group-hover:scale-110 transition-transform">
+              <Layers className="w-5 h-5" />
             </div>
-            <div className="text-4xl font-extrabold font-display text-[#17243A]">5 Tracks</div>
-            <div className="text-xs text-[#6B7280] font-medium">Focused Engineering Domains</div>
+            <div className="text-3xl sm:text-4xl font-extrabold font-display text-[#17243A]">5 Tracks</div>
+            <div className="text-xs text-[#6B7280] font-medium">Focused Engineering Arenas</div>
           </div>
 
-          <div className="p-6 text-center space-y-2 border-l-4 border-l-[#17243A]">
-            <div className="w-8 h-8 rounded-[4px] bg-[#17243A]/5 text-[#17243A] flex items-center justify-center mx-auto">
-              <Users className="w-4 h-4" />
+          <div className="p-6 text-center space-y-2 border-l-4 border-l-[#17243A] group hover:bg-[#F9FAFB] transition-colors">
+            <div className="w-9 h-9 rounded-[6px] bg-[#17243A]/5 text-[#17243A] flex items-center justify-center mx-auto group-hover:scale-110 transition-transform">
+              <Users className="w-5 h-5" />
             </div>
-            <div className="text-4xl font-extrabold font-display text-[#17243A]">1–5</div>
+            <div className="text-3xl sm:text-4xl font-extrabold font-display text-[#17243A]">1–5</div>
             <div className="text-xs text-[#6B7280] font-medium">Solo or Team Members</div>
           </div>
 
-          <div className="p-6 text-center space-y-2 border-l-4 border-l-[#17243A]">
-            <div className="w-8 h-8 rounded-[4px] bg-[#17243A]/5 text-[#17243A] flex items-center justify-center mx-auto">
-              <Clock className="w-4 h-4" />
+          <div className="p-6 text-center space-y-2 border-l-4 border-l-[#17243A] group hover:bg-[#F9FAFB] transition-colors">
+            <div className="w-9 h-9 rounded-[6px] bg-[#17243A]/5 text-[#17243A] flex items-center justify-center mx-auto group-hover:scale-110 transition-transform">
+              <Clock className="w-5 h-5" />
             </div>
-            <div className="text-4xl font-extrabold font-display text-[#17243A]">36 Hours</div>
+            <div className="text-3xl sm:text-4xl font-extrabold font-display text-[#17243A]">36 Hours</div>
             <div className="text-xs text-[#6B7280] font-medium">Continuous Finale Sprint</div>
           </div>
 
-          <div className="p-6 text-center space-y-2 border-l-4 border-l-[#D6A64F]">
-            <div className="w-8 h-8 rounded-[4px] bg-[#D6A64F]/10 text-[#D6A64F] flex items-center justify-center mx-auto">
-              <Trophy className="w-4 h-4" />
+          <div className="p-6 text-center space-y-2 border-l-4 border-l-[#D6A64F] group hover:bg-[#F9FAFB] transition-colors">
+            <div className="w-9 h-9 rounded-[6px] bg-[#D6A64F]/15 text-[#D6A64F] flex items-center justify-center mx-auto group-hover:scale-110 transition-transform">
+              <Trophy className="w-5 h-5" />
             </div>
-            <div className="text-4xl font-extrabold font-display text-[#D6A64F]">₹1,50,000+</div>
-            <div className="text-xs text-[#6B7280] font-medium">Prize Pool &amp; Cloud Credits</div>
+            <div className="text-3xl sm:text-4xl font-extrabold font-display text-[#D6A64F]">₹1,50,000+</div>
+            <div className="text-xs text-[#6B7280] font-medium">Prize Pool &amp; Cloud Grants</div>
           </div>
         </div>
       </section>
 
       {/* 2.5 Sponsors & Partner Ecosystem Bar */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 observe-anim opacity-0 transition-opacity duration-500">
-        <div className="border border-[#E5E7EB] rounded-[7px] bg-white p-6 shadow-sm space-y-5">
+        <div className="border border-[#E5E7EB] rounded-[8px] bg-white p-6 sm:p-7 shadow-sm space-y-5">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#F7F7F4] pb-4">
             <div>
               <span className="text-[10px] font-mono uppercase tracking-wider font-bold text-[#6B7280]">
@@ -429,23 +474,23 @@ const Home = () => {
             </div>
           </div>
 
-          {/* Placeholder Partner Strip */}
+          {/* Partner Strip */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <div className="h-12 border border-[#E5E7EB] bg-[#F7F7F4] rounded-[5px] flex items-center justify-center text-xs font-mono font-bold text-[#6B7280] gap-2">
+            <div className="h-12 border border-[#E5E7EB] bg-[#F7F7F4] hover:bg-white hover:border-[#17243A]/30 hover:shadow-xs transition-all rounded-[6px] flex items-center justify-center text-xs font-mono font-bold text-[#17243A] gap-2">
               <Building2 className="w-4 h-4 text-[#17243A]" />
               <span>NeuralStack Labs</span>
             </div>
-            <div className="h-12 border border-[#E5E7EB] bg-[#F7F7F4] rounded-[5px] flex items-center justify-center text-xs font-mono font-bold text-[#6B7280] gap-2">
+            <div className="h-12 border border-[#E5E7EB] bg-[#F7F7F4] hover:bg-white hover:border-[#17243A]/30 hover:shadow-xs transition-all rounded-[6px] flex items-center justify-center text-xs font-mono font-bold text-[#17243A] gap-2">
               <Globe className="w-4 h-4 text-[#17243A]" />
               <span>CloudVantage Infra</span>
             </div>
-            <div className="h-12 border border-[#E5E7EB] bg-[#F7F7F4] rounded-[5px] flex items-center justify-center text-xs font-mono font-bold text-[#6B7280] gap-2">
+            <div className="h-12 border border-[#E5E7EB] bg-[#F7F7F4] hover:bg-white hover:border-[#17243A]/30 hover:shadow-xs transition-all rounded-[6px] flex items-center justify-center text-xs font-mono font-bold text-[#17243A] gap-2">
               <Shield className="w-4 h-4 text-[#17243A]" />
               <span>Aegis Security</span>
             </div>
-            <div className="h-12 border border-[#E5E7EB] bg-[#F7F7F4] rounded-[5px] flex items-center justify-center text-xs font-mono font-bold text-[#6B7280] gap-2">
+            <div className="h-12 border border-[#E5E7EB] bg-[#F7F7F4] hover:bg-white hover:border-[#17243A]/30 hover:shadow-xs transition-all rounded-[6px] flex items-center justify-center text-xs font-mono font-bold text-[#17243A] gap-2">
               <Cpu className="w-4 h-4 text-[#17243A]" />
-              <span>DecentraSys Mesh</span>
+              <span>Vortex Silicon</span>
             </div>
           </div>
 
@@ -718,41 +763,70 @@ const Home = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {PRIZE_TIERS.map((tier, idx) => {
-              // Accent border color per rank: gold, silver, bronze
-              const rankBorderColor =
-                idx === 0
-                  ? 'border-l-4 border-l-[#D6A64F]'
-                  : idx === 1
-                  ? 'border-l-4 border-l-[#9CA3AF]'
-                  : 'border-l-4 border-l-[#21845B]';
+              const isFirst = idx === 0;
+              const isSecond = idx === 1;
 
               return (
                 <div
                   key={idx}
-                  className={`bg-white/5 border border-white/10 rounded-[6px] p-6 space-y-4 hover:border-white/25 transition-colors ${rankBorderColor}`}
+                  className={`relative rounded-[8px] p-6 space-y-4 transition-all duration-300 hover:-translate-y-1 ${
+                    isFirst
+                      ? 'bg-gradient-to-b from-[#1C2C47] to-[#121E33] border-2 border-[#D6A64F] shadow-[0_8px_30px_rgba(214,166,79,0.18)]'
+                      : isSecond
+                      ? 'bg-white/5 border border-white/20 hover:border-white/35 shadow-md'
+                      : 'bg-white/5 border border-white/10 hover:border-white/25 shadow-md'
+                  }`}
                 >
+                  {isFirst && (
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#D6A64F] text-[#17243A] text-[10px] font-extrabold uppercase tracking-widest px-3 py-0.5 rounded-full shadow-sm">
+                      Grand Champion
+                    </div>
+                  )}
+
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-mono uppercase text-[#D6A64F] font-bold">
+                    <span
+                      className={`text-xs font-mono uppercase font-bold ${
+                        isFirst ? 'text-[#D6A64F]' : isSecond ? 'text-[#D1D5DB]' : 'text-emerald-400'
+                      }`}
+                    >
                       {tier.rank}
                     </span>
-                    <Trophy className="w-5 h-5 text-[#D6A64F]" />
+                    <div
+                      className={`w-9 h-9 rounded-full flex items-center justify-center ${
+                        isFirst
+                          ? 'bg-[#D6A64F]/20 text-[#D6A64F]'
+                          : isSecond
+                          ? 'bg-white/10 text-white'
+                          : 'bg-emerald-500/10 text-emerald-400'
+                      }`}
+                    >
+                      <Trophy className="w-5 h-5" />
+                    </div>
                   </div>
 
                   <div>
                     <h4 className="text-xl font-bold font-display text-white">{tier.title}</h4>
-                    <div className="text-2xl font-extrabold font-mono text-[#D6A64F] mt-1">
+                    <div
+                      className={`text-3xl font-extrabold font-mono mt-1 ${
+                        isFirst ? 'text-[#D6A64F]' : 'text-white'
+                      }`}
+                    >
                       {tier.amount}
                     </div>
                   </div>
 
-                  <div className="border-t border-white/10 pt-3 space-y-2">
+                  <div className="border-t border-white/10 pt-3.5 space-y-2.5">
                     <div className="text-[11px] uppercase tracking-wider text-[#9CA3AF] font-bold">
                       Package Includes:
                     </div>
-                    <ul className="space-y-1.5 text-xs text-[#D1D5DB]">
+                    <ul className="space-y-2 text-xs text-[#D1D5DB]">
                       {tier.benefits.map((b, bIdx) => (
                         <li key={bIdx} className="flex items-center gap-2">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-[#21845B] shrink-0" />
+                          <CheckCircle2
+                            className={`w-3.5 h-3.5 shrink-0 ${
+                              isFirst ? 'text-[#D6A64F]' : 'text-[#21845B]'
+                            }`}
+                          />
                           <span>{b}</span>
                         </li>
                       ))}
@@ -767,7 +841,7 @@ const Home = () => {
 
       {/* 6. Evaluation Framework Quick Matrix */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 observe-anim opacity-0 transition-opacity duration-500">
-        <div className="bg-white border border-[#E5E7EB] rounded-[7px] p-6 sm:p-8 space-y-6 shadow-sm">
+        <div className="bg-white border border-[#E5E7EB] rounded-[8px] p-6 sm:p-8 space-y-6 shadow-sm">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#F7F7F4] pb-4">
             <div>
               <div className="text-xs font-bold uppercase tracking-wider text-[#D6A64F] font-mono">
@@ -785,41 +859,59 @@ const Home = () => {
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-            <div className="p-3 bg-[#F7F7F4] border border-[#E5E7EB] rounded-[5px] text-center space-y-1">
-              <div className="text-xl font-extrabold font-mono text-[#17243A]">30 pts</div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3.5">
+            <div className="p-3.5 bg-[#F7F7F4] hover:bg-white hover:border-[#17243A]/30 transition-all border border-[#E5E7EB] rounded-[6px] text-center space-y-2">
+              <div className="text-2xl font-extrabold font-mono text-[#17243A]">30 pts</div>
               <div className="text-xs font-semibold text-[#17243A]">Functional MVP</div>
+              <div className="w-full bg-[#E5E7EB] h-1 rounded-full overflow-hidden">
+                <div className="bg-[#17243A] h-full w-[30%]" />
+              </div>
               <div className="text-[10px] text-[#6B7280]">Complete working flows</div>
             </div>
 
-            <div className="p-3 bg-[#F7F7F4] border border-[#E5E7EB] rounded-[5px] text-center space-y-1">
-              <div className="text-xl font-extrabold font-mono text-[#17243A]">20 pts</div>
-              <div className="text-xs font-semibold text-[#17243A]">Code Architecture</div>
+            <div className="p-3.5 bg-[#F7F7F4] hover:bg-white hover:border-[#17243A]/30 transition-all border border-[#E5E7EB] rounded-[6px] text-center space-y-2">
+              <div className="text-2xl font-extrabold font-mono text-[#17243A]">20 pts</div>
+              <div className="text-xs font-semibold text-[#17243A]">Architecture</div>
+              <div className="w-full bg-[#E5E7EB] h-1 rounded-full overflow-hidden">
+                <div className="bg-[#17243A] h-full w-[20%]" />
+              </div>
               <div className="text-[10px] text-[#6B7280]">Modularity &amp; error safety</div>
             </div>
 
-            <div className="p-3 bg-[#F7F7F4] border border-[#E5E7EB] rounded-[5px] text-center space-y-1">
-              <div className="text-xl font-extrabold font-mono text-[#17243A]">20 pts</div>
+            <div className="p-3.5 bg-[#F7F7F4] hover:bg-white hover:border-[#17243A]/30 transition-all border border-[#E5E7EB] rounded-[6px] text-center space-y-2">
+              <div className="text-2xl font-extrabold font-mono text-[#17243A]">20 pts</div>
               <div className="text-xs font-semibold text-[#17243A]">UI / UX Quality</div>
-              <div className="text-[10px] text-[#6B7280]">Design system adherence</div>
+              <div className="w-full bg-[#E5E7EB] h-1 rounded-full overflow-hidden">
+                <div className="bg-[#17243A] h-full w-[20%]" />
+              </div>
+              <div className="text-[10px] text-[#6B7280]">Design system polish</div>
             </div>
 
-            <div className="p-3 bg-[#F7F7F4] border border-[#E5E7EB] rounded-[5px] text-center space-y-1">
-              <div className="text-xl font-extrabold font-mono text-[#17243A]">15 pts</div>
+            <div className="p-3.5 bg-[#F7F7F4] hover:bg-white hover:border-[#17243A]/30 transition-all border border-[#E5E7EB] rounded-[6px] text-center space-y-2">
+              <div className="text-2xl font-extrabold font-mono text-[#17243A]">15 pts</div>
               <div className="text-xs font-semibold text-[#17243A]">Authentication</div>
+              <div className="w-full bg-[#E5E7EB] h-1 rounded-full overflow-hidden">
+                <div className="bg-[#17243A] h-full w-[15%]" />
+              </div>
               <div className="text-[10px] text-[#6B7280]">bcrypt, OTP &amp; JWT safety</div>
             </div>
 
-            <div className="p-3 bg-[#F7F7F4] border border-[#E5E7EB] rounded-[5px] text-center space-y-1">
-              <div className="text-xl font-extrabold font-mono text-[#17243A]">10 pts</div>
-              <div className="text-xs font-semibold text-[#17243A]">Nodemailer</div>
-              <div className="text-[10px] text-[#6B7280]">Automated email delivery</div>
+            <div className="p-3.5 bg-[#F7F7F4] hover:bg-white hover:border-[#17243A]/30 transition-all border border-[#E5E7EB] rounded-[6px] text-center space-y-2">
+              <div className="text-2xl font-extrabold font-mono text-[#17243A]">10 pts</div>
+              <div className="text-xs font-semibold text-[#17243A]">Automated Mail</div>
+              <div className="w-full bg-[#E5E7EB] h-1 rounded-full overflow-hidden">
+                <div className="bg-[#17243A] h-full w-[10%]" />
+              </div>
+              <div className="text-[10px] text-[#6B7280]">Real OTP delivery</div>
             </div>
 
-            <div className="p-3 bg-[#F7F7F4] border border-[#E5E7EB] rounded-[5px] text-center space-y-1">
-              <div className="text-xl font-extrabold font-mono text-[#17243A]">5 pts</div>
+            <div className="p-3.5 bg-[#F7F7F4] hover:bg-white hover:border-[#17243A]/30 transition-all border border-[#E5E7EB] rounded-[6px] text-center space-y-2">
+              <div className="text-2xl font-extrabold font-mono text-[#17243A]">5 pts</div>
               <div className="text-xs font-semibold text-[#17243A]">Docs &amp; Demo</div>
-              <div className="text-[10px] text-[#6B7280]">Architecture README</div>
+              <div className="w-full bg-[#E5E7EB] h-1 rounded-full overflow-hidden">
+                <div className="bg-[#17243A] h-full w-[5%]" />
+              </div>
+              <div className="text-[10px] text-[#6B7280]">README &amp; demo pitch</div>
             </div>
           </div>
         </div>
@@ -843,14 +935,14 @@ const Home = () => {
           {faqs.map((faq, idx) => (
             <div
               key={idx}
-              className="bg-white border border-[#E5E7EB] rounded-[6px] overflow-hidden transition-all shadow-sm"
+              className="bg-white border border-[#E5E7EB] rounded-[7px] overflow-hidden transition-all shadow-xs hover:border-[#17243A]/30"
             >
               <button
                 onClick={() => setActiveFaq(activeFaq === idx ? null : idx)}
                 className="w-full flex items-center justify-between px-5 py-4 text-left focus:outline-none cursor-pointer"
               >
                 <div className="flex items-center gap-3 pr-4">
-                  <span className="bg-[#17243A]/5 text-[#17243A] border border-[#17243A]/15 px-2 py-0.5 rounded-[3px] text-[10px] font-mono font-bold shrink-0">
+                  <span className="bg-[#17243A]/5 text-[#17243A] border border-[#17243A]/15 px-2 py-0.5 rounded-[4px] text-[10px] font-mono font-bold shrink-0">
                     {faq.category}
                   </span>
                   <span className="text-sm font-semibold text-[#17243A]">
@@ -875,14 +967,17 @@ const Home = () => {
 
       {/* 8. Bottom CTA Banner (Two-Column on md+) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 observe-anim opacity-0 transition-opacity duration-500">
-        <div className="bg-[#17243A] text-white rounded-[8px] p-8 md:p-12 border border-[#243653] shadow-lg">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+        <div className="relative bg-gradient-to-br from-[#17243A] via-[#1B2940] to-[#111A2B] text-white rounded-[10px] p-8 md:p-12 border border-[#243653] shadow-2xl overflow-hidden bg-dark-grid">
+          {/* Ambient glow in CTA */}
+          <div className="ambient-glow-gold -top-20 -right-20 opacity-40 pointer-events-none" />
+
+          <div className="relative grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
             {/* Left Column: CTA Content */}
             <div className="md:col-span-8 space-y-4">
-              <div className="inline-block px-3 py-1 bg-white/10 rounded-[4px] text-xs font-mono text-[#D6A64F] font-bold uppercase">
+              <div className="inline-block px-3 py-1 bg-white/10 rounded-[5px] text-xs font-mono text-[#D6A64F] font-bold uppercase tracking-wider border border-white/10">
                 Limited Submissions Window &bull; Closes Dec 20, 2026
               </div>
-              <h2 className="text-2xl sm:text-3xl font-extrabold font-display">
+              <h2 className="text-2xl sm:text-4xl font-extrabold font-display tracking-tight text-white">
                 Ready to Engineer Something Extraordinary?
               </h2>
               <p className="text-sm text-[#D1D5DB] max-w-xl leading-relaxed">
@@ -890,13 +985,13 @@ const Home = () => {
               </p>
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 pt-2">
                 <Link to={isAuthenticated ? '/register' : '/signup'}>
-                  <Button variant="primary" size="lg" className="bg-[#D6A64F] text-[#17243A] hover:bg-[#e0b462] font-bold gap-2">
+                  <Button variant="accent" size="lg" className="gap-2 shadow-lg hover:shadow-xl font-bold">
                     {isAuthenticated ? 'Submit Team Registration' : 'Register for Hackathon'}
                     <ArrowRight className="w-4 h-4" />
                   </Button>
                 </Link>
                 <Link to="/about">
-                  <Button variant="outline" size="lg" className="border-white/30 text-white hover:bg-white/10 font-medium">
+                  <Button variant="outline" size="lg" className="border-white/30 text-white hover:bg-white/10 font-semibold">
                     Review Guidelines
                   </Button>
                 </Link>
@@ -904,9 +999,10 @@ const Home = () => {
             </div>
 
             {/* Right Column: Mini Stats Summary Panel */}
-            <div className="md:col-span-4 bg-white/5 border border-white/10 rounded-[6px] p-5 space-y-3 font-mono text-xs">
-              <div className="text-[11px] text-[#D6A64F] font-bold uppercase tracking-wider">
-                Platform Snapshot
+            <div className="md:col-span-4 bg-white/5 backdrop-blur-md border border-white/10 rounded-[8px] p-5.5 space-y-3 font-mono text-xs shadow-inner">
+              <div className="text-[11px] text-[#D6A64F] font-bold uppercase tracking-wider flex items-center justify-between">
+                <span>Platform Snapshot</span>
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
               </div>
               <div className="flex items-center justify-between border-b border-white/10 pb-2">
                 <span className="text-[#9CA3AF]">Status</span>

@@ -48,70 +48,71 @@ const CountdownTimer = ({
     <div className={`inline-flex flex-col ${className}`}>
       {label && (
         <div
-          className={`text-[10px] font-mono uppercase tracking-widest mb-1.5 font-bold ${
+          className={`text-[10px] font-mono uppercase tracking-widest mb-1.5 font-bold flex items-center gap-1.5 ${
             isDark ? 'text-[#D6A64F]' : 'text-[#6B7280]'
           }`}
         >
+          <span className="w-1.5 h-1.5 rounded-full bg-[#21845B] animate-pulse" />
           {label}
         </div>
       )}
-      <div className="flex items-center gap-1.5 sm:gap-2">
+      <div className="flex items-center gap-1 sm:gap-1.5">
         <div
-          className={`px-2.5 py-1.5 rounded-[4px] border text-center ${
+          className={`px-2.5 py-1.5 rounded-[5px] border text-center shadow-xs ${
             isDark
-              ? 'bg-white/10 border-white/15 text-white'
-              : 'bg-white border-[#E5E7EB] text-[#17243A]'
+              ? 'bg-[#121c2e]/80 border-white/15 text-white shadow-inner'
+              : 'bg-white border-[#E5E7EB] text-[#17243A] shadow-xs'
           }`}
         >
-          <span className="block text-base sm:text-lg font-bold font-mono leading-none">
+          <span className="block text-base sm:text-lg font-bold font-mono leading-none tracking-tight">
             {timeLeft.days}
           </span>
-          <span className="block text-[9px] uppercase tracking-wider text-[#6B7280] font-sans mt-0.5">
+          <span className="block text-[8px] uppercase tracking-wider text-[#9CA3AF] font-sans font-bold mt-1">
             Days
           </span>
         </div>
-        <span className={`font-mono font-bold ${isDark ? 'text-white/40' : 'text-[#9CA3AF]'}`}>:</span>
+        <span className={`font-mono font-bold text-xs ${isDark ? 'text-white/40' : 'text-[#9CA3AF]'}`}>:</span>
         <div
-          className={`px-2.5 py-1.5 rounded-[4px] border text-center ${
+          className={`px-2.5 py-1.5 rounded-[5px] border text-center shadow-xs ${
             isDark
-              ? 'bg-white/10 border-white/15 text-white'
-              : 'bg-white border-[#E5E7EB] text-[#17243A]'
+              ? 'bg-[#121c2e]/80 border-white/15 text-white shadow-inner'
+              : 'bg-white border-[#E5E7EB] text-[#17243A] shadow-xs'
           }`}
         >
-          <span className="block text-base sm:text-lg font-bold font-mono leading-none">
+          <span className="block text-base sm:text-lg font-bold font-mono leading-none tracking-tight">
             {timeLeft.hours}
           </span>
-          <span className="block text-[9px] uppercase tracking-wider text-[#6B7280] font-sans mt-0.5">
+          <span className="block text-[8px] uppercase tracking-wider text-[#9CA3AF] font-sans font-bold mt-1">
             Hours
           </span>
         </div>
-        <span className={`font-mono font-bold ${isDark ? 'text-white/40' : 'text-[#9CA3AF]'}`}>:</span>
+        <span className={`font-mono font-bold text-xs ${isDark ? 'text-white/40' : 'text-[#9CA3AF]'}`}>:</span>
         <div
-          className={`px-2.5 py-1.5 rounded-[4px] border text-center ${
+          className={`px-2.5 py-1.5 rounded-[5px] border text-center shadow-xs ${
             isDark
-              ? 'bg-white/10 border-white/15 text-white'
-              : 'bg-white border-[#E5E7EB] text-[#17243A]'
+              ? 'bg-[#121c2e]/80 border-white/15 text-white shadow-inner'
+              : 'bg-white border-[#E5E7EB] text-[#17243A] shadow-xs'
           }`}
         >
-          <span className="block text-base sm:text-lg font-bold font-mono leading-none">
+          <span className="block text-base sm:text-lg font-bold font-mono leading-none tracking-tight">
             {timeLeft.minutes}
           </span>
-          <span className="block text-[9px] uppercase tracking-wider text-[#6B7280] font-sans mt-0.5">
+          <span className="block text-[8px] uppercase tracking-wider text-[#9CA3AF] font-sans font-bold mt-1">
             Mins
           </span>
         </div>
-        <span className={`font-mono font-bold ${isDark ? 'text-white/40' : 'text-[#9CA3AF]'}`}>:</span>
+        <span className={`font-mono font-bold text-xs ${isDark ? 'text-white/40' : 'text-[#9CA3AF]'}`}>:</span>
         <div
-          className={`px-2.5 py-1.5 rounded-[4px] border text-center ${
+          className={`px-2.5 py-1.5 rounded-[5px] border text-center shadow-xs ${
             isDark
-              ? 'bg-white/10 border-white/15 text-white'
-              : 'bg-white border-[#E5E7EB] text-[#17243A]'
+              ? 'bg-[#121c2e]/80 border-white/15 text-[#D6A64F] shadow-inner'
+              : 'bg-white border-[#E5E7EB] text-[#D6A64F] shadow-xs'
           }`}
         >
-          <span className="block text-base sm:text-lg font-bold font-mono leading-none text-[#D6A64F]">
+          <span className="block text-base sm:text-lg font-bold font-mono leading-none tracking-tight">
             {timeLeft.seconds}
           </span>
-          <span className="block text-[9px] uppercase tracking-wider text-[#6B7280] font-sans mt-0.5">
+          <span className="block text-[8px] uppercase tracking-wider text-[#9CA3AF] font-sans font-bold mt-1">
             Secs
           </span>
         </div>

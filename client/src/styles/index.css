@@ -84,25 +84,68 @@
 }
 
 /* ----------------------------------------------------------
-   BACKGROUND PATTERN UTILITIES
+   BACKGROUND PATTERN & GLOW UTILITIES
    ---------------------------------------------------------- */
 .bg-tech-grid {
   background-size: 32px 32px;
   background-image:
-    linear-gradient(to right,  rgba(23, 36, 58, 0.04) 1px, transparent 1px),
+    linear-gradient(to right, rgba(23, 36, 58, 0.04) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(23, 36, 58, 0.04) 1px, transparent 1px);
 }
 
 .bg-tech-dots {
   background-size: 20px 20px;
-  background-image: radial-gradient(rgba(23, 36, 58, 0.07) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(23, 36, 58, 0.08) 1px, transparent 1px);
 }
 
 .bg-dark-grid {
   background-size: 32px 32px;
   background-image:
-    linear-gradient(to right,  rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+}
+
+/* Ambient glow orbs */
+.ambient-glow-navy {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(23, 36, 58, 0.08) 0%, rgba(23, 36, 58, 0) 70%);
+  filter: blur(40px);
+  pointer-events: none;
+}
+
+.ambient-glow-gold {
+  position: absolute;
+  width: 450px;
+  height: 450px;
+  background: radial-gradient(circle, rgba(214, 166, 79, 0.12) 0%, rgba(214, 166, 79, 0) 70%);
+  filter: blur(50px);
+  pointer-events: none;
+}
+
+/* Shimmer animation utility */
+@keyframes shimmerKeyframes {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
+}
+
+.animate-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.animate-shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: translateX(-100%);
+  animation: shimmerKeyframes 2.5s infinite;
 }
 
 /* ----------------------------------------------------------

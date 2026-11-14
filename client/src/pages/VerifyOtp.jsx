@@ -129,13 +129,21 @@ const VerifyOtp = () => {
   };
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="w-full max-w-md space-y-6">
+    <div className="relative min-h-[calc(100vh-4rem)] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-tech-dots overflow-hidden">
+      {/* Ambient background glows */}
+      <div className="ambient-glow-navy -top-20 -left-20 opacity-50" />
+      <div className="ambient-glow-gold -bottom-20 -right-20 opacity-40" />
+
+      <div className="relative w-full max-w-md space-y-6">
         <div className="text-center space-y-2">
-          <div className="w-10 h-10 rounded-[5px] bg-[#17243A] text-[#D6A64F] flex items-center justify-center mx-auto">
-            <KeyRound className="w-5 h-5" />
-          </div>
-          <h1 className="text-2xl font-extrabold text-[#17243A] tracking-tight">
+          <Link to="/" className="inline-block group mb-1">
+            <img
+              src="/logo.png"
+              alt="Code-a-Nova Logo"
+              className="w-14 h-14 rounded-[10px] object-contain mx-auto shadow-md group-hover:scale-105 transition-transform"
+            />
+          </Link>
+          <h1 className="text-2xl font-extrabold text-[#17243A] tracking-tight font-display">
             Verify Your Email Address
           </h1>
           <p className="text-xs text-[#6B7280]">
@@ -146,7 +154,7 @@ const VerifyOtp = () => {
           </p>
         </div>
 
-        <Card className="shadow-sm">
+        <Card className="shadow-lg border-[#E5E7EB] bg-white/95 backdrop-blur-md">
           {isSuccess ? (
             <div className="py-8 text-center space-y-4">
               <div className="w-12 h-12 bg-[#21845B]/10 rounded-full flex items-center justify-center mx-auto text-[#21845B]">

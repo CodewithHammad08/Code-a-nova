@@ -82,6 +82,9 @@ const DashboardLayout = () => {
             >
               <Menu className="w-5 h-5" />
             </button>
+            <Link to="/dashboard" className="md:hidden flex items-center">
+              <img src="/logo.png" alt="Code-a-Nova Logo" className="w-7 h-7 rounded-[5px] object-contain" />
+            </Link>
             <div className="flex items-center gap-2 text-xs text-[#6B7280]">
               <Link to="/dashboard" className="hover:text-[#17243A]">
                 Portal

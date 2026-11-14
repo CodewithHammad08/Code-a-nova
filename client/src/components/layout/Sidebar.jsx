@@ -64,11 +64,13 @@ const Sidebar = ({ onClose }) => {
       {/* Brand area */}
       <div className="p-5 border-b border-[#E5E7EB]">
         <NavLink to="/" className="flex items-center gap-2.5 group">
-          <div className="w-7 h-7 rounded-[5px] bg-[#17243A] flex items-center justify-center text-white font-display font-bold text-xs tracking-wider">
-            CAN
-          </div>
+          <img
+            src="/logo.png"
+            alt="Code-a-Nova Logo"
+            className="w-8 h-8 rounded-[6px] object-contain shadow-sm group-hover:scale-105 transition-transform"
+          />
           <div>
-            <div className="font-display font-bold text-sm text-[#17243A] tracking-tight">
+            <div className="font-display font-bold text-sm text-[#17243A] tracking-tight group-hover:text-[#243653] transition-colors">
               CODE-A-NOVA
             </div>
             <div className="text-[10px] text-[#6B7280] font-medium tracking-wide uppercase">

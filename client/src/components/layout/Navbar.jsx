@@ -40,20 +40,23 @@ const Navbar = () => {
   };
 
   const navLinkClass = ({ isActive }) =>
-    `text-xs font-semibold uppercase tracking-wider transition-colors px-2 py-1 border-b-2 ${
+    `text-xs font-semibold tracking-wider transition-all duration-200 px-3 py-1.5 rounded-[5px] ${
       isActive
-        ? 'border-[#17243A] text-[#17243A]'
-        : 'border-transparent text-[#6B7280] hover:text-[#17243A] hover:border-[#D1D5DB]'
+        ? 'bg-[#17243A] text-white shadow-xs'
+        : 'text-[#4B5563] hover:text-[#17243A] hover:bg-[#F3F4F6]'
     }`;
+
+  const desktopAnchorClass =
+    'text-xs font-semibold tracking-wider transition-all duration-200 px-3 py-1.5 rounded-[5px] text-[#4B5563] hover:text-[#17243A] hover:bg-[#F3F4F6]';
 
   return (
     <header
-      className={`sticky top-0 z-40 bg-white/95 backdrop-blur-md transition-shadow duration-200 ${
-        scrolled ? 'shadow-sm border-b border-[#E5E7EB]' : 'border-b border-[#E5E7EB]'
+      className={`sticky top-0 z-40 bg-white/90 backdrop-blur-xl transition-all duration-300 ${
+        scrolled ? 'shadow-md border-b border-black/[0.08]' : 'border-b border-[#E5E7EB]'
       }`}
     >
       {/* Top Announcement Bar */}
-      <div className="bg-[#17243A] text-white text-[11px] py-2 px-4 border-b border-[#243653] flex items-center justify-between sm:justify-center gap-2 sm:gap-4">
+      <div className="bg-gradient-to-r from-[#111A2B] via-[#17243A] to-[#1F2F49] text-white text-[11px] py-1.5 px-4 border-b border-[#243653]/60 flex items-center justify-between sm:justify-center gap-2 sm:gap-4 shadow-inner">
         {/* Left: LIVE Badge */}
         <div className="flex items-center gap-1.5 shrink-0">
           <span className="inline-block w-2 h-2 rounded-full bg-[#21845B] animate-pulse" />
@@ -76,7 +79,7 @@ const Navbar = () => {
         <div className="shrink-0">
           <Link
             to={isAuthenticated ? '/register' : '/signup'}
-            className="text-[#D6A64F] hover:underline font-bold inline-flex items-center gap-0.5 ml-1 text-xs"
+            className="text-[#D6A64F] hover:text-[#ecc47c] font-bold inline-flex items-center gap-0.5 ml-1 text-xs transition-colors"
           >
             {isAuthenticated ? 'Register Project' : 'Register Now'}
             <ChevronRight className="w-3 h-3" />
@@ -89,13 +92,15 @@ const Navbar = () => {
           {/* Brand Monogram & Name */}
           <Link to="/" className="flex items-center gap-3 group">
             <div className="relative">
-              <div className="w-8 h-8 rounded-[5px] bg-[#17243A] flex items-center justify-center text-white font-display font-extrabold text-xs tracking-wider shadow-sm group-hover:bg-[#243653] transition-colors border border-[#243653]">
-                CAN
-              </div>
+              <img
+                src="/logo.png"
+                alt="Code-a-Nova Logo"
+                className="w-8 h-8 rounded-[6px] object-contain shadow-sm group-hover:scale-105 transition-transform"
+              />
               <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-[#D6A64F] border-2 border-white" />
             </div>
             <div className="flex flex-col">
-              <span className="font-display font-extrabold text-base tracking-tight text-[#17243A] leading-tight">
+              <span className="font-display font-extrabold text-base tracking-tight text-[#17243A] leading-tight group-hover:text-[#243653] transition-colors">
                 CODE-A-NOVA
               </span>
               <span className="text-[10px] tracking-widest uppercase text-[#6B7280] font-mono leading-none">
@@ -105,29 +110,20 @@ const Navbar = () => {
           </Link>
 
           {/* Desktop Navigation Links */}
-          <div className="hidden md:flex items-center space-x-7">
+          <div className="hidden md:flex items-center space-x-1.5">
             <NavLink to="/" className={navLinkClass}>
               Home
             </NavLink>
             <NavLink to="/about" className={navLinkClass}>
               About & Rubric
             </NavLink>
-            <a
-              href="/#domains"
-              className="text-xs font-semibold uppercase tracking-wider text-[#6B7280] hover:text-[#17243A] transition-colors"
-            >
+            <a href="/#domains" className={desktopAnchorClass}>
               Tracks
             </a>
-            <a
-              href="/#timeline"
-              className="text-xs font-semibold uppercase tracking-wider text-[#6B7280] hover:text-[#17243A] transition-colors"
-            >
+            <a href="/#timeline" className={desktopAnchorClass}>
               Timeline
             </a>
-            <a
-              href="/#prizes"
-              className="text-xs font-semibold uppercase tracking-wider text-[#6B7280] hover:text-[#17243A] transition-colors"
-            >
+            <a href="/#prizes" className={desktopAnchorClass}>
               Prizes
             </a>
             <NavLink to="/contact" className={navLinkClass}>

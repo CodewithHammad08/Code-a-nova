@@ -7,6 +7,13 @@ const NotFound = () => {
   return (
     <div className="min-h-[calc(100vh-8rem)] flex items-center justify-center p-6 text-center">
       <div className="max-w-md space-y-4">
+        <Link to="/" className="inline-block group">
+          <img
+            src="/logo.png"
+            alt="Code-a-Nova Logo"
+            className="w-14 h-14 rounded-[10px] object-contain mx-auto shadow-sm group-hover:scale-105 transition-transform"
+          />
+        </Link>
         <div className="text-5xl font-extrabold text-[#17243A] font-mono">404</div>
         <h1 className="text-xl font-bold text-[#17243A]">Page Not Found</h1>
         <p className="text-xs text-[#6B7280]">
