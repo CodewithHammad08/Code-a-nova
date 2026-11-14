@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
-    "build": "echo 'Server build completed successfully'"
+    "build": "echo 'Server build completed successfully'",
+    "db:clean": "node scripts/clean-db.js"
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",

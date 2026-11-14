@@ -9,9 +9,15 @@ import toast from 'react-hot-toast';
 const VerifyOtp = () => {
   const [searchParams] = useSearchParams();
   const emailParam = searchParams.get('email') || '';
+  const codeParam = searchParams.get('code') || '';
 
   const [email, setEmail] = useState(emailParam);
-  const [otp, setOtp] = useState(['', '', '', '', '', '']);
+  const [otp, setOtp] = useState(() => {
+    if (codeParam && /^\d{6}$/.test(codeParam)) {
+      return codeParam.split('');
+    }
+    return ['', '', '', '', '', ''];
+  });
   const [isVerifying, setIsVerifying] = useState(false);
   const [isResending, setIsResending] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);

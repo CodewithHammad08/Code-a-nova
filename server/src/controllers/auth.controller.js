@@ -8,6 +8,7 @@ const signup = async (req, res, next) => {
     return successResponse(res, 201, result.message, {
       email: result.email,
       user: result.user,
+      devOtp: result.devOtp,
     });
   } catch (error) {
     next(error);

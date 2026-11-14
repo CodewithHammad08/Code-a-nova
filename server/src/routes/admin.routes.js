@@ -10,6 +10,7 @@ router.use(adminOnly);
 router.get('/stats', adminController.getStats);
 router.get('/registrations', adminController.listRegistrations);
 router.get('/export-csv', adminController.exportCsv);
+router.delete('/clear-clutter', adminController.clearClutter);
 
 module.exports = router;
 

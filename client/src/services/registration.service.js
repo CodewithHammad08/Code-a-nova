@@ -37,6 +37,11 @@ export const registrationService = {
     return res.data;
   },
 
+  async clearDatabaseClutter() {
+    const res = await api.delete('/admin/clear-clutter');
+    return res.data;
+  },
+
   getExportCsvUrl() {
     const baseURL = import.meta.env.VITE_API_URL || '/api';
     const token = localStorage.getItem('can_auth_token');

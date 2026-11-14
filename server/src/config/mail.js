@@ -20,14 +20,20 @@ const createMailTransporter = async () => {
           user: cleanUser,
           pass: cleanPass,
         },
+        connectionTimeout: 4000,
+        greetingTimeout: 4000,
+        socketTimeout: 4000,
       });
 
-      // Verify connection configuration
-      await transporter.verify();
-      console.log('[Mail] SMTP Transporter ready and verified with configured credentials.');
+      // Verify connection in background with timeout protection so startup/requests never hang
+      transporter
+        .verify()
+        .then(() => console.log('[Mail] SMTP Transporter ready and verified with configured credentials.'))
+        .catch((err) => console.warn(`[Mail] Configured SMTP verification notice: ${err.message}`));
+
       return transporter;
     } catch (err) {
-      console.warn(`[Mail] Configured SMTP verification failed: ${err.message}. Falling back to resilient mode.`);
+      console.warn(`[Mail] Configured SMTP creation failed: ${err.message}. Falling back to resilient mode.`);
     }
   }
 

@@ -6,24 +6,7 @@ const EventConfig = require('./models/EventConfig');
 
 const startServer = async () => {
   try {
-    // 1. Connect to Database
-    await connectDB();
-
-    // 2. Initialize Mail Transporter
-    await getTransporter();
-
-    // 3. Ensure Default Event Config exists in DB
-    try {
-      const existingConfig = await EventConfig.findOne();
-      if (!existingConfig) {
-        await EventConfig.create({});
-        console.log('[Setup] Seeded default event configuration.');
-      }
-    } catch (cfgErr) {
-      console.warn('[Setup] Note on event config seed:', cfgErr.message);
-    }
-
-    // 4. Start HTTP Server
+    // 1. Start HTTP Server immediately so Render/Vercel health checks succeed instantly
     const server = app.listen(config.port, () => {
       console.log(`====================================================`);
       console.log(`  CODE-A-NOVA API Server`);
@@ -32,6 +15,24 @@ const startServer = async () => {
       console.log(`  Client Origin: ${config.clientUrl}`);
       console.log(`====================================================`);
     });
+
+    // 2. Connect to Database asynchronously without blocking server readiness
+    connectDB()
+      .then(async () => {
+        try {
+          const existingConfig = await EventConfig.findOne();
+          if (!existingConfig) {
+            await EventConfig.create({});
+            console.log('[Setup] Seeded default event configuration.');
+          }
+        } catch (cfgErr) {
+          console.warn('[Setup] Note on event config seed:', cfgErr.message);
+        }
+      })
+      .catch((err) => console.error('[Setup] DB bootstrap notice:', err.message));
+
+    // 3. Initialize Mail Transporter in background
+    getTransporter().catch((err) => console.warn('[Setup] Mail bootstrap notice:', err.message));
 
     server.on('error', async (err) => {
       if (err.code === 'EADDRINUSE') {

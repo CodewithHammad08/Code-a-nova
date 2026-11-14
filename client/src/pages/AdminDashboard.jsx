@@ -105,6 +105,25 @@ const AdminDashboard = () => {
     fetchRegistrations();
   };
 
+  const [isPurging, setIsPurging] = useState(false);
+
+  const handleClearClutter = async () => {
+    if (!window.confirm('Are you sure you want to purge all test registrations, contact inquiries, and non-admin test users from the database? This cannot be undone.')) {
+      return;
+    }
+    setIsPurging(true);
+    try {
+      const res = await registrationService.clearDatabaseClutter();
+      toast.success(res?.message || 'Database clutter successfully cleared!');
+      fetchStats();
+      fetchRegistrations();
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to clear database clutter.');
+    } finally {
+      setIsPurging(false);
+    }
+  };
+
   const handleExportCsv = () => {
     window.open(registrationService.getExportCsvUrl(), '_blank');
   };
@@ -127,7 +146,18 @@ const AdminDashboard = () => {
           </p>
         </div>
 
-        <div>
+        <div className="flex items-center gap-2.5 flex-wrap">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleClearClutter}
+            disabled={isPurging}
+            className="gap-2 text-rose-600 border-rose-200 hover:bg-rose-50 hover:border-rose-300 font-semibold shadow-xs"
+          >
+            <Trash2 className="w-4 h-4 text-rose-600" />
+            {isPurging ? 'Purging Clutter...' : 'Purge Test Clutter'}
+          </Button>
+
           <Button
             variant="accent"
             size="sm"

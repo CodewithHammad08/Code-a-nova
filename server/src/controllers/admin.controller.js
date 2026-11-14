@@ -1,4 +1,6 @@
 const HackathonRegistration = require('../models/HackathonRegistration');
+const ContactMessage = require('../models/ContactMessage');
+const User = require('../models/User');
 const registrationService = require('../services/registration.service');
 const { successResponse } = require('../utils/apiResponse');
 
@@ -105,9 +107,29 @@ const exportCsv = async (req, res, next) => {
   }
 };
 
+const clearClutter = async (req, res, next) => {
+  try {
+    const regResult = await HackathonRegistration.deleteMany({});
+    const contactResult = await ContactMessage.deleteMany({});
+    const userResult = await User.deleteMany({
+      role: { $ne: 'admin' },
+      email: { $ne: 'hammaddalvi08@gmail.com' },
+    });
+
+    return successResponse(res, 200, 'All test database clutter successfully purged.', {
+      deletedRegistrations: regResult.deletedCount,
+      deletedContactMessages: contactResult.deletedCount,
+      deletedTestUsers: userResult.deletedCount,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getStats,
   listRegistrations,
   exportCsv,
+  clearClutter,
 };
 
