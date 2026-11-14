@@ -46,10 +46,10 @@ const Signup = () => {
 
   const getStrengthLabel = (score) => {
     if (!formData.password) return { text: '', color: 'bg-transparent' };
-    if (score <= 2) return { text: 'Weak', color: 'bg-[#C44545]' };
-    if (score === 3) return { text: 'Fair', color: 'bg-amber-500' };
-    if (score === 4) return { text: 'Good', color: 'bg-blue-600' };
-    return { text: 'Strong', color: 'bg-[#21845B]' };
+    if (score <= 2) return { text: 'Weak', color: 'bg-rose-500' };
+    if (score === 3) return { text: 'Fair', color: 'bg-amber-400' };
+    if (score === 4) return { text: 'Good', color: 'bg-cyan-400' };
+    return { text: 'Strong', color: 'bg-emerald-400' };
   };
 
   const strength = getStrengthLabel(passwordScore);
@@ -108,10 +108,10 @@ const Signup = () => {
   };
 
   return (
-    <div className="relative min-h-[calc(100vh-4rem)] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-tech-dots overflow-hidden">
+    <div className="relative min-h-[calc(100vh-4rem)] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-[#080C14] bg-tech-dots overflow-hidden">
       {/* Ambient background glows */}
-      <div className="ambient-glow-navy -top-20 -left-20 opacity-50" />
-      <div className="ambient-glow-gold -bottom-20 -right-20 opacity-40" />
+      <div className="ambient-glow-navy -top-20 -left-20 opacity-60" />
+      <div className="ambient-glow-cyan -bottom-20 -right-20 opacity-50" />
 
       <div className="relative w-full max-w-md space-y-6">
         <div className="text-center space-y-2">
@@ -119,18 +119,18 @@ const Signup = () => {
             <img
               src="/logo.png"
               alt="Code-a-Nova Logo"
-              className="w-14 h-14 rounded-[10px] object-contain mx-auto shadow-md group-hover:scale-105 transition-transform"
+              className="w-14 h-14 rounded-[10px] object-contain mx-auto shadow-[0_0_20px_rgba(56,189,248,0.3)] group-hover:scale-105 transition-transform"
             />
           </Link>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#17243A] tracking-tight font-display">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight font-display">
             Create Participant Account
           </h1>
-          <p className="text-xs text-[#6B7280]">
+          <p className="text-xs text-slate-400">
             Sign up to register your team, submit project materials, and access your dashboard.
           </p>
         </div>
 
-        <Card className="shadow-lg border-[#E5E7EB] bg-white/95 backdrop-blur-md">
+        <Card className="shadow-2xl border-white/10 bg-[#0F172A]/90 backdrop-blur-md">
           <form onSubmit={handleSubmit} className="space-y-4">
             <Input
               label="Full Name"
@@ -165,7 +165,7 @@ const Signup = () => {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-8 text-[#6B7280] hover:text-[#17243A] focus:outline-none"
+                className="absolute right-3 top-8 text-slate-400 hover:text-white focus:outline-none cursor-pointer"
                 tabIndex="-1"
               >
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -176,10 +176,10 @@ const Signup = () => {
             {formData.password && (
               <div className="space-y-1.5 pt-1">
                 <div className="flex items-center justify-between text-[10px] font-mono">
-                  <span className="text-[#6B7280]">Password Complexity:</span>
-                  <span className="font-bold text-[#17243A]">{strength.text}</span>
+                  <span className="text-slate-400">Password Complexity:</span>
+                  <span className="font-bold text-cyan-300">{strength.text}</span>
                 </div>
-                <div className="w-full bg-[#E5E7EB] h-1 rounded-full overflow-hidden flex gap-0.5">
+                <div className="w-full bg-white/10 h-1.5 rounded-full overflow-hidden flex gap-1">
                   {[1, 2, 3, 4, 5].map((i) => (
                     <div
                       key={i}
@@ -189,17 +189,17 @@ const Signup = () => {
                     />
                   ))}
                 </div>
-                <div className="flex flex-wrap gap-2 text-[10px] text-[#6B7280]">
-                  <span className={formData.password.length >= 8 ? 'text-[#21845B]' : ''}>
+                <div className="flex flex-wrap gap-2 text-[10px] text-slate-400 font-mono">
+                  <span className={formData.password.length >= 8 ? 'text-emerald-400 font-bold' : ''}>
                     ✓ 8+ chars
                   </span>
-                  <span className={/[A-Z]/.test(formData.password) ? 'text-[#21845B]' : ''}>
+                  <span className={/[A-Z]/.test(formData.password) ? 'text-emerald-400 font-bold' : ''}>
                     ✓ Uppercase
                   </span>
-                  <span className={/[a-z]/.test(formData.password) ? 'text-[#21845B]' : ''}>
+                  <span className={/[a-z]/.test(formData.password) ? 'text-emerald-400 font-bold' : ''}>
                     ✓ Lowercase
                   </span>
-                  <span className={/\d/.test(formData.password) ? 'text-[#21845B]' : ''}>
+                  <span className={/\d/.test(formData.password) ? 'text-emerald-400 font-bold' : ''}>
                     ✓ Number
                   </span>
                 </div>
@@ -222,7 +222,7 @@ const Signup = () => {
                 variant="primary"
                 size="md"
                 isLoading={isLoading}
-                className="w-full gap-2 font-bold shadow-sm"
+                className="w-full gap-2 font-bold shadow-[0_0_20px_rgba(56,189,248,0.3)] hover:shadow-[0_0_25px_rgba(56,189,248,0.45)]"
               >
                 <span>Continue to OTP Verification</span>
                 <ArrowRight className="w-4 h-4" />
@@ -230,18 +230,18 @@ const Signup = () => {
             </div>
           </form>
 
-          <div className="mt-6 border-t border-[#E5E7EB] pt-4 text-center">
-            <p className="text-xs text-[#6B7280]">
+          <div className="mt-6 border-t border-white/[0.08] pt-4 text-center">
+            <p className="text-xs text-slate-400">
               Already have an account?{' '}
-              <Link to="/login" className="font-bold text-[#17243A] hover:underline">
+              <Link to="/login" className="font-bold text-cyan-400 hover:text-cyan-300">
                 Sign in here &rarr;
               </Link>
             </p>
           </div>
         </Card>
 
-        <div className="flex items-center justify-center gap-2 text-[11px] text-[#9CA3AF]">
-          <ShieldCheck className="w-3.5 h-3.5 text-[#21845B]" />
+        <div className="flex items-center justify-center gap-2 text-[11px] text-slate-400 font-mono">
+          <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
           <span>Encrypted with salted bcrypt &bull; 10-Minute Expiry OTP</span>
         </div>
       </div>

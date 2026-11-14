@@ -27,6 +27,12 @@ import {
   Flame,
   Copy,
   Check,
+  QrCode,
+  Gauge,
+  Sliders,
+  ChevronRight,
+  BookmarkCheck,
+  Hash,
 } from 'lucide-react';
 import Button from '../components/common/Button';
 import Badge from '../components/common/Badge';
@@ -37,64 +43,39 @@ import useAuth from '../hooks/useAuth';
 
 const Home = () => {
   const { isAuthenticated } = useAuth();
-  const [eventConfig, setEventConfig] = useState(null);
   const [selectedTrackIndex, setSelectedTrackIndex] = useState(0);
   const [activeFaq, setActiveFaq] = useState(0);
-  const [activeHeroTab, setActiveHeroTab] = useState('spec'); // 'spec' | 'pipeline' | 'security'
-  const [copiedCode, setCopiedCode] = useState(false);
+  const [activeFaqCategory, setActiveFaqCategory] = useState('All');
+  const [copiedId, setCopiedId] = useState(false);
 
-  const getHeroSnippetText = () => {
-    if (activeHeroTab === 'spec') {
-      return `{\n  "event": "Code-a-Nova 2026-27",\n  "format": "Hybrid (Online + Grand Finale)",\n  "team_bounds": { "min": 1, "max": 5 },\n  "tracks": ["AI/ML", "Web Dev", "IoT", "Cyber Security", "Blockchain"],\n  "deadline": "2026-12-20T23:59:59Z",\n  "prize_pool": "₹1,50,000+ INR"\n}`;
-    } else if (activeHeroTab === 'pipeline') {
-      return `// Participant Verification Pipeline\n> 01: SIGNUP      -> User account created\n> 02: OTP         -> 6-digit hashed OTP sent (10m TTL)\n> 03: VERIFY      -> OTP validated; account activated\n> 04: REGISTER    -> Team registered & CAN ID generated\n> 05: FINALE      -> 36-hr prototype sprint & judging`;
-    } else {
-      return `// Defensive Security Architecture\nPASSWORDS:   bcryptjs (10 salt rounds)\nOTP STORAGE: sha256/bcrypt hashed (600s TTL)\nSESSIONS:    JWT in HttpOnly, SameSite cookies\nHEADERS:     Helmet, strict CORS, rate-limits\nREVIEWS:     1 registration per candidate`;
-    }
+  // Interactive Interactive Pass Customizer state in Hero
+  const [heroRole, setHeroRole] = useState('Full-Stack Architect');
+  const [heroTrack, setHeroTrack] = useState('AI / Machine Learning');
+
+  // Interactive Rubric Calculator state
+  const [rubricScores, setRubricScores] = useState({
+    mvp: 30,
+    arch: 20,
+    ui: 20,
+    auth: 15,
+    email: 10,
+    docs: 5,
+  });
+
+  const totalCalculatedScore =
+    rubricScores.mvp +
+    rubricScores.arch +
+    rubricScores.ui +
+    rubricScores.auth +
+    rubricScores.email +
+    rubricScores.docs;
+
+  const getScoreVerdict = (score) => {
+    if (score >= 90) return { label: 'Grand Finale Podium Contender', color: 'text-amber-400', badge: 'Tier 1' };
+    if (score >= 75) return { label: 'Shortlist Qualified for Finale', color: 'text-cyan-400', badge: 'Tier 2' };
+    if (score >= 60) return { label: 'Competitive Review Range', color: 'text-emerald-400', badge: 'Tier 3' };
+    return { label: 'Prototype Needs Architecture Polish', color: 'text-slate-400', badge: 'In Progress' };
   };
-
-  const handleCopyCode = () => {
-    navigator.clipboard.writeText(getHeroSnippetText());
-    setCopiedCode(true);
-    setTimeout(() => setCopiedCode(false), 2000);
-  };
-
-  useEffect(() => {
-    registrationService
-      .getEventConfig()
-      .then((res) => {
-        if (res?.data?.config) setEventConfig(res.data.config);
-      })
-      .catch(() => {});
-  }, []);
-
-  // IntersectionObserver for scroll-in animations
-  useEffect(() => {
-    if (typeof window === 'undefined' || !('IntersectionObserver' in window)) {
-      document.querySelectorAll('.observe-anim').forEach((el) => {
-        el.classList.remove('opacity-0');
-      });
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('animate-fadeIn');
-            entry.target.classList.remove('opacity-0');
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    const elements = document.querySelectorAll('.observe-anim');
-    elements.forEach((el) => observer.observe(el));
-
-    return () => observer.disconnect();
-  }, []);
 
   const getTrackIcon = (id, className = 'w-5 h-5') => {
     switch (id) {
@@ -117,300 +98,279 @@ const Home = () => {
 
   const faqs = [
     {
-      category: 'General',
-      q: 'Who is eligible to participate in Code-a-Nova?',
-      a: 'Any enrolled undergraduate or postgraduate student (B.Tech, M.Tech, BCA, MCA, BSc, or equivalent) with a passion for software engineering, design, or hardware is welcome to participate.',
+      category: 'Eligibility',
+      q: 'Who is eligible to compete in Code-a-Nova 2026-27?',
+      a: 'Any currently enrolled undergraduate, postgraduate, or diploma student (B.Tech, BE, M.Tech, BCA, MCA, BSc CS, or allied technical branches) across India is eligible. Cross-college and cross-year teams are fully permitted.',
     },
     {
       category: 'Teams',
-      q: 'What is the permitted team size and structure?',
-      a: 'Teams may consist of 1 (solo participant) up to 5 members, including the team leader. All team members must be listed during registration with valid emails. Cross-college teams are fully permitted.',
-    },
-    {
-      category: 'General',
-      q: 'Is there any registration fee?',
-      a: 'No. Registration and participation in Code-a-Nova is 100% free of charge for all accepted student participants.',
+      q: 'Can I participate solo or must I form a team?',
+      a: 'Both solo developers and teams of 2 to 5 members are welcome. The team leader signs up first, verifies their account via our automated 10-minute OTP system, and dynamically configures member slots in Section 3 of the registration docket.',
     },
     {
       category: 'Submissions',
-      q: 'What should the initial idea submission contain?',
-      a: 'You will need to submit a shareable link to your PPT / presentation deck outlining your problem statement, solution architecture, and a link to your prototype repository (GitHub/GitLab) or Figma design.',
+      q: 'What deliverables are required during the initial phase?',
+      a: 'You must provide a public presentation deck link (Google Drive, OneDrive, or Pitch) and a prototype link (GitHub/GitLab code repository or interactive Figma prototype). An optional 2-minute demo video link can also be included.',
+    },
+    {
+      category: 'Evaluation',
+      q: 'How is judging conducted and what prevents bias?',
+      a: 'Submissions are evaluated through a strict, transparent 100-point rubric with 6 weighted categories: Functional MVP (30), Architecture (20), UI/UX Polish (20), Cryptographic Auth (15), Nodemailer Delivery (10), and Documentation/Pitch (5). Evaluators grade working repositories and live deploys.',
     },
     {
       category: 'Security',
-      q: 'How are participant accounts verified?',
-      a: 'Accounts are protected via cryptographically secure 6-digit OTPs dispatched through Nodemailer with a 10-minute expiry window, and salted bcrypt password hashing.',
+      q: 'How does the automated verification pipeline work?',
+      a: 'Participant accounts are authenticated through salted bcrypt password hashing and cryptographically secure single-use 6-digit OTPs with strict 10-minute TTL (Time-To-Live). All session cookies are configured with HttpOnly and SameSite flags.',
     },
     {
-      category: 'Selection',
-      q: 'How does the shortlisting process work?',
-      a: 'Submissions are reviewed by our industry panel across 6 structured rubric categories (functional completeness, architecture, UI/UX, authentication, automated delivery, documentation). Top teams advance to the 36-hour sprint finale.',
+      category: 'Logistics',
+      q: 'Is there any registration or entry fee?',
+      a: 'No. Registration and participation in Code-a-Nova is 100% free of charge for all accepted students. Cloud credits, mentor guidance, and finalist hospitality are provided at zero cost.',
     },
   ];
 
-  return (
-    <div className="space-y-20 pb-20 scroll-smooth">
-      {/* 1. Hero Section with Architectural Grid */}
-      <section className="relative pt-12 md:pt-20 pb-20 border-b border-[#E5E7EB] bg-white bg-tech-grid overflow-hidden">
-        {/* Ambient atmospheric glows */}
-        <div className="ambient-glow-navy -top-24 -left-20 opacity-60" />
-        <div className="ambient-glow-gold top-20 right-10 opacity-70" />
+  const filteredFaqs =
+    activeFaqCategory === 'All'
+      ? faqs
+      : faqs.filter((f) => f.category === activeFaqCategory);
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  const specialBounties = [
+    { title: 'Best Architectural Elegance', amount: '₹10,000', focus: 'Fault-tolerant backend, modular clean code, sub-50ms latency' },
+    { title: 'Best Defensive Security', amount: '₹10,000', focus: 'Zero-knowledge proofs, hardened auth, zero CVE vulnerabilities' },
+    { title: 'Best UI/UX & Interaction', amount: '₹10,000', focus: 'Bespoke design system, micro-interactions, responsive precision' },
+    { title: 'Rookie / Freshmen Innovation', amount: '₹5,000', focus: 'Top performing team of 1st and 2nd year undergraduates' },
+  ];
+
+  const handleCopyPassId = () => {
+    navigator.clipboard.writeText('CAN-2026-ALPHA-8842');
+    setCopiedId(true);
+    setTimeout(() => setCopiedId(false), 2000);
+  };
+
+  return (
+    <div className="space-y-24 pb-24 text-slate-100 bg-[#06090F] overflow-hidden selection:bg-cyan-500/30 selection:text-cyan-200">
+
+      {/* ── 0. LIVE HUD MISSION CONTROL STRIP ─────────────────────── */}
+      <section className="border-b border-white/[0.08] bg-[#0A0E17]/90 backdrop-blur-md px-4 sm:px-6 lg:px-8 py-2.5 font-mono text-xs">
+        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3 text-slate-400">
+          <div className="flex items-center gap-4">
+            <span className="flex items-center gap-1.5 text-cyan-400 font-bold uppercase tracking-wider">
+              <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+              CAN-OPS HUD
+            </span>
+            <span className="hidden sm:inline text-slate-600">|</span>
+            <span className="hidden sm:inline text-slate-300">
+              CLUSTER: <strong className="text-white">AP-SOUTH-1 (BLR)</strong>
+            </span>
+            <span className="hidden md:inline text-slate-600">|</span>
+            <span className="hidden md:inline text-slate-300">
+              HASH: <strong className="text-cyan-400">#SHA256-V2.4</strong>
+            </span>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <span className="text-emerald-400 flex items-center gap-1 font-semibold">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+              REGISTRATIONS ACTIVE
+            </span>
+            <span className="text-slate-600">|</span>
+            <span className="text-amber-400 font-bold">DEADLINE: DEC 20, 2026</span>
+          </div>
+        </div>
+      </section>
+
+      {/* ── 1. ARCHITECTURAL HERO SECTION ──────────────────────────── */}
+      <section className="relative pt-8 md:pt-16 pb-16 px-4 sm:px-6 lg:px-8">
+        {/* Subtle architectural background grid */}
+        <div className="absolute inset-0 bg-tech-grid opacity-30 pointer-events-none" />
+        <div className="ambient-glow-cyan -top-40 -left-20 opacity-40 pointer-events-none" />
+        <div className="ambient-glow-gold top-60 -right-20 opacity-30 pointer-events-none" />
+
+        <div className="relative max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            {/* Left Content */}
-            <div className="lg:col-span-7 space-y-6">
-              {/* Event Badge */}
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#17243A]/5 border border-[#17243A]/15 rounded-[6px] shadow-xs">
-                <img src="/logo.png" alt="Code-a-Nova Logo" className="w-4 h-4 rounded-[3px] object-contain" />
-                <span className="w-1.5 h-1.5 rounded-full bg-[#21845B] animate-pulse" />
-                <span className="text-xs font-semibold tracking-wider uppercase text-[#17243A] font-mono">
-                  Code-a-Nova &bull; National Hackathon 2026-27
+
+            {/* Left Column: Bold Typography & Action Command */}
+            <div className="lg:col-span-7 space-y-7">
+              {/* Event Badge with Monospace Tag */}
+              <div className="inline-flex items-center gap-3 px-3 py-1.5 rounded-full bg-white/[0.04] border border-cyan-500/30 shadow-[0_0_20px_rgba(56,189,248,0.15)]">
+                <img src="/logo.png" alt="Code-a-Nova Logo" className="w-5 h-5 rounded-[4px] object-contain" />
+                <span className="text-xs font-mono font-semibold tracking-wider text-cyan-300 uppercase">
+                  National Hackathon 2026-27
+                </span>
+                <span className="text-[10px] bg-cyan-500/20 text-cyan-300 font-mono font-bold px-2 py-0.5 rounded-full border border-cyan-500/40">
+                  HYBRID FINALE
                 </span>
               </div>
 
-              {/* Main Headline */}
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#17243A] tracking-tight leading-[1.08] font-display">
-                Build Something That{' '}
-                <span className="bg-gradient-to-r from-[#17243A] via-[#243653] to-[#D6A64F] bg-clip-text text-transparent">
-                  Moves the Future.
-                </span>
-              </h1>
+              {/* Mega Headline */}
+              <div className="space-y-2">
+                <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.05] font-display text-white">
+                  ARCHITECT <br />
+                  <span className="bg-gradient-to-r from-cyan-400 via-sky-300 to-blue-500 bg-clip-text text-transparent">
+                    THE UNBUILT.
+                  </span>
+                </h1>
+                <p className="text-xl sm:text-2xl font-mono text-slate-400 font-medium">
+                  36 Hours of High-Concurrency Sprinting.
+                </p>
+              </div>
 
               {/* Subtitle */}
-              <p className="text-base sm:text-lg text-[#4B5563] max-w-2xl leading-relaxed">
-                An engineering-first hackathon connecting ambitious student innovators across 5 dedicated technology tracks. Transform your boldest ideas into verified production solutions.
+              <p className="text-sm sm:text-base text-slate-300 max-w-xl leading-relaxed">
+                Connect with India's most ambitious student engineers across 5 specialized technology tracks. Build functioning codebases, pass automated security verifications, and pitch to industry architects.
               </p>
 
-              {/* Action Buttons & Countdown */}
+              {/* Hero Action Button Cluster */}
               <div className="pt-2 flex flex-col sm:flex-row sm:items-center gap-4">
                 <div className="flex items-center gap-3">
                   <Link to={isAuthenticated ? '/register' : '/signup'}>
-                    <Button variant="primary" size="lg" className="gap-2 font-bold shadow-md hover:shadow-lg transition-shadow">
-                      {isAuthenticated ? 'Register Project' : 'Register Now'}
+                    <Button variant="primary" size="lg" className="gap-2 font-bold font-display shadow-[0_0_25px_rgba(56,189,248,0.35)] hover:shadow-[0_0_35px_rgba(56,189,248,0.5)]">
+                      {isAuthenticated ? 'Submit Project Docket' : 'Register for Hackathon'}
                       <ArrowRight className="w-4 h-4" />
                     </Button>
                   </Link>
-                  <a href="#domains">
-                    <Button variant="secondary" size="lg" className="font-semibold">
-                      Explore Tracks
+                  <a href="#tracks">
+                    <Button variant="secondary" size="lg" className="font-semibold border-white/10 text-slate-200 hover:text-white hover:border-cyan-500/40">
+                      Explore 5 Tracks
                     </Button>
                   </a>
                 </div>
 
-                <div className="sm:border-l sm:border-[#E5E7EB] sm:pl-4 pt-2 sm:pt-0">
+                <div className="sm:border-l sm:border-white/10 sm:pl-4 pt-2 sm:pt-0">
                   <CountdownTimer
                     targetDate="2026-12-20T23:59:59"
-                    label="Registration Deadline:"
+                    label="Docket Closes In:"
                   />
                 </div>
               </div>
 
-              {/* Trust Badges */}
-              <div className="pt-3 flex flex-wrap items-center gap-6 text-xs text-[#6B7280] font-medium border-t border-[#F7F7F4]">
-                <div className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4 text-[#21845B]" />
-                  <span>100% Free Participation</span>
+              {/* Trust Specs Strip */}
+              <div className="pt-4 grid grid-cols-3 gap-4 border-t border-white/[0.08] text-xs font-mono text-slate-400">
+                <div>
+                  <span className="text-cyan-400 block font-bold text-sm">100% FREE</span>
+                  <span>Zero entry fee</span>
                 </div>
-                <div className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4 text-[#21845B]" />
-                  <span>10-Min OTP Verification</span>
+                <div>
+                  <span className="text-cyan-400 block font-bold text-sm">1 TO 5</span>
+                  <span>Solo or team squad</span>
                 </div>
-                <div className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4 text-[#21845B]" />
-                  <span>Cryptographically Hashed</span>
-                </div>
-              </div>
-
-              {/* Mini-Stats Row within Hero */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-3 border-t border-[#E5E7EB]">
-                <div className="p-3 bg-white border border-[#E5E7EB] rounded-[6px] shadow-xs hover:border-[#17243A]/40 transition-colors">
-                  <div className="text-[10px] text-[#6B7280] font-mono font-bold tracking-wider uppercase">TRACKS</div>
-                  <div className="text-base font-extrabold text-[#17243A] font-display">5 Arenas</div>
-                </div>
-                <div className="p-3 bg-white border border-[#E5E7EB] rounded-[6px] shadow-xs hover:border-[#17243A]/40 transition-colors">
-                  <div className="text-[10px] text-[#6B7280] font-mono font-bold tracking-wider uppercase">TEAM SIZE</div>
-                  <div className="text-base font-extrabold text-[#17243A] font-display">1 to 5 Mbrs</div>
-                </div>
-                <div className="p-3 bg-white border border-[#E5E7EB] rounded-[6px] shadow-xs hover:border-[#17243A]/40 transition-colors">
-                  <div className="text-[10px] text-[#6B7280] font-mono font-bold tracking-wider uppercase">FINALE</div>
-                  <div className="text-base font-extrabold text-[#17243A] font-display">36-Hr Sprint</div>
-                </div>
-                <div className="p-3 bg-[#17243A] text-white border border-[#243653] rounded-[6px] shadow-sm">
-                  <div className="text-[10px] text-[#D6A64F] font-mono font-bold tracking-wider uppercase">PRIZES</div>
-                  <div className="text-base font-extrabold text-[#D6A64F] font-mono">₹1,50,000+</div>
+                <div>
+                  <span className="text-cyan-400 block font-bold text-sm">₹1,50,000+</span>
+                  <span>Prizes &amp; bounties</span>
                 </div>
               </div>
             </div>
 
-            {/* Right Editorial Interactive Technical Terminal */}
+            {/* Right Column: Interactive Holographic Participant Pass Simulator */}
             <div className="lg:col-span-5">
-              <div className="bg-[#111A2B] text-white rounded-[8px] border border-[#243653] shadow-2xl overflow-hidden font-mono text-xs">
-                {/* Window Header with Tabs & Copy button */}
-                <div className="flex items-center justify-between border-b border-[#243653] bg-[#0E1524] px-4 py-2.5">
-                  <div className="flex items-center gap-2">
-                    <img src="/logo.png" alt="Code-a-Nova" className="w-4 h-4 rounded-[3px] object-contain" />
-                    <div className="flex items-center gap-1.5 ml-1">
-                      <div className="w-2.5 h-2.5 rounded-full bg-[#C44545]" />
-                      <div className="w-2.5 h-2.5 rounded-full bg-[#D6A64F]" />
-                      <div className="w-2.5 h-2.5 rounded-full bg-[#21845B]" />
+              <div className="relative rounded-[16px] bg-gradient-to-b from-[#0F172A] to-[#0A0E17] border border-cyan-500/40 p-6 shadow-[0_0_40px_rgba(56,189,248,0.15)] relative overflow-hidden">
+                {/* Decorative circuit line corner */}
+                <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-cyan-500/20 to-transparent pointer-events-none" />
+                <div className="absolute -top-1 -right-1 text-cyan-400 font-mono text-[10px] px-2 py-0.5 bg-cyan-950 border border-cyan-500/40 rounded-bl-[8px]">
+                  LIVE BADGE SPEC
+                </div>
+
+                {/* Pass Simulator Header */}
+                <div className="flex items-center justify-between pb-4 border-b border-white/10">
+                  <div className="flex items-center gap-2.5">
+                    <img src="/logo.png" alt="Logo" className="w-8 h-8 rounded-[6px] object-contain shadow-sm" />
+                    <div>
+                      <div className="font-display font-bold text-sm text-white tracking-wide">
+                        CODE-A-NOVA // PASS
+                      </div>
+                      <div className="text-[10px] text-cyan-400 font-mono">
+                        VERIFIED APPLICANT CREDENTIAL
+                      </div>
                     </div>
-                    <span className="ml-1.5 text-[11px] text-[#9CA3AF] font-mono">
-                      engine-v2.4
-                    </span>
+                  </div>
+                  <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
+                </div>
+
+                {/* Role Switcher Pills */}
+                <div className="pt-4 space-y-2">
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 block">
+                    1. Select Your Engineering Persona:
+                  </span>
+                  <div className="flex flex-wrap gap-1.5">
+                    {[
+                      'Full-Stack Architect',
+                      'AI/ML Researcher',
+                      'Systems & Security',
+                      'IoT / Edge Hacker',
+                      'Web3 Engineer',
+                    ].map((role) => (
+                      <button
+                        key={role}
+                        type="button"
+                        onClick={() => setHeroRole(role)}
+                        className={`px-2.5 py-1 rounded-[5px] text-[11px] font-mono transition-all cursor-pointer ${
+                          heroRole === role
+                            ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/50 shadow-[0_0_10px_rgba(56,189,248,0.25)] font-bold'
+                            : 'bg-white/5 text-slate-400 border border-white/5 hover:text-white'
+                        }`}
+                      >
+                        {role}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Generated Pass Body */}
+                <div className="mt-5 p-4 rounded-[10px] bg-[#070A12] border border-white/10 space-y-3 font-mono text-xs">
+                  <div className="flex items-center justify-between border-b border-white/[0.08] pb-2.5">
+                    <div>
+                      <div className="text-[10px] text-slate-500">ASSIGNED ROLE</div>
+                      <div className="text-white font-bold text-sm font-display">{heroRole}</div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-[10px] text-slate-500">ACCESS LEVEL</div>
+                      <div className="text-amber-400 font-bold">ALL-ARENAS (VIP)</div>
+                    </div>
                   </div>
 
-                  <div className="flex items-center gap-2">
-                    {/* Switcher Tabs */}
-                    <div className="flex items-center gap-1 text-[10px]">
-                      <button
-                        onClick={() => setActiveHeroTab('spec')}
-                        className={`px-2 py-0.5 rounded-[3px] transition-colors ${
-                          activeHeroTab === 'spec'
-                            ? 'bg-white/20 text-white font-bold'
-                            : 'text-[#9CA3AF] hover:text-white'
-                        }`}
-                      >
-                        manifest.json
-                      </button>
-                      <button
-                        onClick={() => setActiveHeroTab('pipeline')}
-                        className={`px-2 py-0.5 rounded-[3px] transition-colors ${
-                          activeHeroTab === 'pipeline'
-                            ? 'bg-white/20 text-white font-bold'
-                            : 'text-[#9CA3AF] hover:text-white'
-                        }`}
-                      >
-                        pipeline.sh
-                      </button>
-                      <button
-                        onClick={() => setActiveHeroTab('security')}
-                        className={`px-2 py-0.5 rounded-[3px] transition-colors ${
-                          activeHeroTab === 'security'
-                            ? 'bg-white/20 text-white font-bold'
-                            : 'text-[#9CA3AF] hover:text-white'
-                        }`}
-                      >
-                        security.lock
-                      </button>
+                  <div className="grid grid-cols-2 gap-2 text-[11px]">
+                    <div>
+                      <span className="text-slate-500">REF ID:</span>{' '}
+                      <span className="text-cyan-300 font-bold">CAN-2026-ALPHA-8842</span>
                     </div>
+                    <div>
+                      <span className="text-slate-500">FORMAT:</span>{' '}
+                      <span className="text-white">Hybrid Sprint</span>
+                    </div>
+                    <div>
+                      <span className="text-slate-500">HASH:</span>{' '}
+                      <span className="text-slate-300">sha256/bcrypt</span>
+                    </div>
+                    <div>
+                      <span className="text-slate-500">ENTRY FEE:</span>{' '}
+                      <span className="text-emerald-400 font-bold">₹0 (100% Free)</span>
+                    </div>
+                  </div>
 
-                    {/* Copy Button */}
+                  {/* Perforated barcode representation */}
+                  <div className="pt-2 border-t border-dashed border-white/20 flex items-center justify-between">
+                    <div className="space-y-0.5">
+                      <div className="h-4 w-36 bg-gradient-to-r from-white/40 via-cyan-400/40 to-white/40 rounded-[2px]" />
+                      <div className="text-[9px] text-slate-500 tracking-widest">||| | |||| | ||| || |||</div>
+                    </div>
                     <button
-                      onClick={handleCopyCode}
-                      className="text-[#9CA3AF] hover:text-white p-1 rounded hover:bg-white/10 transition-colors"
-                      title="Copy code snippet"
+                      onClick={handleCopyPassId}
+                      className="px-2.5 py-1 rounded bg-white/5 hover:bg-white/10 text-cyan-300 border border-cyan-500/30 text-[10px] font-mono flex items-center gap-1 cursor-pointer transition-colors"
+                      title="Copy Pass Reference"
                     >
-                      {copiedCode ? (
-                        <Check className="w-3.5 h-3.5 text-emerald-400" />
-                      ) : (
-                        <Copy className="w-3.5 h-3.5" />
-                      )}
+                      {copiedId ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                      <span>{copiedId ? 'Copied' : 'Copy Ref'}</span>
                     </button>
                   </div>
                 </div>
 
-                {/* Tab 1: Manifest Spec */}
-                {activeHeroTab === 'spec' && (
-                  <div className="p-5 space-y-2.5 leading-relaxed bg-[#111A2B]/90">
-                    <div className="text-[#64748B]">
-                      &#47;&#47; Code-a-Nova Hackathon Parameters v2.0
-                    </div>
-                    <div>
-                      <span className="text-[#D6A64F]">"event"</span>:{' '}
-                      <span className="text-emerald-400">"Code-a-Nova 2026-27"</span>,
-                    </div>
-                    <div>
-                      <span className="text-[#D6A64F]">"format"</span>:{' '}
-                      <span className="text-emerald-400">"Hybrid (Online + Grand Finale)"</span>,
-                    </div>
-                    <div>
-                      <span className="text-[#D6A64F]">"team_bounds"</span>:{' '}
-                      <span className="text-amber-300">&#123; "min": 1, "max": 5 &#125;</span>,
-                    </div>
-                    <div>
-                      <span className="text-[#D6A64F]">"tracks"</span>: [
-                      <div className="pl-4 text-emerald-300">
-                        "AI/ML", "Web Dev", "IoT", "Cyber Security", "Blockchain"
-                      </div>
-                      ],
-                    </div>
-                    <div>
-                      <span className="text-[#D6A64F]">"deadline"</span>:{' '}
-                      <span className="text-emerald-400">"2026-12-20T23:59:59Z"</span>,
-                    </div>
-                    <div>
-                      <span className="text-[#D6A64F]">"prize_pool"</span>:{' '}
-                      <span className="text-[#D6A64F] font-bold">"₹1,50,000+ INR"</span>
-                    </div>
-                  </div>
-                )}
-
-                {/* Tab 2: Pipeline */}
-                {activeHeroTab === 'pipeline' && (
-                  <div className="p-5 space-y-2.5 leading-relaxed text-xs bg-[#111A2B]/90">
-                    <div className="text-[#64748B]">&#47;&#47; Participant Verification Pipeline</div>
-                    <div className="flex items-center gap-2 text-emerald-400">
-                      <span>&gt; 01: SIGNUP</span>
-                      <span className="text-white/60">&rarr; user account created in unverified state</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-emerald-400">
-                      <span>&gt; 02: OTP DISPATCH</span>
-                      <span className="text-white/60">&rarr; 6-digit hashed OTP sent via Nodemailer (10m TTL)</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-emerald-400">
-                      <span>&gt; 03: VERIFY</span>
-                      <span className="text-white/60">&rarr; single-use OTP consumed; account activated</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-emerald-400">
-                      <span>&gt; 04: REGISTER</span>
-                      <span className="text-white/60">&rarr; dynamic team submission &amp; CAN ID generated</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-amber-300">
-                      <span>&gt; 05: FINALE</span>
-                      <span className="text-white/60">&rarr; 36-hr prototype sprint &amp; live judging</span>
-                    </div>
-                  </div>
-                )}
-
-                {/* Tab 3: Security */}
-                {activeHeroTab === 'security' && (
-                  <div className="p-5 space-y-2.5 leading-relaxed text-xs bg-[#111A2B]/90">
-                    <div className="text-[#64748B]">&#47;&#47; Defensive Security Architecture</div>
-                    <div className="text-[#D6A64F]">
-                      PASSWORDS:{' '}
-                      <span className="text-white">bcryptjs (10 salt rounds)</span>
-                    </div>
-                    <div className="text-[#D6A64F]">
-                      OTP STORAGE:{' '}
-                      <span className="text-white">sha256/bcrypt hashed &bull; 600s TTL</span>
-                    </div>
-                    <div className="text-[#D6A64F]">
-                      SESSIONS:{' '}
-                      <span className="text-white">JWT in HttpOnly, SameSite cookies</span>
-                    </div>
-                    <div className="text-[#D6A64F]">
-                      HEADERS:{' '}
-                      <span className="text-white">Helmet, strict CORS, express-rate-limit</span>
-                    </div>
-                    <div className="text-[#D6A64F]">
-                      REVIEWS:{' '}
-                      <span className="text-white">1 registration per candidate enforced</span>
-                    </div>
-                  </div>
-                )}
-
-                {/* Bottom status bar */}
-                <div className="border-t border-[#243653] bg-[#0E1524] px-4 py-2.5 flex items-center justify-between text-[11px] text-[#9CA3AF]">
-                  <span className="flex items-center gap-1.5 text-emerald-400">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                    LIVE PRODUCTION PIPELINE
-                  </span>
+                <div className="mt-4 pt-3 border-t border-white/[0.08] flex items-center justify-between text-xs">
+                  <span className="text-slate-400 font-mono text-[11px]">Ready to claim your spot?</span>
                   <Link
                     to={isAuthenticated ? '/register' : '/signup'}
-                    className="text-[#D6A64F] hover:text-[#f3cc83] font-sans font-semibold text-[10px] uppercase transition-colors"
+                    className="text-cyan-400 hover:text-cyan-300 font-bold font-mono text-xs inline-flex items-center gap-1"
                   >
-                    Enter Platform &rarr;
+                    Enter Registration &rarr;
                   </Link>
                 </div>
               </div>
@@ -419,158 +379,163 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 2. Event Highlights Strip */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 observe-anim opacity-0 transition-opacity duration-500">
-        <div className="bg-white/95 backdrop-blur-md border border-[#E5E7EB] rounded-[8px] grid grid-cols-2 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-[#E5E7EB] shadow-lg">
-          <div className="p-6 text-center space-y-2 border-l-4 border-l-[#17243A] group hover:bg-[#F9FAFB] transition-colors">
-            <div className="w-9 h-9 rounded-[6px] bg-[#17243A]/5 text-[#17243A] flex items-center justify-center mx-auto group-hover:scale-110 transition-transform">
-              <Layers className="w-5 h-5" />
-            </div>
-            <div className="text-3xl sm:text-4xl font-extrabold font-display text-[#17243A]">5 Tracks</div>
-            <div className="text-xs text-[#6B7280] font-medium">Focused Engineering Arenas</div>
-          </div>
-
-          <div className="p-6 text-center space-y-2 border-l-4 border-l-[#17243A] group hover:bg-[#F9FAFB] transition-colors">
-            <div className="w-9 h-9 rounded-[6px] bg-[#17243A]/5 text-[#17243A] flex items-center justify-center mx-auto group-hover:scale-110 transition-transform">
-              <Users className="w-5 h-5" />
-            </div>
-            <div className="text-3xl sm:text-4xl font-extrabold font-display text-[#17243A]">1–5</div>
-            <div className="text-xs text-[#6B7280] font-medium">Solo or Team Members</div>
-          </div>
-
-          <div className="p-6 text-center space-y-2 border-l-4 border-l-[#17243A] group hover:bg-[#F9FAFB] transition-colors">
-            <div className="w-9 h-9 rounded-[6px] bg-[#17243A]/5 text-[#17243A] flex items-center justify-center mx-auto group-hover:scale-110 transition-transform">
-              <Clock className="w-5 h-5" />
-            </div>
-            <div className="text-3xl sm:text-4xl font-extrabold font-display text-[#17243A]">36 Hours</div>
-            <div className="text-xs text-[#6B7280] font-medium">Continuous Finale Sprint</div>
-          </div>
-
-          <div className="p-6 text-center space-y-2 border-l-4 border-l-[#D6A64F] group hover:bg-[#F9FAFB] transition-colors">
-            <div className="w-9 h-9 rounded-[6px] bg-[#D6A64F]/15 text-[#D6A64F] flex items-center justify-center mx-auto group-hover:scale-110 transition-transform">
-              <Trophy className="w-5 h-5" />
-            </div>
-            <div className="text-3xl sm:text-4xl font-extrabold font-display text-[#D6A64F]">₹1,50,000+</div>
-            <div className="text-xs text-[#6B7280] font-medium">Prize Pool &amp; Cloud Grants</div>
-          </div>
+      {/* ── 2. CONTINUOUS HACKER MARQUEE RIBBON ─────────────────────── */}
+      <div className="w-full border-y border-cyan-500/30 bg-[#0A0F1D] py-3 overflow-hidden relative shadow-inner">
+        <div className="flex w-[200%] animate-marquee whitespace-nowrap text-xs font-mono font-bold tracking-wider text-cyan-300">
+          <span className="mx-6 flex items-center gap-2">
+            <Trophy className="w-4 h-4 text-amber-400" />
+            ₹1,50,000+ CASH &amp; CLOUD BOUNTIES
+          </span>
+          <span className="mx-6 text-slate-600">&bull;</span>
+          <span className="mx-6 flex items-center gap-2">
+            <Clock className="w-4 h-4 text-cyan-400" />
+            36-HOUR RAPID PROTOTYPING GRAND FINALE
+          </span>
+          <span className="mx-6 text-slate-600">&bull;</span>
+          <span className="mx-6 flex items-center gap-2">
+            <Brain className="w-4 h-4 text-cyan-400" />
+            AI / MACHINE LEARNING ARENA
+          </span>
+          <span className="mx-6 text-slate-600">&bull;</span>
+          <span className="mx-6 flex items-center gap-2">
+            <Globe className="w-4 h-4 text-cyan-400" />
+            HIGH-CONCURRENCY WEB SYSTEMS
+          </span>
+          <span className="mx-6 text-slate-600">&bull;</span>
+          <span className="mx-6 flex items-center gap-2">
+            <Cpu className="w-4 h-4 text-cyan-400" />
+            INTERNET OF THINGS &amp; EDGE HARDWARE
+          </span>
+          <span className="mx-6 text-slate-600">&bull;</span>
+          <span className="mx-6 flex items-center gap-2">
+            <Shield className="w-4 h-4 text-cyan-400" />
+            CYBER SECURITY &amp; ZERO-KNOWLEDGE
+          </span>
+          <span className="mx-6 text-slate-600">&bull;</span>
+          <span className="mx-6 flex items-center gap-2">
+            <Layers className="w-4 h-4 text-cyan-400" />
+            DECENTRALIZED PROTOCOLS &amp; WEB3
+          </span>
+          <span className="mx-6 text-slate-600">&bull;</span>
+          <span className="mx-6 flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+            100% FREE PARTICIPATION NATIONWIDE
+          </span>
+          <span className="mx-6 text-slate-600">&bull;</span>
         </div>
-      </section>
+      </div>
 
-      {/* 2.5 Sponsors & Partner Ecosystem Bar */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 observe-anim opacity-0 transition-opacity duration-500">
-        <div className="border border-[#E5E7EB] rounded-[8px] bg-white p-6 sm:p-7 shadow-sm space-y-5">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#F7F7F4] pb-4">
-            <div>
-              <span className="text-[10px] font-mono uppercase tracking-wider font-bold text-[#6B7280]">
-                Event Ecosystem
-              </span>
-              <h3 className="text-sm font-bold text-[#17243A] font-display">
-                Supported by Engineering Communities &amp; Cloud Partners
-              </h3>
+      {/* ── 3. FOUR ARCHITECTURAL PILLARS (BRUTALIST GRID) ─────────── */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="bg-[#0B101D] border border-white/10 rounded-[10px] p-6 space-y-3 relative overflow-hidden group hover:border-cyan-500/50 transition-all">
+            <div className="text-[10px] font-mono text-cyan-400 uppercase font-bold tracking-widest flex items-center justify-between">
+              <span>ARENA SPEC 01</span>
+              <span>[05 TRACKS]</span>
             </div>
-            <div className="flex items-center gap-2 text-xs font-mono text-[#21845B]">
-              <span className="w-2 h-2 rounded-full bg-[#21845B] animate-pulse" />
-              <span>REGISTRATIONS ACTIVE NATIONWIDE</span>
-            </div>
-          </div>
-
-          {/* Partner Strip */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <div className="h-12 border border-[#E5E7EB] bg-[#F7F7F4] hover:bg-white hover:border-[#17243A]/30 hover:shadow-xs transition-all rounded-[6px] flex items-center justify-center text-xs font-mono font-bold text-[#17243A] gap-2">
-              <Building2 className="w-4 h-4 text-[#17243A]" />
-              <span>NeuralStack Labs</span>
-            </div>
-            <div className="h-12 border border-[#E5E7EB] bg-[#F7F7F4] hover:bg-white hover:border-[#17243A]/30 hover:shadow-xs transition-all rounded-[6px] flex items-center justify-center text-xs font-mono font-bold text-[#17243A] gap-2">
-              <Globe className="w-4 h-4 text-[#17243A]" />
-              <span>CloudVantage Infra</span>
-            </div>
-            <div className="h-12 border border-[#E5E7EB] bg-[#F7F7F4] hover:bg-white hover:border-[#17243A]/30 hover:shadow-xs transition-all rounded-[6px] flex items-center justify-center text-xs font-mono font-bold text-[#17243A] gap-2">
-              <Shield className="w-4 h-4 text-[#17243A]" />
-              <span>Aegis Security</span>
-            </div>
-            <div className="h-12 border border-[#E5E7EB] bg-[#F7F7F4] hover:bg-white hover:border-[#17243A]/30 hover:shadow-xs transition-all rounded-[6px] flex items-center justify-center text-xs font-mono font-bold text-[#17243A] gap-2">
-              <Cpu className="w-4 h-4 text-[#17243A]" />
-              <span>Vortex Silicon</span>
-            </div>
-          </div>
-
-          {/* Key Event Facts Row */}
-          <div className="pt-2 border-t border-[#F7F7F4] flex flex-wrap items-center justify-between text-xs text-[#6B7280] gap-4">
-            <div className="flex items-center gap-2">
-              <span className="font-semibold text-[#17243A]">Evaluation:</span>
-              <span>100-Point Transparent Rubric</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="font-semibold text-[#17243A]">Submission Format:</span>
-              <span>PPT Deck + Prototype Repository</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="font-semibold text-[#17243A]">Cost:</span>
-              <span className="text-[#21845B] font-bold">100% Free Registration</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 3. Interactive Tracks & Domains Showcase */}
-      <section id="domains" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 observe-anim opacity-0 transition-opacity duration-500">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4 border-b border-[#E5E7EB] pb-5">
-          <div className="space-y-2">
-            <div className="text-xs font-bold uppercase tracking-wider text-[#D6A64F] font-mono">
-              01 &bull; Competition Tracks
-            </div>
-            <h2 className="text-3xl font-extrabold text-[#17243A] tracking-tight font-display">
-              Select Your Arena of Technical Impact
-            </h2>
-            <p className="text-sm text-[#4B5563] max-w-xl">
-              Each domain features dedicated problem briefs, specialized mentor evaluation, and category excellence awards.
+            <div className="text-3xl font-extrabold text-white font-display">5 Arenas</div>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Dedicated problem statements, specialized evaluation rubrics, and track-specific mentoring across AI, Web, IoT, Security, and Web3.
             </p>
           </div>
 
-          <div className="text-xs text-[#6B7280] font-mono">
-            Track {selectedTrackIndex + 1} of {DOMAINS.length}
+          <div className="bg-[#0B101D] border border-white/10 rounded-[10px] p-6 space-y-3 relative overflow-hidden group hover:border-cyan-500/50 transition-all">
+            <div className="text-[10px] font-mono text-cyan-400 uppercase font-bold tracking-widest flex items-center justify-between">
+              <span>ARENA SPEC 02</span>
+              <span>[1–5 MB]</span>
+            </div>
+            <div className="text-3xl font-extrabold text-white font-display">1 to 5 Mbrs</div>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Solo pioneers or dynamic multi-college teams. Automated internal collision prevention and instant confirmation receipts.
+            </p>
+          </div>
+
+          <div className="bg-[#0B101D] border border-white/10 rounded-[10px] p-6 space-y-3 relative overflow-hidden group hover:border-cyan-500/50 transition-all">
+            <div className="text-[10px] font-mono text-cyan-400 uppercase font-bold tracking-widest flex items-center justify-between">
+              <span>ARENA SPEC 03</span>
+              <span>[36 HOURS]</span>
+            </div>
+            <div className="text-3xl font-extrabold text-white font-display">36-Hr Sprint</div>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Continuous hybrid hackathon marathon with milestone checkpoints, architecture mentoring, and bare-metal prototype judging.
+            </p>
+          </div>
+
+          <div className="bg-gradient-to-br from-amber-950/30 via-[#0B101D] to-[#0A0E17] border border-amber-500/40 rounded-[10px] p-6 space-y-3 relative overflow-hidden group hover:border-amber-400 transition-all shadow-[0_0_20px_rgba(245,158,11,0.15)]">
+            <div className="text-[10px] font-mono text-amber-400 uppercase font-bold tracking-widest flex items-center justify-between">
+              <span>ARENA SPEC 04</span>
+              <span>[REWARDS]</span>
+            </div>
+            <div className="text-3xl font-extrabold text-amber-300 font-display">₹1,50,000+</div>
+            <p className="text-xs text-slate-300 leading-relaxed">
+              Substantial direct cash grants, seed incubation fast-track interviews, cloud infrastructure credits, and direct partner recruiting.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ── 4. TACTICAL TRACK EXPLORER ─────────────────────────────── */}
+      <section id="tracks" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4 border-b border-white/10 pb-5">
+          <div className="space-y-2">
+            <div className="text-xs font-bold uppercase tracking-wider text-cyan-400 font-mono">
+              [ SECTION 01 // COMPETITION DOMAINS ]
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-white font-display tracking-tight">
+              Select Your Arena of Technical Impact
+            </h2>
+            <p className="text-sm text-slate-400 max-w-xl">
+              Each arena features targeted problem statements, dedicated industry architect evaluators, and category excellence grants.
+            </p>
+          </div>
+
+          <div className="text-xs text-slate-400 font-mono bg-white/5 border border-white/10 px-3 py-1.5 rounded-[6px]">
+            ACTIVE SELECTION: TRACK 0{selectedTrackIndex + 1} OF {DOMAINS.length}
           </div>
         </div>
 
-        {/* Track Selection Tabs & Rich Details Panel */}
+        {/* Track Selection Grid + Dossier */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Left Column: Track Selector Buttons */}
-          <div className="lg:col-span-5 space-y-2.5">
+          <div className="lg:col-span-5 space-y-3">
             {DOMAINS.map((domain, index) => {
               const isSelected = selectedTrackIndex === index;
               return (
                 <button
                   key={domain.id}
                   onClick={() => setSelectedTrackIndex(index)}
-                  className={`w-full text-left p-4 rounded-[6px] border transition-all flex items-start justify-between cursor-pointer ${
+                  className={`w-full text-left p-4 rounded-[10px] border transition-all flex items-start justify-between cursor-pointer ${
                     isSelected
-                      ? 'bg-[#17243A] text-white border-[#17243A] shadow-sm'
-                      : 'bg-white text-[#20242B] border-[#E5E7EB] hover:border-[#17243A]/40 hover:bg-[#FAFAFA]'
+                      ? 'bg-gradient-to-r from-cyan-950/80 to-slate-900 text-white border-cyan-500/60 shadow-[0_0_25px_rgba(56,189,248,0.2)]'
+                      : 'bg-[#0B101D] text-slate-300 border-white/10 hover:border-white/20 hover:bg-[#10172A]'
                   }`}
                 >
-                  <div className="flex items-start gap-3">
+                  <div className="flex items-start gap-3.5">
                     <div
-                      className={`p-2 rounded-[4px] border ${
+                      className={`p-2.5 rounded-[8px] border ${
                         isSelected
-                          ? 'bg-white/10 border-white/20 text-[#D6A64F]'
-                          : 'bg-[#F7F7F4] border-[#E5E7EB] text-[#17243A]'
+                          ? 'bg-cyan-500/20 border-cyan-500/40 text-cyan-300 shadow-sm'
+                          : 'bg-[#070A12] border-white/10 text-slate-400'
                       }`}
                     >
                       {getTrackIcon(domain.id)}
                     </div>
                     <div>
-                      <div className="text-xs font-mono font-semibold opacity-75">
+                      <div className="text-[11px] font-mono font-semibold text-cyan-400">
                         TRACK 0{index + 1}
                       </div>
-                      <div className="font-bold text-sm sm:text-base font-display">
+                      <div className="font-bold text-sm sm:text-base font-display text-white">
                         {domain.title}
+                      </div>
+                      <div className="text-[11px] text-slate-400 line-clamp-1 mt-0.5">
+                        {domain.shortDesc}
                       </div>
                     </div>
                   </div>
 
                   <ArrowRight
-                    className={`w-4 h-4 mt-2 transition-transform ${
-                      isSelected ? 'text-[#D6A64F] translate-x-1' : 'text-[#9CA3AF]'
+                    className={`w-4 h-4 mt-2 transition-transform shrink-0 ${
+                      isSelected ? 'text-cyan-400 translate-x-1' : 'text-slate-600'
                     }`}
                   />
                 </button>
@@ -578,23 +543,22 @@ const Home = () => {
             })}
           </div>
 
-          {/* Right Column: Deep-Dive Details for Selected Track */}
+          {/* Right Column: Deep Technical Track Dossier */}
           <div className="lg:col-span-7">
             <div
               key={selectedTrackIndex}
-              className="bg-white border border-[#E5E7EB] rounded-[7px] p-6 sm:p-8 space-y-6 shadow-sm transition-all duration-300 animate-fadeIn"
+              className="bg-[#0B101D] border border-cyan-500/30 rounded-[12px] p-6 sm:p-8 space-y-6 shadow-2xl relative overflow-hidden"
             >
-              {/* Header */}
-              <div className="flex items-center justify-between border-b border-[#F7F7F4] pb-4">
+              <div className="flex items-center justify-between border-b border-white/[0.08] pb-4">
                 <div className="flex items-center gap-3">
-                  <div className="p-3 bg-[#17243A] text-white rounded-[5px]">
+                  <div className="p-3 bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 rounded-[10px]">
                     {getTrackIcon(selectedDomain.id, 'w-6 h-6')}
                   </div>
                   <div>
-                    <span className="text-[11px] font-mono text-[#D6A64F] uppercase font-bold tracking-wider">
-                      Selected Track Focus
+                    <span className="text-[10px] font-mono text-cyan-400 uppercase font-bold tracking-widest">
+                      TECHNICAL DOSSIER // TRACK 0{selectedTrackIndex + 1}
                     </span>
-                    <h3 className="text-xl font-extrabold text-[#17243A] font-display">
+                    <h3 className="text-xl sm:text-2xl font-extrabold text-white font-display">
                       {selectedDomain.title}
                     </h3>
                   </div>
@@ -607,49 +571,49 @@ const Home = () => {
                       : '/signup'
                   }
                 >
-                  <Button variant="primary" size="sm" className="gap-1.5 font-semibold">
-                    Register Track
+                  <Button variant="primary" size="sm" className="gap-1.5 font-bold shadow-[0_0_15px_rgba(56,189,248,0.25)]">
+                    Register This Track
                     <ArrowRight className="w-3.5 h-3.5" />
                   </Button>
                 </Link>
               </div>
 
               {/* Description */}
-              <p className="text-sm text-[#4B5563] leading-relaxed">
+              <p className="text-sm text-slate-300 leading-relaxed">
                 {selectedDomain.shortDesc}
               </p>
 
               {/* Sample Challenge Statements */}
-              <div className="space-y-2">
-                <div className="text-xs font-bold uppercase tracking-wider text-[#17243A] font-mono">
-                  Sample Challenge Areas
+              <div className="space-y-3">
+                <div className="text-xs font-bold uppercase tracking-wider text-cyan-400 font-mono">
+                  Sample Problem Statements &amp; Focus Areas:
                 </div>
-                <div className="space-y-2 text-xs text-[#4B5563]">
+                <div className="space-y-2.5 text-xs text-slate-300">
                   {selectedDomain.sampleProblems?.map((prob, i) => (
                     <div
                       key={i}
-                      className="p-3 bg-[#F7F7F4] border border-[#E5E7EB] rounded-[5px] flex items-start gap-2.5"
+                      className="p-3.5 bg-[#070A12] border border-white/10 rounded-[8px] flex items-start gap-3"
                     >
-                      <span className="font-mono font-bold text-[#17243A] shrink-0">
+                      <span className="font-mono font-bold text-cyan-400 shrink-0 text-sm">
                         0{i + 1}.
                       </span>
-                      <span className="leading-relaxed">{prob}</span>
+                      <span className="leading-relaxed text-slate-200">{prob}</span>
                     </div>
                   ))}
                 </div>
               </div>
 
-              {/* Recommended Stack & Evaluation Focus */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-[#F7F7F4]">
+              {/* Tech Stack & Evaluation Focus */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-3 border-t border-white/[0.08]">
                 <div className="space-y-2">
-                  <div className="text-[11px] font-bold uppercase tracking-wider text-[#6B7280]">
-                    Recommended Tooling
+                  <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400 font-mono">
+                    Recommended Stacks &amp; Frameworks
                   </div>
                   <div className="flex flex-wrap gap-1.5">
                     {selectedDomain.techStack?.map((tech) => (
                       <span
                         key={tech}
-                        className="px-2 py-0.5 bg-[#F7F7F4] text-[#17243A] border border-[#E5E7EB] rounded-[3px] text-xs font-mono font-semibold"
+                        className="px-2.5 py-1 bg-white/5 text-cyan-300 border border-white/10 rounded-[5px] text-xs font-mono font-semibold"
                       >
                         {tech}
                       </span>
@@ -658,10 +622,10 @@ const Home = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <div className="text-[11px] font-bold uppercase tracking-wider text-[#6B7280]">
-                    Evaluation Emphasis
+                  <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400 font-mono">
+                    Primary Evaluation Emphasis
                   </div>
-                  <p className="text-xs text-[#4B5563] leading-relaxed">
+                  <p className="text-xs text-slate-300 leading-relaxed font-mono">
                     {selectedDomain.evalFocus}
                   </p>
                 </div>
@@ -671,38 +635,308 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 4. Event Timeline & Stages */}
-      <section id="timeline" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 observe-anim opacity-0 transition-opacity duration-500">
-        <div className="text-center max-w-2xl mx-auto space-y-3 mb-12">
-          <div className="text-xs font-bold uppercase tracking-wider text-[#D6A64F] font-mono">
-            02 &bull; Event Milestones
+      {/* ── 5. INTERACTIVE 100-POINT RUBRIC CALCULATOR (UNIQUE FEATURE) ─── */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-gradient-to-br from-[#0B101D] via-[#0E1526] to-[#070A12] border border-cyan-500/40 rounded-[14px] p-6 sm:p-10 shadow-[0_0_40px_rgba(56,189,248,0.12)] space-y-8 relative overflow-hidden">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-white/10 pb-6">
+            <div>
+              <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 font-mono text-[11px] font-bold uppercase mb-2">
+                <Gauge className="w-3.5 h-3.5" />
+                INTERACTIVE SCORING ENGINE
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-white font-display">
+                Simulate Your Project Evaluation Score (100 Marks Total)
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-400 max-w-xl">
+                Every project is graded against these transparent criteria. Adjust the sliders below to see how your submission aligns with evaluator expectations.
+              </p>
+            </div>
+
+            {/* Live Score Display Badge */}
+            <div className="bg-[#070A12] border border-cyan-500/50 p-4 rounded-[10px] text-right font-mono min-w-[200px] shadow-inner">
+              <div className="text-[10px] text-slate-400 uppercase tracking-widest">CALCULATED SCORE</div>
+              <div className="text-4xl font-extrabold text-cyan-300">
+                {totalCalculatedScore} <span className="text-xs text-slate-500 font-normal">/ 100</span>
+              </div>
+              <div className={`text-xs font-bold mt-1 ${getScoreVerdict(totalCalculatedScore).color}`}>
+                {getScoreVerdict(totalCalculatedScore).label}
+              </div>
+            </div>
           </div>
-          <h2 className="text-3xl font-extrabold text-[#17243A] tracking-tight font-display">
-            The Roadmap to the Grand Finale
+
+          {/* Interactive Sliders */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Slider 1: Functional MVP (30 pts) */}
+            <div className="bg-[#070A12]/80 border border-white/10 rounded-[8px] p-4 space-y-2">
+              <div className="flex items-center justify-between text-xs font-mono">
+                <span className="font-bold text-white">01. Working MVP Execution</span>
+                <span className="text-cyan-400 font-bold">{rubricScores.mvp} / 30 pts</span>
+              </div>
+              <input
+                type="range"
+                min="0"
+                max="30"
+                value={rubricScores.mvp}
+                onChange={(e) => setRubricScores({ ...rubricScores, mvp: Number(e.target.value) })}
+                className="w-full accent-cyan-400 cursor-pointer"
+              />
+              <p className="text-[11px] text-slate-400">
+                All end-to-end user workflows, error handling, and database persistence working.
+              </p>
+            </div>
+
+            {/* Slider 2: Architecture & Clean Code (20 pts) */}
+            <div className="bg-[#070A12]/80 border border-white/10 rounded-[8px] p-4 space-y-2">
+              <div className="flex items-center justify-between text-xs font-mono">
+                <span className="font-bold text-white">02. Clean System Architecture</span>
+                <span className="text-cyan-400 font-bold">{rubricScores.arch} / 20 pts</span>
+              </div>
+              <input
+                type="range"
+                min="0"
+                max="20"
+                value={rubricScores.arch}
+                onChange={(e) => setRubricScores({ ...rubricScores, arch: Number(e.target.value) })}
+                className="w-full accent-cyan-400 cursor-pointer"
+              />
+              <p className="text-[11px] text-slate-400">
+                Modular services, controllers, centralized error handling, and decoupled layers.
+              </p>
+            </div>
+
+            {/* Slider 3: UI / UX Quality (20 pts) */}
+            <div className="bg-[#070A12]/80 border border-white/10 rounded-[8px] p-4 space-y-2">
+              <div className="flex items-center justify-between text-xs font-mono">
+                <span className="font-bold text-white">03. UI / UX Design System Polish</span>
+                <span className="text-cyan-400 font-bold">{rubricScores.ui} / 20 pts</span>
+              </div>
+              <input
+                type="range"
+                min="0"
+                max="20"
+                value={rubricScores.ui}
+                onChange={(e) => setRubricScores({ ...rubricScores, ui: Number(e.target.value) })}
+                className="w-full accent-cyan-400 cursor-pointer"
+              />
+              <p className="text-[11px] text-slate-400">
+                Responsive layouts (360px-1440px), visual hierarchy, zero layout shift, polished dark craft.
+              </p>
+            </div>
+
+            {/* Slider 4: Authentication & Security (15 pts) */}
+            <div className="bg-[#070A12]/80 border border-white/10 rounded-[8px] p-4 space-y-2">
+              <div className="flex items-center justify-between text-xs font-mono">
+                <span className="font-bold text-white">04. Cryptographic Authentication</span>
+                <span className="text-cyan-400 font-bold">{rubricScores.auth} / 15 pts</span>
+              </div>
+              <input
+                type="range"
+                min="0"
+                max="15"
+                value={rubricScores.auth}
+                onChange={(e) => setRubricScores({ ...rubricScores, auth: Number(e.target.value) })}
+                className="w-full accent-cyan-400 cursor-pointer"
+              />
+              <p className="text-[11px] text-slate-400">
+                Salted bcrypt hashing, single-use hashed OTP storage, 10m TTL, and secure cookies.
+              </p>
+            </div>
+
+            {/* Slider 5: Automated Nodemailer Delivery (10 pts) */}
+            <div className="bg-[#070A12]/80 border border-white/10 rounded-[8px] p-4 space-y-2">
+              <div className="flex items-center justify-between text-xs font-mono">
+                <span className="font-bold text-white">05. Automated Email Receipts</span>
+                <span className="text-cyan-400 font-bold">{rubricScores.email} / 10 pts</span>
+              </div>
+              <input
+                type="range"
+                min="0"
+                max="10"
+                value={rubricScores.email}
+                onChange={(e) => setRubricScores({ ...rubricScores, email: Number(e.target.value) })}
+                className="w-full accent-cyan-400 cursor-pointer"
+              />
+              <p className="text-[11px] text-slate-400">
+                Branded HTML templates, verified SMTP dispatch for OTP codes and team registrations.
+              </p>
+            </div>
+
+            {/* Slider 6: Documentation & Video Pitch (5 pts) */}
+            <div className="bg-[#070A12]/80 border border-white/10 rounded-[8px] p-4 space-y-2">
+              <div className="flex items-center justify-between text-xs font-mono">
+                <span className="font-bold text-white">06. Documentation &amp; Demo Pitch</span>
+                <span className="text-cyan-400 font-bold">{rubricScores.docs} / 5 pts</span>
+              </div>
+              <input
+                type="range"
+                min="0"
+                max="5"
+                value={rubricScores.docs}
+                onChange={(e) => setRubricScores({ ...rubricScores, docs: Number(e.target.value) })}
+                className="w-full accent-cyan-400 cursor-pointer"
+              />
+              <p className="text-[11px] text-slate-400">
+                Comprehensive README.md, deployment documentation, clean Git commit history, and demo deck.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── 6. PRIZE VAULT & SPECIAL BOUNTIES ───────────────────────── */}
+      <section id="prizes" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="space-y-10">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/10 pb-6">
+            <div className="space-y-2">
+              <div className="text-xs font-bold uppercase tracking-wider text-amber-400 font-mono">
+                [ SECTION 03 // AWARDS &amp; BOUNTIES ]
+              </div>
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-white font-display tracking-tight">
+                Rewarding Hardcore Technical Craft
+              </h2>
+              <p className="text-sm text-slate-400 max-w-xl">
+                Beyond direct cash rewards, podium champions unlock pre-seed founder interviews, cloud computing grants, and exclusive recruiting access.
+              </p>
+            </div>
+
+            <div className="text-left md:text-right font-mono">
+              <div className="text-xs text-slate-500 uppercase tracking-widest">TOTAL BOUNTY POOL</div>
+              <div className="text-4xl font-extrabold text-amber-400">₹1,50,000+</div>
+            </div>
+          </div>
+
+          {/* Podium Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {PRIZE_TIERS.map((tier, idx) => {
+              const isFirst = idx === 0;
+              const isSecond = idx === 1;
+
+              return (
+                <div
+                  key={idx}
+                  className={`relative rounded-[12px] p-6 space-y-5 transition-all duration-300 hover:-translate-y-1.5 ${
+                    isFirst
+                      ? 'bg-gradient-to-b from-amber-950/40 via-[#0B101D] to-[#070A12] border-2 border-amber-400 shadow-[0_0_35px_rgba(245,158,11,0.25)]'
+                      : isSecond
+                      ? 'bg-[#0B101D] border border-white/20 hover:border-cyan-500/50 shadow-xl'
+                      : 'bg-[#0B101D] border border-white/10 hover:border-cyan-500/40 shadow-xl'
+                  }`}
+                >
+                  {isFirst && (
+                    <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-amber-400 text-slate-950 text-[10px] font-extrabold uppercase tracking-widest px-3.5 py-0.5 rounded-full font-mono shadow-md">
+                      ★ GRAND CHAMPION
+                    </div>
+                  )}
+
+                  <div className="flex items-center justify-between">
+                    <span
+                      className={`text-xs font-mono uppercase font-bold tracking-wider ${
+                        isFirst ? 'text-amber-400' : isSecond ? 'text-cyan-300' : 'text-emerald-400'
+                      }`}
+                    >
+                      {tier.rank}
+                    </span>
+                    <div
+                      className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                        isFirst
+                          ? 'bg-amber-400/20 text-amber-300 border border-amber-400/40'
+                          : isSecond
+                          ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40'
+                          : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40'
+                      }`}
+                    >
+                      <Trophy className="w-5 h-5" />
+                    </div>
+                  </div>
+
+                  <div>
+                    <h4 className="text-xl font-bold font-display text-white">{tier.title}</h4>
+                    <div
+                      className={`text-3xl sm:text-4xl font-extrabold font-mono mt-1 ${
+                        isFirst ? 'text-amber-400' : 'text-white'
+                      }`}
+                    >
+                      {tier.amount}
+                    </div>
+                  </div>
+
+                  <div className="border-t border-white/10 pt-4 space-y-2.5">
+                    <div className="text-[11px] uppercase tracking-wider text-slate-400 font-mono font-bold">
+                      Package Includes:
+                    </div>
+                    <ul className="space-y-2 text-xs text-slate-300">
+                      {tier.benefits.map((b, bIdx) => (
+                        <li key={bIdx} className="flex items-center gap-2">
+                          <CheckCircle2
+                            className={`w-3.5 h-3.5 shrink-0 ${
+                              isFirst ? 'text-amber-400' : 'text-cyan-400'
+                            }`}
+                          />
+                          <span>{b}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* 4 Special Engineering Bounties */}
+          <div className="pt-4 space-y-4">
+            <div className="text-xs font-bold uppercase tracking-wider text-cyan-400 font-mono">
+              [ SPECIAL CATEGORY BOUNTIES — OPEN TO ALL TRACKS ]
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {specialBounties.map((bounty, i) => (
+                <div
+                  key={i}
+                  className="bg-[#070A12] border border-white/10 hover:border-cyan-500/40 rounded-[8px] p-4 space-y-2 transition-all"
+                >
+                  <div className="flex items-center justify-between font-mono">
+                    <span className="text-[10px] text-slate-500 uppercase">BOUNTY 0{i + 1}</span>
+                    <span className="text-cyan-300 font-bold text-sm">{bounty.amount}</span>
+                  </div>
+                  <div className="font-bold text-white text-sm font-display">{bounty.title}</div>
+                  <p className="text-[11px] text-slate-400">{bounty.focus}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── 7. STAGED SPRINT ROADMAP ────────────────────────────────── */}
+      <section id="timeline" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center max-w-2xl mx-auto space-y-3 mb-12">
+          <div className="text-xs font-bold uppercase tracking-wider text-cyan-400 font-mono">
+            [ SECTION 04 // EVENT MILESTONES ]
+          </div>
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-white font-display tracking-tight">
+            The Roadmap to the 36-Hour Sprint
           </h2>
-          <p className="text-sm text-[#4B5563]">
-            Structured progression milestones from initial account verification to the 36-hour sprint.
+          <p className="text-sm text-slate-400">
+            Structured progression milestones from initial account verification to bare-metal sprint judging.
           </p>
         </div>
 
-        {/* Stepped Timeline */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          {EVENT_TIMELINE.map((item, idx) => (
+          {EVENT_TIMELINE.map((item) => (
             <div
               key={item.step}
-              className={`bg-white border rounded-[7px] p-6 relative flex flex-col justify-between card-hover transition-all ${
+              className={`bg-[#0B101D] border rounded-[12px] p-6 relative flex flex-col justify-between transition-all duration-200 ${
                 item.active
-                  ? 'border-[#17243A] ring-2 ring-[#D6A64F]/30 shadow-md'
-                  : 'border-[#E5E7EB]'
+                  ? 'border-cyan-500/60 ring-2 ring-cyan-500/20 shadow-[0_0_25px_rgba(56,189,248,0.2)]'
+                  : 'border-white/10 hover:border-white/20'
               }`}
             >
               <div>
                 <div className="flex items-center justify-between mb-4">
                   <div
-                    className={`w-10 h-10 rounded-[5px] flex items-center justify-center font-mono font-bold text-sm ${
+                    className={`w-10 h-10 rounded-[8px] flex items-center justify-center font-mono font-bold text-sm ${
                       item.active
-                        ? 'bg-[#17243A] text-[#D6A64F] ring-2 ring-[#D6A64F] ring-offset-2'
-                        : 'bg-[#F7F7F4] text-[#17243A] border border-[#E5E7EB]'
+                        ? 'bg-gradient-to-br from-cyan-500 to-blue-600 text-white shadow-md'
+                        : 'bg-[#070A12] text-cyan-400 border border-white/10'
                     }`}
                   >
                     0{item.step}
@@ -718,245 +952,83 @@ const Home = () => {
                   )}
                 </div>
 
-                <h3 className="font-bold text-base text-[#17243A] mb-1 font-display">
+                <h3 className="font-bold text-base text-white mb-1 font-display">
                   {item.phase}
                 </h3>
-                <div className="text-xs font-bold text-[#D6A64F] font-mono mb-3">
+                <div className="text-xs font-bold text-cyan-400 font-mono mb-3">
                   {item.date}
                 </div>
-                <p className="text-xs text-[#6B7280] leading-relaxed mb-4">
+                <p className="text-xs text-slate-400 leading-relaxed mb-4">
                   {item.desc}
                 </p>
               </div>
 
-              <div className="pt-3 border-t border-[#F7F7F4] text-[11px] text-[#4B5563]">
-                <strong className="text-[#17243A]">Expected:</strong> {item.deliverables}
+              <div className="pt-3 border-t border-white/[0.08] text-[11px] text-slate-300">
+                <strong className="text-white font-mono">Expected Deliverable:</strong> {item.deliverables}
               </div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* 5. Awards & Recognition Section */}
-      <section id="prizes" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 observe-anim opacity-0 transition-opacity duration-500">
-        <div className="bg-[#17243A] text-white rounded-[8px] p-8 md:p-12 border border-[#243653] shadow-lg bg-dark-grid">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 border-b border-white/10 pb-6">
-            <div className="space-y-3">
-              <div className="text-xs font-bold uppercase tracking-wider text-[#D6A64F] font-mono">
-                03 &bull; Awards &amp; Grants
-              </div>
-              <h2 className="text-3xl font-extrabold font-display tracking-tight text-white">
-                Rewarding Engineering Excellence
-              </h2>
-              <p className="text-sm text-[#D1D5DB] max-w-xl leading-relaxed">
-                Beyond cash rewards, winners gain seed incubation interviews, cloud infrastructure credits, and direct partner recruiting access.
-              </p>
-            </div>
-
-            <div className="text-left md:text-right">
-              <div className="text-xs text-[#9CA3AF] uppercase tracking-wider">Total Prize Pool</div>
-              <div className="text-3xl sm:text-4xl font-extrabold text-[#D6A64F] font-mono">
-                ₹1,50,000+
-              </div>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {PRIZE_TIERS.map((tier, idx) => {
-              const isFirst = idx === 0;
-              const isSecond = idx === 1;
-
-              return (
-                <div
-                  key={idx}
-                  className={`relative rounded-[8px] p-6 space-y-4 transition-all duration-300 hover:-translate-y-1 ${
-                    isFirst
-                      ? 'bg-gradient-to-b from-[#1C2C47] to-[#121E33] border-2 border-[#D6A64F] shadow-[0_8px_30px_rgba(214,166,79,0.18)]'
-                      : isSecond
-                      ? 'bg-white/5 border border-white/20 hover:border-white/35 shadow-md'
-                      : 'bg-white/5 border border-white/10 hover:border-white/25 shadow-md'
-                  }`}
-                >
-                  {isFirst && (
-                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#D6A64F] text-[#17243A] text-[10px] font-extrabold uppercase tracking-widest px-3 py-0.5 rounded-full shadow-sm">
-                      Grand Champion
-                    </div>
-                  )}
-
-                  <div className="flex items-center justify-between">
-                    <span
-                      className={`text-xs font-mono uppercase font-bold ${
-                        isFirst ? 'text-[#D6A64F]' : isSecond ? 'text-[#D1D5DB]' : 'text-emerald-400'
-                      }`}
-                    >
-                      {tier.rank}
-                    </span>
-                    <div
-                      className={`w-9 h-9 rounded-full flex items-center justify-center ${
-                        isFirst
-                          ? 'bg-[#D6A64F]/20 text-[#D6A64F]'
-                          : isSecond
-                          ? 'bg-white/10 text-white'
-                          : 'bg-emerald-500/10 text-emerald-400'
-                      }`}
-                    >
-                      <Trophy className="w-5 h-5" />
-                    </div>
-                  </div>
-
-                  <div>
-                    <h4 className="text-xl font-bold font-display text-white">{tier.title}</h4>
-                    <div
-                      className={`text-3xl font-extrabold font-mono mt-1 ${
-                        isFirst ? 'text-[#D6A64F]' : 'text-white'
-                      }`}
-                    >
-                      {tier.amount}
-                    </div>
-                  </div>
-
-                  <div className="border-t border-white/10 pt-3.5 space-y-2.5">
-                    <div className="text-[11px] uppercase tracking-wider text-[#9CA3AF] font-bold">
-                      Package Includes:
-                    </div>
-                    <ul className="space-y-2 text-xs text-[#D1D5DB]">
-                      {tier.benefits.map((b, bIdx) => (
-                        <li key={bIdx} className="flex items-center gap-2">
-                          <CheckCircle2
-                            className={`w-3.5 h-3.5 shrink-0 ${
-                              isFirst ? 'text-[#D6A64F]' : 'text-[#21845B]'
-                            }`}
-                          />
-                          <span>{b}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* 6. Evaluation Framework Quick Matrix */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 observe-anim opacity-0 transition-opacity duration-500">
-        <div className="bg-white border border-[#E5E7EB] rounded-[8px] p-6 sm:p-8 space-y-6 shadow-sm">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#F7F7F4] pb-4">
-            <div>
-              <div className="text-xs font-bold uppercase tracking-wider text-[#D6A64F] font-mono">
-                04 &bull; Evaluation Transparency
-              </div>
-              <h2 className="text-2xl font-extrabold text-[#17243A] font-display">
-                How Projects Are Evaluated (100 Marks Total)
-              </h2>
-            </div>
-            <Link to="/about#rules">
-              <Button variant="outline" size="sm" className="gap-1.5 font-semibold">
-                Full Scoring Framework
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Button>
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3.5">
-            <div className="p-3.5 bg-[#F7F7F4] hover:bg-white hover:border-[#17243A]/30 transition-all border border-[#E5E7EB] rounded-[6px] text-center space-y-2">
-              <div className="text-2xl font-extrabold font-mono text-[#17243A]">30 pts</div>
-              <div className="text-xs font-semibold text-[#17243A]">Functional MVP</div>
-              <div className="w-full bg-[#E5E7EB] h-1 rounded-full overflow-hidden">
-                <div className="bg-[#17243A] h-full w-[30%]" />
-              </div>
-              <div className="text-[10px] text-[#6B7280]">Complete working flows</div>
-            </div>
-
-            <div className="p-3.5 bg-[#F7F7F4] hover:bg-white hover:border-[#17243A]/30 transition-all border border-[#E5E7EB] rounded-[6px] text-center space-y-2">
-              <div className="text-2xl font-extrabold font-mono text-[#17243A]">20 pts</div>
-              <div className="text-xs font-semibold text-[#17243A]">Architecture</div>
-              <div className="w-full bg-[#E5E7EB] h-1 rounded-full overflow-hidden">
-                <div className="bg-[#17243A] h-full w-[20%]" />
-              </div>
-              <div className="text-[10px] text-[#6B7280]">Modularity &amp; error safety</div>
-            </div>
-
-            <div className="p-3.5 bg-[#F7F7F4] hover:bg-white hover:border-[#17243A]/30 transition-all border border-[#E5E7EB] rounded-[6px] text-center space-y-2">
-              <div className="text-2xl font-extrabold font-mono text-[#17243A]">20 pts</div>
-              <div className="text-xs font-semibold text-[#17243A]">UI / UX Quality</div>
-              <div className="w-full bg-[#E5E7EB] h-1 rounded-full overflow-hidden">
-                <div className="bg-[#17243A] h-full w-[20%]" />
-              </div>
-              <div className="text-[10px] text-[#6B7280]">Design system polish</div>
-            </div>
-
-            <div className="p-3.5 bg-[#F7F7F4] hover:bg-white hover:border-[#17243A]/30 transition-all border border-[#E5E7EB] rounded-[6px] text-center space-y-2">
-              <div className="text-2xl font-extrabold font-mono text-[#17243A]">15 pts</div>
-              <div className="text-xs font-semibold text-[#17243A]">Authentication</div>
-              <div className="w-full bg-[#E5E7EB] h-1 rounded-full overflow-hidden">
-                <div className="bg-[#17243A] h-full w-[15%]" />
-              </div>
-              <div className="text-[10px] text-[#6B7280]">bcrypt, OTP &amp; JWT safety</div>
-            </div>
-
-            <div className="p-3.5 bg-[#F7F7F4] hover:bg-white hover:border-[#17243A]/30 transition-all border border-[#E5E7EB] rounded-[6px] text-center space-y-2">
-              <div className="text-2xl font-extrabold font-mono text-[#17243A]">10 pts</div>
-              <div className="text-xs font-semibold text-[#17243A]">Automated Mail</div>
-              <div className="w-full bg-[#E5E7EB] h-1 rounded-full overflow-hidden">
-                <div className="bg-[#17243A] h-full w-[10%]" />
-              </div>
-              <div className="text-[10px] text-[#6B7280]">Real OTP delivery</div>
-            </div>
-
-            <div className="p-3.5 bg-[#F7F7F4] hover:bg-white hover:border-[#17243A]/30 transition-all border border-[#E5E7EB] rounded-[6px] text-center space-y-2">
-              <div className="text-2xl font-extrabold font-mono text-[#17243A]">5 pts</div>
-              <div className="text-xs font-semibold text-[#17243A]">Docs &amp; Demo</div>
-              <div className="w-full bg-[#E5E7EB] h-1 rounded-full overflow-hidden">
-                <div className="bg-[#17243A] h-full w-[5%]" />
-              </div>
-              <div className="text-[10px] text-[#6B7280]">README &amp; demo pitch</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 7. FAQs Accordion */}
-      <section className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 observe-anim opacity-0 transition-opacity duration-500">
+      {/* ── 8. FREQUENTLY ASKED QUESTIONS (FILTERABLE) ──────────────── */}
+      <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center space-y-3 mb-8">
-          <div className="text-xs font-bold uppercase tracking-wider text-[#D6A64F] font-mono">
-            05 &bull; Inquiries
+          <div className="text-xs font-bold uppercase tracking-wider text-cyan-400 font-mono">
+            [ SECTION 05 // HELP &amp; PROTOCOL ]
           </div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#17243A] tracking-tight font-display">
+          <h2 className="text-3xl font-extrabold text-white font-display tracking-tight">
             Frequently Asked Questions
           </h2>
-          <p className="text-xs text-[#6B7280]">
-            Everything you need to know about participating, team assembly, and submissions.
+          <p className="text-xs text-slate-400">
+            Rules, eligibility guidelines, and submission protocol.
           </p>
         </div>
 
+        {/* Category Filter Pills */}
+        <div className="flex flex-wrap items-center justify-center gap-2 mb-6">
+          {['All', 'Eligibility', 'Teams', 'Submissions', 'Evaluation', 'Security', 'Logistics'].map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setActiveFaqCategory(cat)}
+              className={`px-3 py-1 rounded-[6px] text-xs font-mono transition-all cursor-pointer ${
+                activeFaqCategory === cat
+                  ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-bold'
+                  : 'bg-white/5 text-slate-400 border border-white/5 hover:text-white'
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+
+        {/* Accordion Items */}
         <div className="space-y-3">
-          {faqs.map((faq, idx) => (
+          {filteredFaqs.map((faq, idx) => (
             <div
               key={idx}
-              className="bg-white border border-[#E5E7EB] rounded-[7px] overflow-hidden transition-all shadow-xs hover:border-[#17243A]/30"
+              className="bg-[#0B101D] border border-white/10 rounded-[10px] overflow-hidden transition-all shadow-sm hover:border-cyan-500/40"
             >
               <button
                 onClick={() => setActiveFaq(activeFaq === idx ? null : idx)}
                 className="w-full flex items-center justify-between px-5 py-4 text-left focus:outline-none cursor-pointer"
               >
                 <div className="flex items-center gap-3 pr-4">
-                  <span className="bg-[#17243A]/5 text-[#17243A] border border-[#17243A]/15 px-2 py-0.5 rounded-[4px] text-[10px] font-mono font-bold shrink-0">
+                  <span className="bg-cyan-500/10 text-cyan-300 border border-cyan-500/20 px-2 py-0.5 rounded-[4px] text-[10px] font-mono font-bold shrink-0">
                     {faq.category}
                   </span>
-                  <span className="text-sm font-semibold text-[#17243A]">
+                  <span className="text-sm font-semibold text-white">
                     {faq.q}
                   </span>
                 </div>
                 <ChevronDown
-                  className={`w-4 h-4 text-[#6B7280] shrink-0 transition-transform duration-200 ${
-                    activeFaq === idx ? 'rotate-180 text-[#17243A]' : ''
+                  className={`w-4 h-4 text-slate-400 shrink-0 transition-transform duration-200 ${
+                    activeFaq === idx ? 'rotate-180 text-cyan-400' : ''
                   }`}
                 />
               </button>
               {activeFaq === idx && (
-                <div className="px-5 pb-4 pt-1 text-xs text-[#4B5563] leading-relaxed border-t border-[#F7F7F4] animate-fadeIn">
+                <div className="px-5 pb-4 pt-1 text-xs text-slate-300 leading-relaxed border-t border-white/[0.06] animate-fadeIn">
                   {faq.a}
                 </div>
               )}
@@ -965,60 +1037,55 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 8. Bottom CTA Banner (Two-Column on md+) */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 observe-anim opacity-0 transition-opacity duration-500">
-        <div className="relative bg-gradient-to-br from-[#17243A] via-[#1B2940] to-[#111A2B] text-white rounded-[10px] p-8 md:p-12 border border-[#243653] shadow-2xl overflow-hidden bg-dark-grid">
-          {/* Ambient glow in CTA */}
-          <div className="ambient-glow-gold -top-20 -right-20 opacity-40 pointer-events-none" />
-
+      {/* ── 9. BOTTOM COMMAND BANNER ───────────────────────────────── */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative bg-gradient-to-br from-[#0B101D] via-[#0E1526] to-[#070A12] text-white rounded-[14px] p-8 md:p-12 border border-cyan-500/40 shadow-[0_0_40px_rgba(56,189,248,0.2)] overflow-hidden">
           <div className="relative grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
-            {/* Left Column: CTA Content */}
             <div className="md:col-span-8 space-y-4">
-              <div className="inline-block px-3 py-1 bg-white/10 rounded-[5px] text-xs font-mono text-[#D6A64F] font-bold uppercase tracking-wider border border-white/10">
-                Limited Submissions Window &bull; Closes Dec 20, 2026
+              <div className="inline-block px-3 py-1 bg-cyan-500/10 rounded-[6px] text-xs font-mono text-cyan-300 font-bold uppercase tracking-wider border border-cyan-500/30">
+                APPLICATIONS WINDOW ACTIVE &bull; SUBMISSION PORTAL OPEN
               </div>
               <h2 className="text-2xl sm:text-4xl font-extrabold font-display tracking-tight text-white">
-                Ready to Engineer Something Extraordinary?
+                Ready to Ship Something That Moves the Future?
               </h2>
-              <p className="text-sm text-[#D1D5DB] max-w-xl leading-relaxed">
-                Create your account in seconds, verify with our 10-minute automated OTP system, and submit your project to the official docket.
+              <p className="text-sm text-slate-300 max-w-xl leading-relaxed">
+                Create your verified participant account in seconds, assemble your team of 1 to 5 members, and register your official project deliverables into the Code-a-Nova docket.
               </p>
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 pt-2">
                 <Link to={isAuthenticated ? '/register' : '/signup'}>
-                  <Button variant="accent" size="lg" className="gap-2 shadow-lg hover:shadow-xl font-bold">
+                  <Button variant="accent" size="lg" className="gap-2 shadow-lg font-bold">
                     {isAuthenticated ? 'Submit Team Registration' : 'Register for Hackathon'}
                     <ArrowRight className="w-4 h-4" />
                   </Button>
                 </Link>
                 <Link to="/about">
-                  <Button variant="outline" size="lg" className="border-white/30 text-white hover:bg-white/10 font-semibold">
-                    Review Guidelines
+                  <Button variant="outline" size="lg" className="border-white/20 text-white hover:bg-white/10 font-semibold">
+                    Review 100-Mark Rubric
                   </Button>
                 </Link>
               </div>
             </div>
 
-            {/* Right Column: Mini Stats Summary Panel */}
-            <div className="md:col-span-4 bg-white/5 backdrop-blur-md border border-white/10 rounded-[8px] p-5.5 space-y-3 font-mono text-xs shadow-inner">
-              <div className="text-[11px] text-[#D6A64F] font-bold uppercase tracking-wider flex items-center justify-between">
-                <span>Platform Snapshot</span>
+            <div className="md:col-span-4 bg-[#070A12]/90 border border-white/10 rounded-[10px] p-5 space-y-3 font-mono text-xs shadow-inner">
+              <div className="text-[11px] text-cyan-400 font-bold uppercase tracking-wider flex items-center justify-between">
+                <span>SYSTEM SNAPSHOT</span>
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
               </div>
-              <div className="flex items-center justify-between border-b border-white/10 pb-2">
-                <span className="text-[#9CA3AF]">Status</span>
-                <span className="text-emerald-400 font-bold">REGISTRATIONS OPEN</span>
+              <div className="flex items-center justify-between border-b border-white/[0.08] pb-2">
+                <span className="text-slate-500">PLATFORM</span>
+                <span className="text-emerald-400 font-bold">ONLINE &bull; v2.4</span>
               </div>
-              <div className="flex items-center justify-between border-b border-white/10 pb-2">
-                <span className="text-[#9CA3AF]">Active Tracks</span>
-                <span className="text-white font-bold">5 Specialized Tracks</span>
+              <div className="flex items-center justify-between border-b border-white/[0.08] pb-2">
+                <span className="text-slate-500">TRACKS</span>
+                <span className="text-white font-bold">5 SPECIALIZED</span>
               </div>
-              <div className="flex items-center justify-between border-b border-white/10 pb-2">
-                <span className="text-[#9CA3AF]">Team Bounds</span>
-                <span className="text-white font-bold">1–5 Members</span>
+              <div className="flex items-center justify-between border-b border-white/[0.08] pb-2">
+                <span className="text-slate-500">TEAM SQUAD</span>
+                <span className="text-white font-bold">1–5 PARTICIPANTS</span>
               </div>
               <div className="flex items-center justify-between pt-1">
-                <span className="text-[#9CA3AF]">Sprint Duration</span>
-                <span className="text-[#D6A64F] font-bold">36 Continuous Hours</span>
+                <span className="text-slate-500">SPRINT DURATION</span>
+                <span className="text-amber-300 font-bold">36 CONTINUOUS HOURS</span>
               </div>
             </div>
           </div>

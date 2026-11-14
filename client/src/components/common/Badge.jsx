@@ -8,12 +8,12 @@ const Badge = ({ children, variant = 'default', size = 'md', className = '' }) =
   };
 
   const variantStyles = {
-    default: 'bg-[#F7F7F4] text-[#20242B] border border-[#E5E7EB]',
-    primary: 'bg-[#17243A] text-white',
-    accent: 'bg-[#D6A64F]/15 text-[#9E7322] border border-[#D6A64F]/30',
-    success: 'bg-[#21845B]/10 text-[#21845B] border border-[#21845B]/20 font-medium',
-    warning: 'bg-amber-50 text-amber-700 border border-amber-200',
-    error: 'bg-[#C44545]/10 text-[#C44545] border border-[#C44545]/20 font-medium',
+    default: 'bg-slate-800/80 text-slate-300 border border-white/10',
+    primary: 'bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 font-mono shadow-[0_0_10px_rgba(56,189,248,0.15)]',
+    accent: 'bg-amber-500/15 text-amber-300 border border-amber-500/30 font-mono shadow-[0_0_10px_rgba(245,158,11,0.15)]',
+    success: 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 font-medium',
+    warning: 'bg-yellow-500/15 text-yellow-300 border border-yellow-500/30',
+    error: 'bg-rose-500/15 text-rose-300 border border-rose-500/30 font-medium',
   };
 
   return (

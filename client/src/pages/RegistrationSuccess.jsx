@@ -37,93 +37,90 @@ const RegistrationSuccess = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto py-12 px-4 sm:px-6">
-      <Card className="text-center p-8 sm:p-12 space-y-6 shadow-md border-[#E5E7EB]">
+    <div className="max-w-2xl mx-auto py-12 px-4 sm:px-6 text-slate-100">
+      <Card className="text-center p-8 sm:p-12 space-y-6 shadow-2xl border-white/10 bg-[#0F172A]/90 backdrop-blur-md">
         {/* Success Icon & Logo */}
         <div className="flex flex-col items-center gap-3">
           <Link to="/" className="inline-block group">
             <img
               src="/logo.png"
               alt="Code-a-Nova Logo"
-              className="w-14 h-14 rounded-[10px] object-contain mx-auto shadow-md group-hover:scale-105 transition-transform"
+              className="w-14 h-14 rounded-[10px] object-contain mx-auto shadow-[0_0_20px_rgba(56,189,248,0.3)] group-hover:scale-105 transition-transform"
             />
           </Link>
-          <div className="w-10 h-10 bg-[#21845B]/10 rounded-full flex items-center justify-center text-[#21845B]">
+          <div className="w-12 h-12 bg-emerald-500/10 border border-emerald-500/30 rounded-full flex items-center justify-center text-emerald-400">
             <CheckCircle2 className="w-6 h-6" />
           </div>
         </div>
 
         <div className="space-y-2">
-          <div className="text-xs font-bold uppercase tracking-wider text-[#21845B]">
+          <div className="text-xs font-bold uppercase tracking-wider text-emerald-400 font-mono">
             Registration Successful
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#17243A] tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight font-display">
             You're Officially Registered!
           </h1>
-          <p className="text-xs sm:text-sm text-[#4B5563] max-w-md mx-auto leading-relaxed">
+          <p className="text-xs sm:text-sm text-slate-300 max-w-md mx-auto leading-relaxed">
             Your hackathon entry has been successfully validated and recorded into the Code-a-Nova database. A confirmation receipt has been dispatched to your email.
           </p>
         </div>
 
         {/* Reference ID banner */}
-        <div className="bg-[#F7F7F4] border border-[#E5E7EB] rounded-[6px] p-5 max-w-md mx-auto space-y-2">
-          <div className="text-[11px] uppercase tracking-wider font-semibold text-[#6B7280]">
+        <div className="bg-[#0B0F19] border border-white/10 rounded-[8px] p-5 max-w-md mx-auto space-y-2 shadow-inner">
+          <div className="text-[11px] uppercase tracking-wider font-semibold text-slate-400 font-mono">
             Official Registration Reference
           </div>
           <div className="flex items-center justify-center gap-3">
-            <span className="text-2xl font-mono font-extrabold text-[#17243A] tracking-wider">
+            <span className="text-2xl font-mono font-extrabold text-cyan-400 tracking-wider">
               {referenceId}
             </span>
             <button
               type="button"
               onClick={handleCopyId}
-              className="p-1.5 rounded-[4px] border border-[#E5E7EB] bg-white hover:bg-[#F7F7F4] text-[#17243A] transition-colors"
+              className="p-1.5 rounded-[4px] border border-white/10 bg-white/5 hover:bg-white/10 text-cyan-300 transition-colors cursor-pointer"
               title="Copy Reference ID"
             >
-              {copied ? <Check className="w-4 h-4 text-[#21845B]" /> : <Copy className="w-4 h-4" />}
+              {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
             </button>
           </div>
-          <div className="text-[11px] text-[#9CA3AF]">
+          <div className="text-[11px] text-slate-500 font-mono">
             Quote this reference ID for all queries and finale check-in.
           </div>
         </div>
 
         {/* Project Snapshot */}
         {registration && (
-          <div className="bg-white border border-[#E5E7EB] rounded-[6px] p-4 text-xs text-left grid grid-cols-1 sm:grid-cols-2 gap-2 text-[#4B5563]">
+          <div className="bg-[#0B0F19] border border-white/10 rounded-[8px] p-4 text-xs text-left grid grid-cols-1 sm:grid-cols-2 gap-2 text-slate-300">
             <div>
-              <span className="text-[#6B7280]">Project Name:</span>{' '}
-              <span className="font-semibold text-[#17243A]">{registration.projectName}</span>
+              <span className="text-slate-400">Project Name:</span>{' '}
+              <span className="font-semibold text-white">{registration.projectName}</span>
             </div>
             <div>
-              <span className="text-[#6B7280]">Track:</span>{' '}
-              <span className="font-semibold text-[#17243A]">{registration.domain}</span>
+              <span className="text-slate-400">Track:</span>{' '}
+              <span className="font-semibold text-cyan-300 font-mono">{registration.domain}</span>
             </div>
             <div>
-              <span className="text-[#6B7280]">Team Size:</span>{' '}
-              <span className="font-semibold text-[#17243A]">
-                {registration.teamSize} Member(s)
+              <span className="text-slate-400">Team Size:</span>{' '}
+              <span className="font-semibold text-white">
+                {registration.teamSize} Member{registration.teamSize > 1 ? 's' : ' (Solo)'}
               </span>
             </div>
             <div>
-              <span className="text-[#6B7280]">Team Leader:</span>{' '}
-              <span className="font-semibold text-[#17243A]">
-                {registration.participantName}
-              </span>
+              <span className="text-slate-400">Institution:</span>{' '}
+              <span className="font-semibold text-white">{registration.collegeName}</span>
             </div>
           </div>
         )}
 
-        {/* CTAs */}
-        <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
-          <Link to="/my-registration">
-            <Button variant="primary" size="md" className="gap-2 w-full sm:w-auto">
+        <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
+          <Link to="/my-registration" className="w-full sm:w-auto">
+            <Button variant="primary" size="md" className="w-full gap-2 font-bold shadow-[0_0_20px_rgba(56,189,248,0.3)]">
               <FolderGit2 className="w-4 h-4" />
-              View Registration Pass
+              View Printable Pass
             </Button>
           </Link>
-          <Link to="/dashboard">
-            <Button variant="secondary" size="md" className="gap-2 w-full sm:w-auto">
+          <Link to="/dashboard" className="w-full sm:w-auto">
+            <Button variant="secondary" size="md" className="w-full gap-2">
               <LayoutDashboard className="w-4 h-4" />
               Go to Dashboard
             </Button>
@@ -135,4 +132,3 @@ const RegistrationSuccess = () => {
 };
 
 export default RegistrationSuccess;
-

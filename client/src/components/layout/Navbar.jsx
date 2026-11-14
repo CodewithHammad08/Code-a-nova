@@ -40,37 +40,37 @@ const Navbar = () => {
   };
 
   const navLinkClass = ({ isActive }) =>
-    `text-xs font-semibold tracking-wider transition-all duration-200 px-3 py-1.5 rounded-[5px] ${
+    `text-xs font-semibold tracking-wider transition-all duration-200 px-3 py-1.5 rounded-[6px] ${
       isActive
-        ? 'bg-[#17243A] text-white shadow-xs'
-        : 'text-[#4B5563] hover:text-[#17243A] hover:bg-[#F3F4F6]'
+        ? 'bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 shadow-[0_0_12px_rgba(56,189,248,0.2)]'
+        : 'text-slate-400 hover:text-white hover:bg-white/[0.06]'
     }`;
 
   const desktopAnchorClass =
-    'text-xs font-semibold tracking-wider transition-all duration-200 px-3 py-1.5 rounded-[5px] text-[#4B5563] hover:text-[#17243A] hover:bg-[#F3F4F6]';
+    'text-xs font-semibold tracking-wider transition-all duration-200 px-3 py-1.5 rounded-[6px] text-slate-400 hover:text-white hover:bg-white/[0.06]';
 
   return (
     <header
-      className={`sticky top-0 z-40 bg-white/90 backdrop-blur-xl transition-all duration-300 ${
-        scrolled ? 'shadow-md border-b border-black/[0.08]' : 'border-b border-[#E5E7EB]'
+      className={`sticky top-0 z-40 bg-[#080C14]/90 backdrop-blur-xl transition-all duration-300 ${
+        scrolled ? 'shadow-[0_4px_20px_rgba(0,0,0,0.5)] border-b border-white/10' : 'border-b border-white/[0.06]'
       }`}
     >
       {/* Top Announcement Bar */}
-      <div className="bg-gradient-to-r from-[#111A2B] via-[#17243A] to-[#1F2F49] text-white text-[11px] py-1.5 px-4 border-b border-[#243653]/60 flex items-center justify-between sm:justify-center gap-2 sm:gap-4 shadow-inner">
+      <div className="bg-[#05080F] text-white text-[11px] py-1.5 px-4 border-b border-white/[0.06] flex items-center justify-between sm:justify-center gap-2 sm:gap-4 shadow-inner">
         {/* Left: LIVE Badge */}
         <div className="flex items-center gap-1.5 shrink-0">
-          <span className="inline-block w-2 h-2 rounded-full bg-[#21845B] animate-pulse" />
-          <span className="text-[#21845B] font-bold tracking-wider uppercase text-[10px] bg-[#21845B]/15 px-1.5 py-0.5 rounded-[3px] border border-[#21845B]/30 font-mono">
+          <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+          <span className="text-emerald-400 font-bold tracking-wider uppercase text-[10px] bg-emerald-500/15 px-1.5 py-0.5 rounded-[3px] border border-emerald-500/30 font-mono">
             LIVE
           </span>
         </div>
 
         {/* Center: Event Info */}
         <div className="flex items-center gap-2 text-center truncate">
-          <span className="text-[#D6A64F] font-bold tracking-wider uppercase text-[10px]">
+          <span className="text-cyan-400 font-bold tracking-wider uppercase text-[10px]">
             Official Registration Portal:
           </span>
-          <span className="hidden sm:inline text-white/90">
+          <span className="hidden sm:inline text-slate-300">
             Code-a-Nova 2026-27 is live &bull; 10-minute automated OTP verification &bull;
           </span>
         </div>
@@ -79,7 +79,7 @@ const Navbar = () => {
         <div className="shrink-0">
           <Link
             to={isAuthenticated ? '/register' : '/signup'}
-            className="text-[#D6A64F] hover:text-[#ecc47c] font-bold inline-flex items-center gap-0.5 ml-1 text-xs transition-colors"
+            className="text-cyan-400 hover:text-cyan-300 font-bold inline-flex items-center gap-0.5 ml-1 text-xs transition-colors"
           >
             {isAuthenticated ? 'Register Project' : 'Register Now'}
             <ChevronRight className="w-3 h-3" />
@@ -95,29 +95,29 @@ const Navbar = () => {
               <img
                 src="/logo.png"
                 alt="Code-a-Nova Logo"
-                className="w-8 h-8 rounded-[6px] object-contain shadow-sm group-hover:scale-105 transition-transform"
+                className="w-9 h-9 rounded-[8px] object-contain shadow-[0_0_15px_rgba(56,189,248,0.25)] group-hover:scale-105 transition-transform"
               />
-              <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-[#D6A64F] border-2 border-white" />
+              <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-cyan-400 border-2 border-[#080C14]" />
             </div>
             <div className="flex flex-col">
-              <span className="font-display font-extrabold text-base tracking-tight text-[#17243A] leading-tight group-hover:text-[#243653] transition-colors">
+              <span className="font-display font-extrabold text-base tracking-tight text-white leading-tight group-hover:text-cyan-300 transition-colors">
                 CODE-A-NOVA
               </span>
-              <span className="text-[10px] tracking-widest uppercase text-[#6B7280] font-mono leading-none">
+              <span className="text-[10px] tracking-widest uppercase text-slate-400 font-mono leading-none">
                 National Hackathon 2026-27
               </span>
             </div>
           </Link>
 
           {/* Desktop Navigation Links */}
-          <div className="hidden md:flex items-center space-x-1.5">
+          <div className="hidden md:flex items-center space-x-1">
             <NavLink to="/" className={navLinkClass}>
               Home
             </NavLink>
             <NavLink to="/about" className={navLinkClass}>
               About & Rubric
             </NavLink>
-            <a href="/#domains" className={desktopAnchorClass}>
+            <a href="/#tracks" className={desktopAnchorClass}>
               Tracks
             </a>
             <a href="/#timeline" className={desktopAnchorClass}>
@@ -137,7 +137,7 @@ const Navbar = () => {
               <div className="flex items-center gap-3">
                 {/* User Avatar Circle */}
                 <Link to="/profile" title="View Profile">
-                  <div className="w-8 h-8 rounded-[4px] bg-[#17243A] text-white flex items-center justify-center text-xs font-bold font-mono hover:bg-[#243653] transition-colors border border-[#243653]">
+                  <div className="w-8 h-8 rounded-[6px] bg-slate-800 text-cyan-300 flex items-center justify-center text-xs font-bold font-mono hover:bg-slate-700 transition-colors border border-cyan-500/30">
                     {user?.name?.[0]?.toUpperCase() || user?.fullName?.[0]?.toUpperCase() || user?.email?.[0]?.toUpperCase() || 'U'}
                   </div>
                 </Link>
@@ -152,9 +152,9 @@ const Navbar = () => {
                   variant="ghost"
                   size="sm"
                   onClick={handleLogout}
-                  className="text-xs"
+                  className="text-xs text-slate-400 hover:text-white"
                 >
-                  <LogOut className="w-3.5 h-3.5 mr-1 text-[#6B7280]" />
+                  <LogOut className="w-3.5 h-3.5 mr-1" />
                   Sign Out
                 </Button>
               </div>
@@ -179,7 +179,7 @@ const Navbar = () => {
           <div className="flex md:hidden">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-[5px] text-[#6B7280] hover:text-[#17243A] hover:bg-[#F7F7F4] transition-colors border border-transparent hover:border-[#E5E7EB]"
+              className="p-2 rounded-[6px] text-slate-400 hover:text-white hover:bg-white/10 transition-colors border border-white/10"
               aria-label="Toggle navigation menu"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -190,52 +190,52 @@ const Navbar = () => {
 
       {/* Mobile Drawer with Slide Animation */}
       <div
-        className={`md:hidden border-b border-[#E5E7EB] bg-white px-4 space-y-3 transition-all duration-300 ease-in-out transform ${
+        className={`md:hidden border-b border-white/10 bg-[#0B0F19] px-4 space-y-3 transition-all duration-300 ease-in-out transform ${
           mobileMenuOpen
             ? 'translate-y-0 opacity-100 pointer-events-auto max-h-[600px] pt-2 pb-5'
             : '-translate-y-full opacity-0 pointer-events-none max-h-0 overflow-hidden py-0 border-b-0'
         }`}
       >
-        <div className="flex flex-col space-y-2 pt-2 pb-3 border-b border-[#E5E7EB] text-sm">
+        <div className="flex flex-col space-y-1.5 pt-2 pb-3 border-b border-white/10 text-sm">
           <Link
             to="/"
             onClick={() => setMobileMenuOpen(false)}
-            className="px-3 py-2 font-semibold text-[#17243A] hover:bg-[#F7F7F4] rounded-[5px] transition-colors"
+            className="px-3 py-2 font-semibold text-slate-200 hover:text-cyan-300 hover:bg-white/5 rounded-[6px] transition-colors"
           >
             Home
           </Link>
           <Link
             to="/about"
             onClick={() => setMobileMenuOpen(false)}
-            className="px-3 py-2 font-semibold text-[#17243A] hover:bg-[#F7F7F4] rounded-[5px] transition-colors"
+            className="px-3 py-2 font-semibold text-slate-200 hover:text-cyan-300 hover:bg-white/5 rounded-[6px] transition-colors"
           >
             About & Rubric
           </Link>
           <a
-            href="/#domains"
+            href="/#tracks"
             onClick={() => setMobileMenuOpen(false)}
-            className="px-3 py-2 font-semibold text-[#17243A] hover:bg-[#F7F7F4] rounded-[5px] transition-colors"
+            className="px-3 py-2 font-semibold text-slate-200 hover:text-cyan-300 hover:bg-white/5 rounded-[6px] transition-colors"
           >
             Tracks
           </a>
           <a
             href="/#timeline"
             onClick={() => setMobileMenuOpen(false)}
-            className="px-3 py-2 font-semibold text-[#17243A] hover:bg-[#F7F7F4] rounded-[5px] transition-colors"
+            className="px-3 py-2 font-semibold text-slate-200 hover:text-cyan-300 hover:bg-white/5 rounded-[6px] transition-colors"
           >
             Timeline
           </a>
           <a
             href="/#prizes"
             onClick={() => setMobileMenuOpen(false)}
-            className="px-3 py-2 font-semibold text-[#17243A] hover:bg-[#F7F7F4] rounded-[5px] transition-colors"
+            className="px-3 py-2 font-semibold text-slate-200 hover:text-cyan-300 hover:bg-white/5 rounded-[6px] transition-colors"
           >
             Prizes
           </a>
           <Link
             to="/contact"
             onClick={() => setMobileMenuOpen(false)}
-            className="px-3 py-2 font-semibold text-[#17243A] hover:bg-[#F7F7F4] rounded-[5px] transition-colors"
+            className="px-3 py-2 font-semibold text-slate-200 hover:text-cyan-300 hover:bg-white/5 rounded-[6px] transition-colors"
           >
             Contact
           </Link>
@@ -245,15 +245,15 @@ const Navbar = () => {
           {isAuthenticated ? (
             <>
               {/* Mobile Authenticated User Info */}
-              <div className="flex items-center gap-2.5 px-3 py-2 bg-[#F7F7F4] rounded-[5px] border border-[#E5E7EB]">
-                <div className="w-8 h-8 rounded-[4px] bg-[#17243A] text-white flex items-center justify-center text-xs font-bold font-mono shrink-0">
+              <div className="flex items-center gap-2.5 px-3 py-2 bg-slate-800/80 rounded-[6px] border border-white/10">
+                <div className="w-8 h-8 rounded-[6px] bg-slate-900 text-cyan-400 flex items-center justify-center text-xs font-bold font-mono shrink-0 border border-cyan-500/30">
                   {user?.name?.[0]?.toUpperCase() || user?.fullName?.[0]?.toUpperCase() || user?.email?.[0]?.toUpperCase() || 'U'}
                 </div>
                 <div className="min-w-0 flex-1">
-                  <div className="text-xs font-semibold text-[#17243A] truncate">
+                  <div className="text-xs font-semibold text-white truncate">
                     {user?.fullName || user?.name || 'Participant'}
                   </div>
-                  <div className="text-[11px] text-[#6B7280] truncate font-mono">
+                  <div className="text-[11px] text-slate-400 truncate font-mono">
                     {user?.email}
                   </div>
                 </div>

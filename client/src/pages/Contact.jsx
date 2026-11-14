@@ -78,70 +78,70 @@ const Contact = () => {
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 text-slate-100">
       <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
         {/* Left info column */}
         <div className="md:col-span-5 space-y-6">
           <div className="space-y-3">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#17243A]/5 border border-[#17243A]/15 rounded-[6px]">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-cyan-500/10 border border-cyan-500/30 rounded-[6px]">
               <img src="/logo.png" alt="Code-a-Nova Logo" className="w-4 h-4 rounded-[3px] object-contain" />
-              <span className="text-xs font-semibold tracking-wider uppercase text-[#17243A] font-mono">
+              <span className="text-xs font-semibold tracking-wider uppercase text-cyan-300 font-mono">
                 Organizing Secretariat
               </span>
             </div>
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-[#17243A] tracking-tight font-display">
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight font-display">
               Get in Touch
             </h1>
-            <p className="text-sm text-[#4B5563] leading-relaxed">
+            <p className="text-sm text-slate-300 leading-relaxed">
               Have questions regarding track guidelines, team eligibility, or submission formats? Reach out to the Code-a-Nova coordination team directly.
             </p>
           </div>
 
-          <div className="bg-white border border-[#E5E7EB] rounded-[7px] p-6 space-y-5 shadow-sm">
+          <div className="bg-[#0F172A]/80 backdrop-blur-md border border-white/10 rounded-[10px] p-6 space-y-5 shadow-xl">
             <div className="flex items-start gap-3">
-              <div className="w-9 h-9 rounded-[5px] bg-[#17243A] text-white flex items-center justify-center shrink-0">
-                <Mail className="w-4 h-4 text-[#D6A64F]" />
+              <div className="w-10 h-10 rounded-[8px] bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 flex items-center justify-center shrink-0">
+                <Mail className="w-5 h-5 text-cyan-400" />
               </div>
               <div>
-                <div className="text-[10px] font-bold uppercase tracking-wider text-[#6B7280] font-mono">
+                <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 font-mono">
                   Official Communication
                 </div>
                 <a
                   href={`mailto:${contactInfo.contactEmail}`}
-                  className="text-sm font-bold text-[#17243A] hover:underline font-mono"
+                  className="text-sm font-bold text-cyan-400 hover:text-cyan-300 hover:underline font-mono"
                 >
                   {contactInfo.contactEmail}
                 </a>
-                <div className="text-[11px] text-[#6B7280] mt-0.5">
+                <div className="text-[11px] text-slate-400 mt-0.5">
                   Expected reply window: within 24 hours
                 </div>
               </div>
             </div>
 
-            <div className="border-t border-[#F7F7F4] pt-4 space-y-2 text-xs text-[#6B7280]">
-              <div className="font-bold text-[#17243A] font-mono uppercase text-[10px]">
+            <div className="border-t border-white/[0.08] pt-4 space-y-2 text-xs text-slate-400">
+              <div className="font-bold text-cyan-400 font-mono uppercase text-[10px]">
                 Support Hours
               </div>
               <div className="flex items-center gap-2">
-                <Clock className="w-3.5 h-3.5 text-[#17243A]" />
+                <Clock className="w-3.5 h-3.5 text-cyan-400" />
                 <span>Monday &ndash; Saturday: 09:00 AM &ndash; 07:00 PM IST</span>
               </div>
-              <div className="text-[11px] text-[#21845B] font-semibold">
+              <div className="text-[11px] text-emerald-400 font-semibold font-mono">
                 ● Emergency technical helpline active during 36-hr finale sprint
               </div>
             </div>
 
-            <div className="border-t border-[#F7F7F4] pt-4 space-y-1.5 text-xs">
-              <div className="font-bold text-[#17243A] font-mono uppercase text-[10px]">
+            <div className="border-t border-white/[0.08] pt-4 space-y-1.5 text-xs">
+              <div className="font-bold text-cyan-400 font-mono uppercase text-[10px]">
                 Quick Links
               </div>
               <div>
-                <Link to="/about#rules" className="text-[#17243A] hover:underline flex items-center gap-1">
+                <Link to="/about#rules" className="text-slate-300 hover:text-cyan-300 flex items-center gap-1">
                   &bull; Official Scoring Rubric &rarr;
                 </Link>
               </div>
               <div>
-                <Link to="/#timeline" className="text-[#17243A] hover:underline flex items-center gap-1">
+                <Link to="/#timeline" className="text-slate-300 hover:text-cyan-300 flex items-center gap-1">
                   &bull; Competition Timeline &amp; Deadlines &rarr;
                 </Link>
               </div>
@@ -151,14 +151,14 @@ const Contact = () => {
 
         {/* Right Form Column */}
         <div className="md:col-span-7">
-          <Card className="shadow-sm border-[#E5E7EB]">
+          <Card className="shadow-2xl border-white/10 bg-[#0F172A]/90 backdrop-blur-md">
             {isSubmitted ? (
               <div className="py-12 text-center space-y-4">
-                <div className="w-12 h-12 bg-[#21845B]/10 rounded-full flex items-center justify-center mx-auto text-[#21845B]">
+                <div className="w-12 h-12 bg-emerald-500/10 border border-emerald-500/30 rounded-full flex items-center justify-center mx-auto text-emerald-400">
                   <CheckCircle2 className="w-6 h-6" />
                 </div>
-                <h3 className="text-xl font-bold text-[#17243A] font-display">Inquiry Transmitted</h3>
-                <p className="text-xs text-[#6B7280] max-w-sm mx-auto leading-relaxed">
+                <h3 className="text-xl font-bold text-white font-display">Inquiry Transmitted</h3>
+                <p className="text-xs text-slate-400 max-w-sm mx-auto leading-relaxed">
                   Thank you for reaching out. A committee member will review your inquiry and reply to your email address promptly.
                 </p>
                 <div className="pt-2">
@@ -173,11 +173,11 @@ const Contact = () => {
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="border-b border-[#F7F7F4] pb-2">
-                  <h3 className="text-base font-bold text-[#17243A] font-display">
+                <div className="border-b border-white/[0.08] pb-2">
+                  <h3 className="text-base font-bold text-white font-display">
                     Send a Message to the Committee
                   </h3>
-                  <p className="text-xs text-[#6B7280]">
+                  <p className="text-xs text-slate-400">
                     Inquiries are recorded and routed to relevant track leads.
                   </p>
                 </div>
@@ -210,22 +210,22 @@ const Contact = () => {
                 />
 
                 <div className="space-y-1">
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-[#17243A] mb-1.5 font-mono">
-                    Your Message <span className="text-[#C44545]">*</span>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5 font-mono">
+                    Your Message <span className="text-rose-400">*</span>
                   </label>
                   <textarea
                     rows={6}
                     placeholder="Please specify your query or challenge in detail..."
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    className={`w-full rounded-[5px] border px-3.5 py-2.5 text-sm text-[#20242B] placeholder-[#9CA3AF] bg-white transition-colors duration-150 focus:outline-none focus:ring-1 focus:ring-[#17243A] ${
+                    className={`w-full rounded-[6px] border px-3.5 py-2.5 text-sm text-white placeholder-slate-500 bg-[#0B0F19] transition-all duration-150 focus:outline-none focus:ring-1 focus:ring-cyan-500/30 ${
                       errors.message
-                        ? 'border-[#C44545] focus:border-[#C44545]'
-                        : 'border-[#E5E7EB] hover:border-[#D1D5DB] focus:border-[#17243A]'
+                        ? 'border-rose-500/80 focus:border-rose-500'
+                        : 'border-white/10 hover:border-white/20 focus:border-cyan-400'
                     }`}
                   />
                   {errors.message && (
-                    <p className="text-xs text-[#C44545] font-medium">{errors.message}</p>
+                    <p className="text-xs text-rose-400 font-medium">{errors.message}</p>
                   )}
                 </div>
 
@@ -234,7 +234,7 @@ const Contact = () => {
                     type="submit"
                     variant="primary"
                     isLoading={isSubmitting}
-                    className="w-full sm:w-auto font-bold shadow-sm"
+                    className="w-full sm:w-auto font-bold shadow-[0_0_20px_rgba(56,189,248,0.3)]"
                   >
                     <Send className="w-4 h-4 mr-1.5" />
                     Transmit Inquiry

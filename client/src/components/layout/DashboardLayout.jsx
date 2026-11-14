@@ -29,17 +29,17 @@ const DashboardLayout = () => {
   };
 
   return (
-    <div className="flex h-screen bg-[#F7F7F4] overflow-hidden text-[#20242B]">
+    <div className="flex h-screen bg-[#080C14] overflow-hidden text-slate-100">
       <Toaster
         position="top-right"
         toastOptions={{
           style: {
-            background: '#FFFFFF',
-            color: '#20242B',
-            border: '1px solid #E5E7EB',
-            borderRadius: '6px',
+            background: '#0F172A',
+            color: '#F8FAFC',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            borderRadius: '8px',
             fontSize: '13px',
-            boxShadow: '0 4px 12px rgba(0,0,0,0.06)',
+            boxShadow: '0 8px 30px rgba(0,0,0,0.5)',
           },
         }}
       />
@@ -53,14 +53,14 @@ const DashboardLayout = () => {
       {mobileSidebarOpen && (
         <div className="fixed inset-0 z-50 flex md:hidden">
           <div
-            className="fixed inset-0 bg-[#17243A]/50 backdrop-blur-sm"
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm"
             onClick={() => setMobileSidebarOpen(false)}
           />
-          <div className="relative flex-1 flex flex-col max-w-xs w-full bg-white z-10">
+          <div className="relative flex-1 flex flex-col max-w-xs w-full bg-[#0B0F19] z-10 border-r border-white/10">
             <div className="absolute top-0 right-0 -mr-12 pt-2">
               <button
                 onClick={() => setMobileSidebarOpen(false)}
-                className="ml-1 flex items-center justify-center h-10 w-10 rounded-full text-white focus:outline-none"
+                className="ml-1 flex items-center justify-center h-10 w-10 rounded-full text-slate-400 hover:text-white focus:outline-none"
               >
                 <X className="h-6 w-6" />
               </button>
@@ -73,40 +73,40 @@ const DashboardLayout = () => {
       {/* Main Content Area */}
       <div className="flex flex-col flex-1 w-0 overflow-hidden">
         {/* Compact Top Navigation */}
-        <header className="h-16 bg-white border-b border-[#E5E7EB] flex items-center justify-between px-4 sm:px-6 z-10">
+        <header className="h-16 bg-[#0B0F19]/90 backdrop-blur-md border-b border-white/[0.08] flex items-center justify-between px-4 sm:px-6 z-10">
           <div className="flex items-center gap-3">
             <button
               onClick={() => setMobileSidebarOpen(true)}
-              className="md:hidden p-2 text-[#6B7280] hover:text-[#17243A] hover:bg-[#F7F7F4] rounded-[5px]"
+              className="md:hidden p-2 text-slate-400 hover:text-white hover:bg-white/5 rounded-[6px]"
               aria-label="Open sidebar"
             >
               <Menu className="w-5 h-5" />
             </button>
             <Link to="/dashboard" className="md:hidden flex items-center">
-              <img src="/logo.png" alt="Code-a-Nova Logo" className="w-7 h-7 rounded-[5px] object-contain" />
+              <img src="/logo.png" alt="Code-a-Nova Logo" className="w-7 h-7 rounded-[6px] object-contain" />
             </Link>
-            <div className="flex items-center gap-2 text-xs text-[#6B7280]">
-              <Link to="/dashboard" className="hover:text-[#17243A]">
+            <div className="flex items-center gap-2 text-xs text-slate-400 font-mono">
+              <Link to="/dashboard" className="hover:text-cyan-400 transition-colors">
                 Portal
               </Link>
-              <span>/</span>
-              <span className="font-semibold text-[#17243A]">{getPageTitle()}</span>
+              <span className="text-slate-600">/</span>
+              <span className="font-semibold text-slate-200">{getPageTitle()}</span>
             </div>
           </div>
 
           <div className="flex items-center gap-4">
             <div className="hidden sm:flex flex-col text-right">
-              <span className="text-xs font-semibold text-[#17243A]">
+              <span className="text-xs font-semibold text-slate-200">
                 {user?.fullName}
               </span>
-              <span className="text-[11px] text-[#21845B] font-medium flex items-center gap-1 justify-end">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#21845B]" />
-                Account Verified
+              <span className="text-[11px] text-emerald-400 font-medium flex items-center gap-1 justify-end font-mono">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                Verified
               </span>
             </div>
             <Link
               to="/profile"
-              className="w-8 h-8 rounded-[4px] bg-[#17243A] text-white flex items-center justify-center font-display font-semibold text-xs uppercase hover:bg-[#243653] transition-colors"
+              className="w-9 h-9 rounded-[8px] bg-gradient-to-br from-cyan-500/20 to-blue-600/20 border border-cyan-500/40 text-cyan-300 flex items-center justify-center font-display font-bold text-xs uppercase hover:border-cyan-400 transition-colors shadow-[0_0_12px_rgba(56,189,248,0.2)]"
             >
               {user?.fullName ? user.fullName.slice(0, 2) : 'U'}
             </Link>
@@ -114,7 +114,7 @@ const DashboardLayout = () => {
         </header>
 
         {/* Scrollable Dashboard Body */}
-        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-tech-grid">
           <div className="max-w-6xl mx-auto">
             <Outlet />
           </div>
@@ -125,4 +125,3 @@ const DashboardLayout = () => {
 };
 
 export default DashboardLayout;
-

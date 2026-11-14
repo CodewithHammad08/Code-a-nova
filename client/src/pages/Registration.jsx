@@ -68,8 +68,6 @@ const Registration = () => {
     teamMembers: [], // [{ name: '', email: '' }]
   });
 
-  const [collegeSearch, setCollegeSearch] = useState('');
-  const [showCollegeDropdown, setShowCollegeDropdown] = useState(false);
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [alreadyRegistered, setAlreadyRegistered] = useState(false);
@@ -138,34 +136,34 @@ const Registration = () => {
     if (!url) return null;
     if (url.includes('github.com') || url.includes('gitlab.com')) {
       return (
-        <span className="inline-flex items-center gap-1 text-[11px] text-[#17243A] font-mono bg-[#F7F7F4] px-2 py-0.5 rounded border border-[#E5E7EB]">
-          <FolderGit2 className="w-3 h-3 text-[#17243A]" /> Repository
+        <span className="inline-flex items-center gap-1 text-[11px] text-cyan-300 font-mono bg-cyan-950/40 px-2 py-0.5 rounded border border-cyan-500/30">
+          <FolderGit2 className="w-3 h-3 text-cyan-400" /> Repository
         </span>
       );
     }
     if (url.includes('drive.google.com') || url.includes('onedrive') || url.includes('slides')) {
       return (
-        <span className="inline-flex items-center gap-1 text-[11px] text-blue-700 font-mono bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
-          <FileText className="w-3 h-3 text-blue-600" /> Slides / Deck
+        <span className="inline-flex items-center gap-1 text-[11px] text-blue-300 font-mono bg-blue-950/40 px-2 py-0.5 rounded border border-blue-500/30">
+          <FileText className="w-3 h-3 text-blue-400" /> Slides / Deck
         </span>
       );
     }
     if (url.includes('figma.com')) {
       return (
-        <span className="inline-flex items-center gap-1 text-[11px] text-purple-700 font-mono bg-purple-50 px-2 py-0.5 rounded border border-purple-200">
-          <Sparkles className="w-3 h-3 text-purple-600" /> Figma Design
+        <span className="inline-flex items-center gap-1 text-[11px] text-purple-300 font-mono bg-purple-950/40 px-2 py-0.5 rounded border border-purple-500/30">
+          <Sparkles className="w-3 h-3 text-purple-400" /> Figma Design
         </span>
       );
     }
     if (url.includes('youtube.com') || url.includes('youtu.be') || url.includes('loom.com')) {
       return (
-        <span className="inline-flex items-center gap-1 text-[11px] text-red-700 font-mono bg-red-50 px-2 py-0.5 rounded border border-red-200">
-          <Video className="w-3 h-3 text-red-600" /> Video Demo
+        <span className="inline-flex items-center gap-1 text-[11px] text-rose-300 font-mono bg-rose-950/40 px-2 py-0.5 rounded border border-rose-500/30">
+          <Video className="w-3 h-3 text-rose-400" /> Video Demo
         </span>
       );
     }
     return (
-      <span className="inline-flex items-center gap-1 text-[11px] text-[#6B7280] font-mono bg-[#F7F7F4] px-2 py-0.5 rounded border border-[#E5E7EB]">
+      <span className="inline-flex items-center gap-1 text-[11px] text-slate-300 font-mono bg-white/5 px-2 py-0.5 rounded border border-white/10">
         <Globe className="w-3 h-3" /> Web URL
       </span>
     );
@@ -174,17 +172,17 @@ const Registration = () => {
   const getTrackIcon = (id) => {
     switch (id) {
       case 'AI / Machine Learning':
-        return <Brain className="w-4 h-4 text-[#17243A]" />;
+        return <Brain className="w-4 h-4 text-cyan-400" />;
       case 'Web Development':
-        return <Globe className="w-4 h-4 text-[#17243A]" />;
+        return <Globe className="w-4 h-4 text-cyan-400" />;
       case 'Internet of Things':
-        return <Cpu className="w-4 h-4 text-[#17243A]" />;
+        return <Cpu className="w-4 h-4 text-cyan-400" />;
       case 'Cyber Security':
-        return <Shield className="w-4 h-4 text-[#17243A]" />;
+        return <Shield className="w-4 h-4 text-cyan-400" />;
       case 'Blockchain':
-        return <Layers className="w-4 h-4 text-[#17243A]" />;
+        return <Layers className="w-4 h-4 text-cyan-400" />;
       default:
-        return <FilePlus2 className="w-4 h-4 text-[#17243A]" />;
+        return <Sparkles className="w-4 h-4 text-cyan-400" />;
     }
   };
 
@@ -193,40 +191,43 @@ const Registration = () => {
 
     if (step === 1) {
       if (!formData.participantName.trim() || formData.participantName.trim().length < 3) {
-        errs.participantName = 'Participant name must be at least 3 characters';
+        errs.participantName = 'Full Name is required (minimum 3 characters)';
       }
-      if (!formData.mobileNumber || !/^[6-9]\d{9}$/.test(formData.mobileNumber.trim())) {
-        errs.mobileNumber = 'Must be a valid 10-digit Indian mobile number';
+      if (!formData.mobileNumber.trim() || !/^[6-9]\d{9}$/.test(formData.mobileNumber.trim())) {
+        errs.mobileNumber = 'Enter a valid 10-digit Indian mobile number';
       }
-      const effectiveCollege =
-        formData.collegeName === 'Other / Custom College'
-          ? formData.customCollege.trim()
-          : formData.collegeName.trim();
-
-      if (!effectiveCollege) {
-        errs.collegeName = 'Please select or specify your college/institution';
+      if (!formData.collegeName) {
+        errs.collegeName = 'Please select your institution';
+      } else if (
+        formData.collegeName === 'Other / Custom College' &&
+        (!formData.customCollege.trim() || formData.customCollege.trim().length < 3)
+      ) {
+        errs.collegeName = 'Please enter your institution name';
       }
-      if (!formData.course) errs.course = 'Please select your degree/course';
-      if (!formData.branch) errs.branch = 'Please select your branch';
-      if (!formData.yearOfStudy) errs.yearOfStudy = 'Please select year of study';
+      if (!formData.course) errs.course = 'Course is required';
+      if (!formData.branch) errs.branch = 'Branch is required';
+      if (!formData.yearOfStudy) errs.yearOfStudy = 'Year of study is required';
     }
 
     if (step === 2) {
-      if (!formData.domain) errs.domain = 'Please choose a hackathon track';
+      if (!formData.domain) {
+        errs.domain = 'Please choose a competition track';
+      }
       if (!formData.projectName.trim() || formData.projectName.trim().length < 5) {
-        errs.projectName = 'Project name must be at least 5 characters long';
+        errs.projectName = 'Project title is required (at least 5 characters)';
       }
       if (!formData.pptLink.trim() || !/^https?:\/\//i.test(formData.pptLink.trim())) {
-        errs.pptLink = 'Must be a valid HTTP or HTTPS presentation link';
+        errs.pptLink = 'Valid presentation URL required (http:// or https://)';
       }
       if (!formData.prototypeLink.trim() || !/^https?:\/\//i.test(formData.prototypeLink.trim())) {
-        errs.prototypeLink = 'Must be a valid HTTP or HTTPS repository or prototype link';
+        errs.prototypeLink = 'Valid prototype / code repository URL required';
       }
       if (
+        formData.demoVideoLink &&
         formData.demoVideoLink.trim() &&
         !/^https?:\/\//i.test(formData.demoVideoLink.trim())
       ) {
-        errs.demoVideoLink = 'Demo video link must be a valid HTTP or HTTPS URL';
+        errs.demoVideoLink = 'Demo video link must be a valid URL';
       }
     }
 
@@ -298,12 +299,6 @@ const Registration = () => {
     } catch (err) {
       const msg = err.response?.data?.message || 'Submission failed. Please check your data.';
       toast.error(msg);
-      if (err.response?.status === 409) {
-        setAlreadyRegistered(true);
-        if (err.response.data?.existingRegistrationId) {
-          setExistingRegId(err.response.data.existingRegistrationId);
-        }
-      }
     } finally {
       setIsSubmitting(false);
     }
@@ -311,7 +306,7 @@ const Registration = () => {
 
   if (checkingExisting) {
     return (
-      <div className="max-w-3xl mx-auto py-16 text-center text-xs text-[#6B7280]">
+      <div className="max-w-3xl mx-auto py-16 text-center text-xs text-slate-400 font-mono">
         Verifying participant status...
       </div>
     );
@@ -320,16 +315,16 @@ const Registration = () => {
   if (alreadyRegistered) {
     return (
       <div className="max-w-2xl mx-auto py-12">
-        <Card className="text-center p-8 space-y-4 shadow-md border-[#E5E7EB]">
-          <div className="w-12 h-12 bg-[#21845B]/10 rounded-full flex items-center justify-center mx-auto text-[#21845B]">
+        <Card className="text-center p-8 space-y-4 shadow-2xl border-white/10 bg-[#0F172A]/90">
+          <div className="w-12 h-12 bg-emerald-500/10 border border-emerald-500/30 rounded-full flex items-center justify-center mx-auto text-emerald-400">
             <CheckCircle2 className="w-6 h-6" />
           </div>
-          <h2 className="text-2xl font-extrabold text-[#17243A] font-display">
+          <h2 className="text-2xl font-extrabold text-white font-display">
             Registration Already Submitted
           </h2>
-          <p className="text-xs text-[#6B7280] max-w-md mx-auto leading-relaxed">
+          <p className="text-xs text-slate-400 max-w-md mx-auto leading-relaxed">
             You have already registered for Code-a-Nova under this participant account (Reference ID:{' '}
-            <strong className="text-[#17243A] font-mono">{existingRegId}</strong>). Only one submission per candidate is permitted in the MVP.
+            <strong className="text-cyan-400 font-mono">{existingRegId}</strong>). Only one submission per candidate is permitted in the MVP.
           </p>
           <div className="pt-2 flex justify-center gap-3">
             <Link to="/my-registration">
@@ -358,34 +353,34 @@ const Registration = () => {
   const progressPercent = ((currentStep - 1) / 3) * 100;
 
   return (
-    <div className="max-w-4xl mx-auto py-4 space-y-6">
+    <div className="max-w-4xl mx-auto py-4 space-y-6 text-slate-100">
       {/* Header with Step Progress */}
       <div className="space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#E5E7EB] pb-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/10 pb-4">
           <div className="flex items-center gap-3">
             <img
               src="/logo.png"
               alt="Code-a-Nova Logo"
-              className="w-10 h-10 rounded-[6px] object-contain shadow-sm shrink-0"
+              className="w-10 h-10 rounded-[8px] object-contain shadow-[0_0_15px_rgba(56,189,248,0.25)] shrink-0"
             />
             <div>
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-[#17243A] tracking-tight font-display">
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight font-display">
                 Hackathon Registration
               </h1>
-              <p className="text-xs text-[#6B7280]">
+              <p className="text-xs text-slate-400">
                 Official submission entry &bull; Code-a-Nova National Hackathon 2026-27
               </p>
             </div>
           </div>
-          <div className="text-xs font-mono font-bold text-[#D6A64F] uppercase tracking-wider">
+          <div className="text-xs font-mono font-bold text-cyan-400 uppercase tracking-wider">
             Step {currentStep} of 4 ({Math.round(progressPercent)}% Complete)
           </div>
         </div>
 
         {/* Dynamic Progress Indicator Bar */}
-        <div className="w-full bg-[#E5E7EB] h-1.5 rounded-full overflow-hidden">
+        <div className="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
           <div
-            className="bg-[#17243A] h-full transition-all duration-300"
+            className="bg-gradient-to-r from-cyan-500 to-blue-500 h-full transition-all duration-300"
             style={{ width: `${progressPercent === 0 ? 8 : progressPercent}%` }}
           />
         </div>
@@ -400,10 +395,10 @@ const Registration = () => {
                 key={step.num}
                 className={`border-t-2 pt-2 text-xs font-semibold transition-colors ${
                   isCurrent
-                    ? 'border-[#17243A] text-[#17243A]'
+                    ? 'border-cyan-400 text-cyan-300'
                     : isCompleted
-                    ? 'border-[#21845B] text-[#21845B]'
-                    : 'border-[#E5E7EB] text-[#9CA3AF]'
+                    ? 'border-emerald-400 text-emerald-400'
+                    : 'border-white/10 text-slate-500'
                 }`}
               >
                 <div className="text-[10px] uppercase tracking-wider font-mono">
@@ -417,15 +412,15 @@ const Registration = () => {
       </div>
 
       {/* Main Form Body */}
-      <Card className="shadow-sm">
+      <Card className="shadow-2xl bg-[#0F172A]/90 border-white/10">
         {/* STEP 1: PARTICIPANT INFORMATION */}
         {currentStep === 1 && (
           <div className="space-y-6">
-            <div className="border-b border-[#F7F7F4] pb-3">
-              <h3 className="text-base font-bold text-[#17243A] font-display">
+            <div className="border-b border-white/[0.08] pb-3">
+              <h3 className="text-base font-bold text-white font-display">
                 Section 1: Team Leader &amp; Institution Details
               </h3>
-              <p className="text-xs text-[#6B7280]">
+              <p className="text-xs text-slate-400">
                 You are registered as the designated team leader. Your verified email will receive official confirmation receipts.
               </p>
             </div>
@@ -521,19 +516,19 @@ const Registration = () => {
         {/* STEP 2: PROJECT & DELIVERABLES */}
         {currentStep === 2 && (
           <div className="space-y-6">
-            <div className="border-b border-[#F7F7F4] pb-3">
-              <h3 className="text-base font-bold text-[#17243A] font-display">
+            <div className="border-b border-white/[0.08] pb-3">
+              <h3 className="text-base font-bold text-white font-display">
                 Section 2: Competition Track &amp; Artifacts
               </h3>
-              <p className="text-xs text-[#6B7280]">
+              <p className="text-xs text-slate-400">
                 Choose your track and supply verified links to your design deck and repository prototype.
               </p>
             </div>
 
             {/* Track Selector Buttons */}
             <div className="space-y-2">
-              <label className="block text-xs font-semibold uppercase tracking-wider text-[#17243A] mb-1.5 font-mono">
-                Select Track <span className="text-[#C44545]">*</span>
+              <label className="block text-xs font-semibold uppercase tracking-wider text-cyan-400 mb-1.5 font-mono">
+                Select Track <span className="text-rose-400">*</span>
               </label>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
                 {DOMAINS.map((domain) => {
@@ -543,30 +538,26 @@ const Registration = () => {
                       key={domain.id}
                       type="button"
                       onClick={() => setFormData({ ...formData, domain: domain.id })}
-                      className={`p-3 text-left rounded-[5px] border transition-all flex items-start gap-2.5 ${
+                      className={`p-3 text-left rounded-[8px] border transition-all flex items-start gap-2.5 cursor-pointer ${
                         isSelected
-                          ? 'bg-[#17243A] text-white border-[#17243A] shadow-sm'
-                          : 'bg-white text-[#20242B] border-[#E5E7EB] hover:border-[#17243A]/40'
+                          ? 'bg-gradient-to-r from-cyan-950/80 to-slate-900 text-white border-cyan-500/60 shadow-[0_0_15px_rgba(56,189,248,0.2)]'
+                          : 'bg-[#0B0F19] text-slate-300 border-white/10 hover:border-white/20'
                       }`}
                     >
                       <div
-                        className={`p-1.5 rounded-[3px] border ${
+                        className={`p-1.5 rounded-[4px] border ${
                           isSelected
-                            ? 'bg-white/10 border-white/20 text-[#D6A64F]'
-                            : 'bg-[#F7F7F4] border-[#E5E7EB] text-[#17243A]'
+                            ? 'bg-cyan-500/20 border-cyan-500/40 text-cyan-300'
+                            : 'bg-white/[0.04] border-white/10 text-cyan-400'
                         }`}
                       >
                         {getTrackIcon(domain.id)}
                       </div>
                       <div className="min-w-0">
-                        <div className="text-xs font-bold font-display truncate">
+                        <div className="text-xs font-bold font-display truncate text-white">
                           {domain.title}
                         </div>
-                        <div
-                          className={`text-[10px] truncate ${
-                            isSelected ? 'text-[#D1D5DB]' : 'text-[#6B7280]'
-                          }`}
-                        >
+                        <div className="text-[10px] truncate text-slate-400">
                           {domain.shortDesc}
                         </div>
                       </div>
@@ -575,7 +566,7 @@ const Registration = () => {
                 })}
               </div>
               {errors.domain && (
-                <p className="text-xs text-[#C44545] font-medium">{errors.domain}</p>
+                <p className="text-xs text-rose-400 font-medium">{errors.domain}</p>
               )}
             </div>
 
@@ -655,18 +646,18 @@ const Registration = () => {
         {/* STEP 3: DYNAMIC TEAM CONFIGURATION */}
         {currentStep === 3 && (
           <div className="space-y-6">
-            <div className="border-b border-[#F7F7F4] pb-3">
-              <h3 className="text-base font-bold text-[#17243A] font-display">
+            <div className="border-b border-white/[0.08] pb-3">
+              <h3 className="text-base font-bold text-white font-display">
                 Section 3: Team Configuration &amp; Member Slots
               </h3>
-              <p className="text-xs text-[#6B7280]">
+              <p className="text-xs text-slate-400">
                 Select your total team size (1 to 5, including leader). Additional member fields are generated dynamically.
               </p>
             </div>
 
             {/* Team Size Selector Cards */}
-            <div className="bg-[#F7F7F4] border border-[#E5E7EB] rounded-[6px] p-4 space-y-3">
-              <label className="block text-xs font-semibold uppercase tracking-wider text-[#17243A] font-mono">
+            <div className="bg-[#0B0F19] border border-white/10 rounded-[8px] p-4 space-y-3">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-cyan-400 font-mono">
                 Total Team Size (Including Leader)
               </label>
               <div className="grid grid-cols-5 gap-2">
@@ -681,16 +672,16 @@ const Registration = () => {
                     key={item.size}
                     type="button"
                     onClick={() => handleTeamSizeChange(item.size)}
-                    className={`py-2 px-2 sm:px-3 text-center rounded-[5px] border transition-all ${
+                    className={`py-2 px-2 sm:px-3 text-center rounded-[6px] border transition-all cursor-pointer ${
                       formData.teamSize === item.size
-                        ? 'bg-[#17243A] text-white border-[#17243A] shadow-sm'
-                        : 'bg-white text-[#20242B] border-[#E5E7EB] hover:border-[#D1D5DB]'
+                        ? 'bg-gradient-to-r from-cyan-950/80 to-slate-900 text-cyan-300 border-cyan-500/60 shadow-[0_0_15px_rgba(56,189,248,0.2)]'
+                        : 'bg-[#0F172A] text-slate-300 border-white/10 hover:border-white/20'
                     }`}
                   >
                     <div className="font-mono font-bold text-sm sm:text-base">
                       {item.size}
                     </div>
-                    <div className="text-[10px] uppercase tracking-wider font-semibold opacity-80">
+                    <div className="text-[10px] uppercase tracking-wider font-semibold opacity-80 font-mono">
                       {item.label}
                     </div>
                   </button>
@@ -699,33 +690,33 @@ const Registration = () => {
             </div>
 
             {/* Team Leader Banner */}
-            <div className="p-3.5 bg-white border border-[#E5E7EB] rounded-[5px] flex items-center justify-between">
+            <div className="p-3.5 bg-[#0B0F19] border border-white/10 rounded-[8px] flex items-center justify-between">
               <div>
-                <div className="text-xs font-bold text-[#17243A] flex items-center gap-2">
+                <div className="text-xs font-bold text-white flex items-center gap-2">
                   <span>1. {formData.participantName}</span>
-                  <span className="text-[10px] bg-[#17243A] text-white px-1.5 py-0.5 rounded-[3px] font-bold uppercase font-mono">
+                  <span className="text-[10px] bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 px-2 py-0.5 rounded-[4px] font-bold uppercase font-mono">
                     Team Leader
                   </span>
                 </div>
-                <div className="text-[11px] text-[#6B7280] font-mono">{formData.email}</div>
+                <div className="text-[11px] text-slate-400 font-mono mt-0.5">{formData.email}</div>
               </div>
-              <span className="text-xs text-[#21845B] font-semibold">Self &bull; Lead</span>
+              <span className="text-xs text-emerald-400 font-semibold font-mono">Self &bull; Lead</span>
             </div>
 
             {/* Dynamic Member Inputs */}
             {formData.teamSize > 1 ? (
               <div className="space-y-4 pt-2">
-                <div className="text-xs font-bold uppercase tracking-wider text-[#17243A] font-mono">
+                <div className="text-xs font-bold uppercase tracking-wider text-cyan-400 font-mono">
                   Additional Team Members ({formData.teamSize - 1} required):
                 </div>
 
                 {formData.teamMembers.map((member, index) => (
                   <div
                     key={index}
-                    className="p-4 bg-white border border-[#E5E7EB] rounded-[6px] space-y-3"
+                    className="p-4 bg-[#0B0F19] border border-white/10 rounded-[8px] space-y-3"
                   >
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold text-[#17243A] uppercase tracking-wider font-mono">
+                      <span className="text-xs font-bold text-cyan-300 uppercase tracking-wider font-mono">
                         Team Member #{index + 2}
                       </span>
                     </div>
@@ -757,7 +748,7 @@ const Registration = () => {
                 ))}
               </div>
             ) : (
-              <div className="p-4 bg-[#FAFAFA] border border-[#E5E7EB] rounded-[5px] text-xs text-[#6B7280] text-center">
+              <div className="p-4 bg-[#0B0F19] border border-white/10 rounded-[8px] text-xs text-slate-400 text-center">
                 Solo registration selected. No additional member slots required.
               </div>
             )}
@@ -767,51 +758,51 @@ const Registration = () => {
         {/* STEP 4: REVIEW & CONFIRMATION DOCKET */}
         {currentStep === 4 && (
           <div className="space-y-6">
-            <div className="border-b border-[#F7F7F4] pb-3">
-              <h3 className="text-base font-bold text-[#17243A] font-display">
+            <div className="border-b border-white/[0.08] pb-3">
+              <h3 className="text-base font-bold text-white font-display">
                 Section 4: Official Registration Docket Review
               </h3>
-              <p className="text-xs text-[#6B7280]">
+              <p className="text-xs text-slate-400">
                 Carefully review all submitted information before finalizing your entry. Once submitted, your registration reference ID will be generated.
               </p>
             </div>
 
             <div className="space-y-4 text-xs">
               {/* Leader & Academic */}
-              <div className="bg-[#F7F7F4] p-4 rounded-[6px] border border-[#E5E7EB] space-y-2">
-                <div className="font-bold text-[#17243A] text-sm uppercase tracking-wider font-mono">
+              <div className="bg-[#0B0F19] p-4 rounded-[8px] border border-white/10 space-y-2">
+                <div className="font-bold text-cyan-400 text-sm uppercase tracking-wider font-mono">
                   Leader &amp; Academic Credentials
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   <div>
-                    <span className="text-[#6B7280]">Leader Name:</span>{' '}
-                    <span className="font-semibold text-[#17243A]">
+                    <span className="text-slate-400">Leader Name:</span>{' '}
+                    <span className="font-semibold text-white">
                       {formData.participantName}
                     </span>
                   </div>
                   <div>
-                    <span className="text-[#6B7280]">Email:</span>{' '}
-                    <span className="font-semibold text-[#17243A] font-mono">
+                    <span className="text-slate-400">Email:</span>{' '}
+                    <span className="font-semibold text-cyan-300 font-mono">
                       {formData.email}
                     </span>
                   </div>
                   <div>
-                    <span className="text-[#6B7280]">Mobile:</span>{' '}
-                    <span className="font-semibold text-[#17243A] font-mono">
+                    <span className="text-slate-400">Mobile:</span>{' '}
+                    <span className="font-semibold text-white font-mono">
                       +91 {formData.mobileNumber}
                     </span>
                   </div>
                   <div>
-                    <span className="text-[#6B7280]">Institution:</span>{' '}
-                    <span className="font-semibold text-[#17243A]">
+                    <span className="text-slate-400">Institution:</span>{' '}
+                    <span className="font-semibold text-white">
                       {formData.collegeName === 'Other / Custom College'
                         ? formData.customCollege
                         : formData.collegeName}
                     </span>
                   </div>
                   <div>
-                    <span className="text-[#6B7280]">Degree &amp; Branch:</span>{' '}
-                    <span className="font-semibold text-[#17243A]">
+                    <span className="text-slate-400">Degree &amp; Branch:</span>{' '}
+                    <span className="font-semibold text-white">
                       {formData.course} ({formData.branch}) &bull; {formData.yearOfStudy}
                     </span>
                   </div>
@@ -819,39 +810,39 @@ const Registration = () => {
               </div>
 
               {/* Project & Track */}
-              <div className="bg-[#F7F7F4] p-4 rounded-[6px] border border-[#E5E7EB] space-y-2">
-                <div className="font-bold text-[#17243A] text-sm uppercase tracking-wider font-mono">
+              <div className="bg-[#0B0F19] p-4 rounded-[8px] border border-white/10 space-y-2">
+                <div className="font-bold text-cyan-400 text-sm uppercase tracking-wider font-mono">
                   Project Submission Deliverables
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   <div>
-                    <span className="text-[#6B7280]">Domain / Track:</span>{' '}
-                    <span className="font-bold text-[#17243A]">{formData.domain}</span>
+                    <span className="text-slate-400">Domain / Track:</span>{' '}
+                    <span className="font-bold text-white">{formData.domain}</span>
                   </div>
                   <div>
-                    <span className="text-[#6B7280]">Project Name:</span>{' '}
-                    <span className="font-semibold text-[#17243A]">
+                    <span className="text-slate-400">Project Name:</span>{' '}
+                    <span className="font-semibold text-white">
                       {formData.projectName}
                     </span>
                   </div>
                   <div className="sm:col-span-2">
-                    <span className="text-[#6B7280]">Presentation Link:</span>{' '}
+                    <span className="text-slate-400">Presentation Link:</span>{' '}
                     <a
                       href={formData.pptLink}
                       target="_blank"
                       rel="noreferrer"
-                      className="text-[#17243A] font-semibold underline truncate inline-block max-w-md ml-1"
+                      className="text-cyan-400 hover:text-cyan-300 font-semibold underline truncate inline-block max-w-md ml-1"
                     >
                       {formData.pptLink}
                     </a>
                   </div>
                   <div className="sm:col-span-2">
-                    <span className="text-[#6B7280]">Prototype Link:</span>{' '}
+                    <span className="text-slate-400">Prototype Link:</span>{' '}
                     <a
                       href={formData.prototypeLink}
                       target="_blank"
                       rel="noreferrer"
-                      className="text-[#17243A] font-semibold underline truncate inline-block max-w-md ml-1"
+                      className="text-cyan-400 hover:text-cyan-300 font-semibold underline truncate inline-block max-w-md ml-1"
                     >
                       {formData.prototypeLink}
                     </a>
@@ -860,16 +851,16 @@ const Registration = () => {
               </div>
 
               {/* Team Roster */}
-              <div className="bg-[#F7F7F4] p-4 rounded-[6px] border border-[#E5E7EB] space-y-2">
-                <div className="font-bold text-[#17243A] text-sm uppercase tracking-wider font-mono">
+              <div className="bg-[#0B0F19] p-4 rounded-[8px] border border-white/10 space-y-2">
+                <div className="font-bold text-cyan-400 text-sm uppercase tracking-wider font-mono">
                   Team Members Roster ({formData.teamSize})
                 </div>
                 <div className="space-y-1">
-                  <div className="font-semibold text-[#17243A]">
+                  <div className="font-semibold text-white">
                     1. {formData.participantName} ({formData.email}) - Team Leader
                   </div>
                   {formData.teamMembers.map((m, i) => (
-                    <div key={i} className="text-[#4B5563]">
+                    <div key={i} className="text-slate-300">
                       {i + 2}. {m.name} ({m.email})
                     </div>
                   ))}
@@ -878,14 +869,14 @@ const Registration = () => {
 
               {/* Truth Certification Checkbox */}
               <div className="pt-2">
-                <label className="flex items-start gap-2.5 p-3 bg-white border border-[#E5E7EB] rounded-[5px] cursor-pointer hover:bg-[#F7F7F4]">
+                <label className="flex items-start gap-2.5 p-3.5 bg-[#0B0F19] border border-white/10 rounded-[8px] cursor-pointer hover:border-cyan-500/40 transition-colors">
                   <input
                     type="checkbox"
                     checked={certifiedTruth}
                     onChange={(e) => setCertifiedTruth(e.target.checked)}
-                    className="mt-0.5 rounded-[3px] text-[#17243A] focus:ring-[#17243A]"
+                    className="mt-0.5 rounded text-cyan-500 focus:ring-cyan-500/30"
                   />
-                  <span className="text-xs text-[#4B5563]">
+                  <span className="text-xs text-slate-300">
                     I confirm that the submitted project details, participant names, and deliverable links are authentic, original, and comply with Code-a-Nova rules.
                   </span>
                 </label>
@@ -895,7 +886,7 @@ const Registration = () => {
         )}
 
         {/* Wizard Controls */}
-        <div className="mt-8 border-t border-[#E5E7EB] pt-4 flex items-center justify-between">
+        <div className="mt-8 border-t border-white/[0.08] pt-4 flex items-center justify-between">
           {currentStep > 1 ? (
             <Button variant="secondary" onClick={prevStep} size="sm" className="gap-1.5">
               <ArrowLeft className="w-3.5 h-3.5" />
@@ -906,7 +897,7 @@ const Registration = () => {
           )}
 
           {currentStep < 4 ? (
-            <Button variant="primary" onClick={nextStep} size="sm" className="gap-1.5 font-bold">
+            <Button variant="primary" onClick={nextStep} size="sm" className="gap-1.5 font-bold shadow-[0_0_15px_rgba(56,189,248,0.25)]">
               Next Section
               <ArrowRight className="w-3.5 h-3.5" />
             </Button>
@@ -917,7 +908,7 @@ const Registration = () => {
               isLoading={isSubmitting}
               size="md"
               disabled={!certifiedTruth}
-              className="gap-2 bg-[#21845B] hover:bg-[#1b6b49] font-bold"
+              className="gap-2 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-bold shadow-[0_0_20px_rgba(16,185,129,0.3)]"
             >
               <CheckCircle2 className="w-4 h-4" />
               Confirm &amp; Submit Registration

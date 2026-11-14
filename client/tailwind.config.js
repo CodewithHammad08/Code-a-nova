@@ -18,24 +18,28 @@ export default {
       /* ── Brand colours ─────────────────────────────────────── */
       colors: {
         brand: {
-          primary: '#17243A',
-          hover:   '#243653',
-          bg:      '#F7F7F4',
-          surface: '#FFFFFF',
-          text:    '#20242B',
-          muted:   '#6B7280',
-          border:  '#E5E7EB',
-          accent:  '#D6A64F',
-          success: '#21845B',
-          error:   '#C44545',
+          primary: '#0F172A',
+          hover:   '#1E293B',
+          bg:      '#080C14',
+          surface: '#0F172A',
+          surfaceLight: '#1E293B',
+          text:    '#F8FAFC',
+          muted:   '#94A3B8',
+          border:  'rgba(255, 255, 255, 0.08)',
+          accent:  '#38BDF8',
+          accentGlow: 'rgba(56, 189, 248, 0.25)',
+          gold:    '#F59E0B',
+          indigo:  '#6366F1',
+          success: '#10B981',
+          error:   '#EF4444',
         },
       },
 
       /* ── Font families ─────────────────────────────────────── */
       fontFamily: {
-        sans:    ['Inter',    'system-ui', '-apple-system', 'sans-serif'],
-        display: ['Manrope',  'Inter',     'system-ui',     'sans-serif'],
-        mono:    ['"JetBrains Mono"', '"Fira Code"', '"Cascadia Code"', 'monospace'],
+        sans:    ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        display: ['"Space Grotesk"', 'Manrope', 'Inter', 'sans-serif'],
+        mono:    ['"JetBrains Mono"', '"Fira Code"', 'monospace'],
       },
 
       /* ── Typography scale ──────────────────────────────────── */
@@ -175,6 +179,10 @@ export default {
           '0%':   { backgroundPosition: '-200% 0' },
           '100%': { backgroundPosition: '200% 0' },
         },
+        marquee: {
+          '0%':   { transform: 'translateX(0%)' },
+          '100%': { transform: 'translateX(-50%)' },
+        },
       },
 
       /* ── Animation utilities ───────────────────────────────── */
@@ -186,6 +194,7 @@ export default {
         'skeleton':     'skeletonPulse 1.6s ease-in-out infinite',
         'badge-pulse':  'badgePulse 2s cubic-bezier(0.4,0,0.6,1) infinite',
         'shimmer':      'shimmer 2s linear infinite',
+        'marquee':      'marquee 24s linear infinite',
         /* speed variants */
         'fadeIn-fast':  'fadeIn 0.2s ease both',
         'slideUp-slow': 'slideUp 0.6s ease both',

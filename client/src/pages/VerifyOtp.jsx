@@ -77,26 +77,25 @@ const VerifyOtp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const fullOtp = otp.join('');
-
-    if (fullOtp.length !== 6) {
-      toast.error('Please enter all 6 digits of your OTP.');
+    const code = otp.join('');
+    if (code.length !== 6) {
+      toast.error('Please enter the full 6-digit verification code.');
       return;
     }
 
     if (!email) {
-      toast.error('Email address is missing. Please re-enter your email.');
+      toast.error('Email address required.');
       return;
     }
 
     setIsVerifying(true);
     try {
-      const res = await verifyOtp({ email, otp: fullOtp });
+      await verifyOtp({ email, otp: code });
       setIsSuccess(true);
-      toast.success(res?.message || 'Email verified successfully! You can now log in.');
+      toast.success('Email verified successfully! You may now sign in.');
       setTimeout(() => {
-        navigate('/login');
-      }, 1500);
+        navigate('/login', { replace: true });
+      }, 2000);
     } catch (err) {
       const msg = err.response?.data?.message || 'Invalid or expired OTP. Please try again.';
       toast.error(msg);
@@ -129,10 +128,10 @@ const VerifyOtp = () => {
   };
 
   return (
-    <div className="relative min-h-[calc(100vh-4rem)] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-tech-dots overflow-hidden">
+    <div className="relative min-h-[calc(100vh-4rem)] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-[#080C14] bg-tech-dots overflow-hidden">
       {/* Ambient background glows */}
-      <div className="ambient-glow-navy -top-20 -left-20 opacity-50" />
-      <div className="ambient-glow-gold -bottom-20 -right-20 opacity-40" />
+      <div className="ambient-glow-navy -top-20 -left-20 opacity-60" />
+      <div className="ambient-glow-cyan -bottom-20 -right-20 opacity-50" />
 
       <div className="relative w-full max-w-md space-y-6">
         <div className="text-center space-y-2">
@@ -140,28 +139,28 @@ const VerifyOtp = () => {
             <img
               src="/logo.png"
               alt="Code-a-Nova Logo"
-              className="w-14 h-14 rounded-[10px] object-contain mx-auto shadow-md group-hover:scale-105 transition-transform"
+              className="w-14 h-14 rounded-[10px] object-contain mx-auto shadow-[0_0_20px_rgba(56,189,248,0.3)] group-hover:scale-105 transition-transform"
             />
           </Link>
-          <h1 className="text-2xl font-extrabold text-[#17243A] tracking-tight font-display">
+          <h1 className="text-2xl font-extrabold text-white tracking-tight font-display">
             Verify Your Email Address
           </h1>
-          <p className="text-xs text-[#6B7280]">
+          <p className="text-xs text-slate-400">
             We dispatched a 6-digit confirmation code to{' '}
-            <strong className="text-[#17243A] font-semibold">
+            <strong className="text-cyan-300 font-mono">
               {email || 'your email'}
             </strong>
           </p>
         </div>
 
-        <Card className="shadow-lg border-[#E5E7EB] bg-white/95 backdrop-blur-md">
+        <Card className="shadow-2xl border-white/10 bg-[#0F172A]/90 backdrop-blur-md">
           {isSuccess ? (
             <div className="py-8 text-center space-y-4">
-              <div className="w-12 h-12 bg-[#21845B]/10 rounded-full flex items-center justify-center mx-auto text-[#21845B]">
+              <div className="w-12 h-12 bg-emerald-500/10 border border-emerald-500/30 rounded-full flex items-center justify-center mx-auto text-emerald-400">
                 <CheckCircle2 className="w-6 h-6" />
               </div>
-              <h3 className="text-lg font-bold text-[#17243A]">Verification Confirmed!</h3>
-              <p className="text-xs text-[#6B7280]">
+              <h3 className="text-lg font-bold text-white font-display">Verification Confirmed!</h3>
+              <p className="text-xs text-slate-400">
                 Your account is now activated. Redirecting you to login...
               </p>
               <Link to="/login">
@@ -175,7 +174,7 @@ const VerifyOtp = () => {
             <form onSubmit={handleSubmit} className="space-y-6">
               {!emailParam && (
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-[#17243A] mb-1.5">
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5 font-mono">
                     Confirm Email Address
                   </label>
                   <input
@@ -184,14 +183,14 @@ const VerifyOtp = () => {
                     onChange={(e) => setEmail(e.target.value)}
                     required
                     placeholder="Enter the registered email"
-                    className="w-full rounded-[5px] border border-[#E5E7EB] px-3.5 py-2 text-sm text-[#20242B]"
+                    className="w-full rounded-[6px] border border-white/10 px-3.5 py-2.5 text-sm text-white bg-[#0B0F19] focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-500/30"
                   />
                 </div>
               )}
 
               {/* 6 Individual OTP inputs */}
-              <div className="space-y-2">
-                <label className="block text-center text-xs font-semibold uppercase tracking-wider text-[#17243A]">
+              <div className="space-y-2.5">
+                <label className="block text-center text-xs font-semibold uppercase tracking-wider text-cyan-400 font-mono">
                   Enter 6-Digit Code
                 </label>
                 <div className="flex justify-center gap-2 sm:gap-3" onPaste={handlePaste}>
@@ -206,23 +205,23 @@ const VerifyOtp = () => {
                       onChange={(e) => handleOtpChange(index, e.target.value)}
                       onKeyDown={(e) => handleKeyDown(index, e)}
                       autoFocus={index === 0}
-                      className="w-11 h-12 sm:w-12 sm:h-14 text-center font-mono font-bold text-lg sm:text-xl text-[#17243A] bg-white border border-[#E5E7EB] rounded-[5px] focus:outline-none focus:ring-2 focus:ring-[#17243A] focus:border-[#17243A] transition-colors"
+                      className="w-11 h-12 sm:w-12 sm:h-14 text-center font-mono font-bold text-lg sm:text-xl text-white bg-[#0B0F19] border border-white/10 rounded-[8px] focus:outline-none focus:ring-2 focus:ring-cyan-500/30 focus:border-cyan-400 transition-all shadow-inner"
                     />
                   ))}
                 </div>
               </div>
 
               {/* Expiry Notice */}
-              <div className="text-center text-xs text-[#6B7280]">
+              <div className="text-center text-xs text-slate-400">
                 {expirySeconds > 0 ? (
                   <span>
                     Code expires in{' '}
-                    <strong className="text-[#17243A] font-mono">
+                    <strong className="text-amber-300 font-mono">
                       {formatTime(expirySeconds)}
                     </strong>
                   </span>
                 ) : (
-                  <span className="text-[#C44545] font-semibold">
+                  <span className="text-rose-400 font-semibold font-mono">
                     Code expired. Please request a new code.
                   </span>
                 )}
@@ -234,19 +233,19 @@ const VerifyOtp = () => {
                 size="md"
                 isLoading={isVerifying}
                 disabled={otp.join('').length !== 6 || expirySeconds === 0}
-                className="w-full"
+                className="w-full font-bold shadow-[0_0_20px_rgba(56,189,248,0.3)]"
               >
-                Verify & Activate Account
+                Verify &amp; Activate Account
               </Button>
 
               {/* Resend OTP */}
-              <div className="border-t border-[#E5E7EB] pt-4 flex items-center justify-between text-xs">
-                <span className="text-[#6B7280]">Didn't receive the email?</span>
+              <div className="border-t border-white/[0.08] pt-4 flex items-center justify-between text-xs">
+                <span className="text-slate-400">Didn't receive the email?</span>
                 <button
                   type="button"
                   onClick={handleResend}
                   disabled={cooldownSeconds > 0 || isResending}
-                  className="font-semibold text-[#17243A] hover:underline disabled:text-[#9CA3AF] disabled:no-underline inline-flex items-center gap-1 cursor-pointer"
+                  className="font-semibold text-cyan-400 hover:text-cyan-300 disabled:text-slate-600 disabled:no-underline inline-flex items-center gap-1.5 cursor-pointer font-mono"
                 >
                   <RotateCw className={`w-3.5 h-3.5 ${isResending ? 'animate-spin' : ''}`} />
                   {cooldownSeconds > 0
@@ -255,15 +254,15 @@ const VerifyOtp = () => {
                 </button>
               </div>
 
-              <div className="bg-[#F7F7F4] p-2.5 rounded-[4px] border border-[#E5E7EB] text-[11px] text-[#6B7280] text-center leading-normal">
-                Local testing: check server terminal logs for the code, or configure real Gmail credentials in <code className="font-mono text-[#17243A]">server/.env</code>.
+              <div className="bg-[#0B0F19] p-3 rounded-[6px] border border-white/10 text-[11px] text-slate-400 text-center leading-normal">
+                Check your inbox (or spam folder) for the 6-digit verification code.
               </div>
             </form>
           )}
         </Card>
 
         <div className="text-center">
-          <Link to="/login" className="text-xs text-[#6B7280] hover:text-[#17243A] underline">
+          <Link to="/login" className="text-xs text-slate-400 hover:text-cyan-300 underline font-mono">
             Back to Sign In
           </Link>
         </div>
@@ -273,4 +272,3 @@ const VerifyOtp = () => {
 };
 
 export default VerifyOtp;
-

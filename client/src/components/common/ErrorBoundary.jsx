@@ -28,24 +28,24 @@ class ErrorBoundary extends React.Component {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen bg-[#F7F7F4] flex items-center justify-center p-6 text-[#20242B]">
-          <div className="max-w-md w-full bg-white border border-[#E5E7EB] rounded-[8px] p-8 shadow-md text-center space-y-5">
-            <div className="w-12 h-12 bg-[#C44545]/10 rounded-full flex items-center justify-center mx-auto text-[#C44545]">
+        <div className="min-h-screen bg-[#080C14] flex items-center justify-center p-6 text-slate-100">
+          <div className="max-w-md w-full bg-[#0F172A] border border-white/10 rounded-[10px] p-8 shadow-2xl text-center space-y-5">
+            <div className="w-12 h-12 bg-rose-500/10 border border-rose-500/30 rounded-full flex items-center justify-center mx-auto text-rose-400">
               <AlertTriangle className="w-6 h-6" />
             </div>
 
             <div className="space-y-2">
-              <h1 className="text-xl font-extrabold text-[#17243A] font-display">
+              <h1 className="text-xl font-extrabold text-white font-display">
                 An Unexpected UI Issue Occurred
               </h1>
-              <p className="text-xs text-[#6B7280] leading-relaxed">
+              <p className="text-xs text-slate-400 leading-relaxed">
                 The interface encountered a rendering issue. Your session data and submissions remain safely stored in the database.
               </p>
             </div>
 
             {Boolean(import.meta.env?.DEV) && this.state.error && (
-              <div className="p-3 bg-[#F7F7F4] border border-[#E5E7EB] rounded-[5px] text-left overflow-auto max-h-36">
-                <p className="font-mono text-[11px] text-[#C44545] font-semibold break-all">
+              <div className="p-3 bg-[#0B0F19] border border-white/10 rounded-[6px] text-left overflow-auto max-h-36">
+                <p className="font-mono text-[11px] text-rose-400 font-semibold break-all">
                   {this.state.error.toString()}
                 </p>
               </div>
@@ -56,7 +56,7 @@ class ErrorBoundary extends React.Component {
                 variant="primary"
                 size="sm"
                 onClick={this.handleReload}
-                className="gap-2 font-bold"
+                className="gap-2 font-bold shadow-[0_0_15px_rgba(56,189,248,0.25)]"
               >
                 <RefreshCw className="w-3.5 h-3.5" />
                 Reload Application

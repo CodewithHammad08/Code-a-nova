@@ -111,30 +111,30 @@ const Profile = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto py-4 space-y-8">
+    <div className="max-w-3xl mx-auto py-4 space-y-8 text-slate-100">
       {/* Page Title */}
-      <div className="border-b border-[#E5E7EB] pb-5">
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-[#17243A] tracking-tight">
+      <div className="border-b border-white/10 pb-5">
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight font-display">
           Profile Settings
         </h1>
-        <p className="text-xs sm:text-sm text-[#6B7280]">
+        <p className="text-xs sm:text-sm text-slate-400">
           Manage your personal credentials, contact number, and academic affiliations.
         </p>
       </div>
 
       <div className="space-y-6">
-        <Card className="shadow-sm">
+        <Card className="shadow-2xl bg-[#0F172A]/90 border-white/10">
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Account Info Header */}
-            <div className="flex items-center gap-3 pb-4 border-b border-[#F7F7F4]">
-              <div className="w-10 h-10 rounded-[5px] bg-[#17243A] text-white flex items-center justify-center font-display font-bold text-sm">
+            <div className="flex items-center gap-3 pb-4 border-b border-white/[0.08]">
+              <div className="w-10 h-10 rounded-[8px] bg-gradient-to-br from-cyan-500/20 to-blue-600/20 border border-cyan-500/40 text-cyan-300 flex items-center justify-center font-display font-bold text-sm shadow-sm">
                 {user?.fullName ? user.fullName.slice(0, 2) : 'U'}
               </div>
               <div>
-                <div className="text-sm font-bold text-[#17243A]">
+                <div className="text-sm font-bold text-white">
                   {user?.fullName || 'Participant Account'}
                 </div>
-                <div className="text-xs text-[#21845B] font-medium flex items-center gap-1">
+                <div className="text-xs text-emerald-400 font-medium flex items-center gap-1 font-mono">
                   <CheckCircle2 className="w-3.5 h-3.5" />
                   Verified Participant ({user?.role || 'participant'})
                 </div>
@@ -211,8 +211,8 @@ const Profile = () => {
               />
             </div>
 
-            <div className="pt-4 border-t border-[#E5E7EB] flex items-center justify-between">
-              <span className="text-xs text-[#6B7280]">
+            <div className="pt-4 border-t border-white/[0.08] flex items-center justify-between">
+              <span className="text-xs text-slate-400 font-mono">
                 Last updated:{' '}
                 {user?.updatedAt
                   ? new Date(user.updatedAt).toLocaleDateString()
@@ -224,7 +224,7 @@ const Profile = () => {
                 variant="primary"
                 size="md"
                 isLoading={isLoading}
-                className="gap-2"
+                className="gap-2 font-bold shadow-[0_0_15px_rgba(56,189,248,0.25)]"
               >
                 <Save className="w-4 h-4" />
                 Save Profile Changes
@@ -234,11 +234,11 @@ const Profile = () => {
         </Card>
 
         {/* Change Password Card */}
-        <Card className="shadow-sm">
+        <Card className="shadow-2xl bg-[#0F172A]/90 border-white/10">
           <form onSubmit={handlePasswordSubmit} className="space-y-4">
-            <div className="flex items-center gap-2 pb-3 border-b border-[#F7F7F4]">
-              <KeyRound className="w-4 h-4 text-[#D6A64F]" />
-              <h2 className="text-sm font-bold text-[#17243A] font-display">Change Account Password</h2>
+            <div className="flex items-center gap-2 pb-3 border-b border-white/[0.08]">
+              <KeyRound className="w-4 h-4 text-cyan-400" />
+              <h2 className="text-sm font-bold text-white font-display">Change Account Password</h2>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -286,12 +286,12 @@ const Profile = () => {
         </Card>
 
         {/* Security Summary Card */}
-        <Card className="bg-[#FAFAFA] border-[#E5E7EB]">
+        <Card className="bg-[#0B0F19] border-white/10">
           <div className="flex items-start gap-3">
-            <ShieldCheck className="w-5 h-5 text-[#21845B] shrink-0 mt-0.5" />
-            <div className="space-y-1 text-xs text-[#4B5563]">
-              <div className="font-semibold text-[#17243A]">Security & Privacy Protection</div>
-              <p>
+            <ShieldCheck className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
+            <div className="space-y-1 text-xs text-slate-300">
+              <div className="font-semibold text-white font-mono">Security &amp; Privacy Protection</div>
+              <p className="text-slate-400 leading-relaxed">
                 Your passwords are never stored in plaintext and are salted using bcrypt. All session cookies are configured with HttpOnly and strict domain isolation.
               </p>
             </div>
@@ -303,4 +303,3 @@ const Profile = () => {
 };
 
 export default Profile;
-

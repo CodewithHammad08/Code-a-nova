@@ -21,11 +21,11 @@ const Card = ({
   return (
     <div
       className={[
-        'bg-white rounded-[7px] overflow-hidden',
-        bordered ? 'border border-[#E5E7EB]' : '',
-        elevated ? 'shadow-md' : 'shadow-sm',
+        'bg-[#0F172A]/80 backdrop-blur-md rounded-[10px] overflow-hidden text-slate-100',
+        bordered ? 'border border-white/10' : '',
+        elevated ? 'shadow-[0_12px_32px_rgba(0,0,0,0.45)]' : 'shadow-md',
         hover
-          ? 'transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 cursor-pointer'
+          ? 'transition-all duration-300 hover:shadow-[0_16px_40px_rgba(56,189,248,0.12)] hover:border-cyan-500/40 hover:-translate-y-1 cursor-pointer'
           : '',
         className,
       ]
@@ -34,11 +34,11 @@ const Card = ({
       {...props}
     >
       {header && (
-        <div className="border-b border-[#E5E7EB] px-6 py-4 bg-[#FAFAFA]">{header}</div>
+        <div className="border-b border-white/10 px-6 py-4 bg-[#131C2E]/90">{header}</div>
       )}
       <div className={paddingMap[padding] ?? paddingMap.md}>{children}</div>
       {footer && (
-        <div className="border-t border-[#E5E7EB] px-6 py-3.5 bg-[#FAFAFA]">{footer}</div>
+        <div className="border-t border-white/10 px-6 py-3.5 bg-[#131C2E]/90">{footer}</div>
       )}
     </div>
   );

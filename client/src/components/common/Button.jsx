@@ -13,7 +13,7 @@ const Button = ({
   ...props
 }) => {
   const baseStyles =
-    'inline-flex items-center justify-center font-medium transition-all duration-200 rounded-[6px] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#17243A] select-none active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100 shadow-sm';
+    'inline-flex items-center justify-center font-medium transition-all duration-200 rounded-[8px] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 focus:ring-offset-[#080C14] select-none active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100 shadow-sm cursor-pointer';
 
   const sizeStyles = {
     sm: 'text-xs px-3.5 py-1.5 gap-1.5 font-semibold',
@@ -24,17 +24,17 @@ const Button = ({
 
   const variantStyles = {
     primary:
-      'bg-gradient-to-b from-[#243653] to-[#17243A] text-white hover:from-[#2e4569] hover:to-[#1c2c47] active:from-[#17243A] active:to-[#121c2e] border border-[#334b73]/40 shadow-[0_2px_4px_rgba(23,36,58,0.15)] hover:shadow-[0_4px_12px_rgba(23,36,58,0.25)]',
+      'bg-gradient-to-r from-sky-500 via-cyan-500 to-blue-600 text-white hover:from-sky-400 hover:via-cyan-400 hover:to-blue-500 border border-cyan-300/30 shadow-[0_0_20px_rgba(14,165,233,0.35)] hover:shadow-[0_0_30px_rgba(14,165,233,0.55)]',
     secondary:
-      'bg-white text-[#17243A] border border-[#E5E7EB] hover:bg-[#F9FAFB] hover:border-[#D1D5DB] hover:text-[#111827] active:bg-[#F3F4F6] shadow-sm',
+      'bg-slate-800/80 hover:bg-slate-700/80 text-slate-100 border border-white/10 hover:border-cyan-500/40 hover:text-cyan-200 shadow-sm',
     outline:
-      'bg-transparent text-[#17243A] border border-[#17243A]/30 hover:border-[#17243A] hover:bg-[#17243A]/5 active:bg-[#17243A]/10',
+      'bg-transparent text-slate-200 border border-white/20 hover:border-cyan-400 hover:text-cyan-300 hover:bg-cyan-500/10',
     destructive:
-      'bg-gradient-to-b from-[#D44C4C] to-[#C44545] text-white hover:from-[#bd3e3e] hover:to-[#A83838] active:from-[#A83838] active:to-[#8F2E2E] border border-transparent shadow-sm',
+      'bg-gradient-to-r from-rose-600 to-red-600 text-white hover:from-rose-500 hover:to-red-500 border border-transparent shadow-[0_0_20px_rgba(225,29,72,0.3)]',
     ghost:
-      'bg-transparent text-[#6B7280] hover:text-[#17243A] hover:bg-[#17243A]/5 border border-transparent shadow-none',
+      'bg-transparent text-slate-400 hover:text-white hover:bg-white/10 border border-transparent shadow-none',
     accent:
-      'bg-gradient-to-b from-[#e5b765] to-[#D6A64F] text-[#17243A] hover:from-[#dab05e] hover:to-[#c49540] active:from-[#c49540] active:to-[#b5892e] border border-[#e8c075]/60 font-bold shadow-[0_2px_8px_rgba(214,166,79,0.25)] hover:shadow-[0_4px_16px_rgba(214,166,79,0.35)]',
+      'bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 text-slate-950 hover:from-amber-300 hover:to-amber-500 border border-amber-300/40 font-bold shadow-[0_0_24px_rgba(245,158,11,0.35)] hover:shadow-[0_0_32px_rgba(245,158,11,0.6)]',
   };
 
   return (

@@ -14,6 +14,7 @@ import {
   Check,
   ShieldCheck,
   QrCode,
+  Sparkles,
 } from 'lucide-react';
 import Button from '../components/common/Button';
 import Card from '../components/common/Card';
@@ -130,16 +131,16 @@ const MyRegistration = () => {
   if (!registration) {
     return (
       <div className="max-w-xl mx-auto py-16 text-center space-y-4">
-        <div className="w-12 h-12 bg-[#F7F7F4] border border-[#E5E7EB] rounded-full flex items-center justify-center mx-auto text-[#6B7280]">
+        <div className="w-12 h-12 bg-white/5 border border-white/10 rounded-full flex items-center justify-center mx-auto text-slate-400">
           <AlertCircle className="w-6 h-6" />
         </div>
-        <h2 className="text-xl font-extrabold text-[#17243A] font-display">No Active Registration Found</h2>
-        <p className="text-xs text-[#6B7280] leading-relaxed max-w-sm mx-auto">
+        <h2 className="text-xl font-extrabold text-white font-display">No Active Registration Found</h2>
+        <p className="text-xs text-slate-400 leading-relaxed max-w-sm mx-auto">
           You have not submitted a project entry for Code-a-Nova yet. Complete registration to generate your official pass.
         </p>
         <div className="pt-2">
           <Link to="/register">
-            <Button variant="primary" size="md" className="gap-2 font-bold">
+            <Button variant="primary" size="md" className="gap-2 font-bold shadow-[0_0_20px_rgba(56,189,248,0.3)]">
               <FilePlus2 className="w-4 h-4" />
               Register Now
             </Button>
@@ -150,20 +151,20 @@ const MyRegistration = () => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto py-4 space-y-6">
+    <div className="max-w-4xl mx-auto py-4 space-y-6 text-slate-100">
       {/* Top Header Actions */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E5E7EB] pb-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-5">
         <div className="flex items-center gap-3">
           <img
             src="/logo.png"
             alt="Code-a-Nova Logo"
-            className="w-10 h-10 rounded-[6px] object-contain shadow-sm shrink-0"
+            className="w-10 h-10 rounded-[8px] object-contain shadow-[0_0_15px_rgba(56,189,248,0.25)] shrink-0"
           />
           <div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#17243A] tracking-tight font-display">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight font-display">
               Official Participant Pass
             </h1>
-            <p className="text-xs text-[#6B7280]">
+            <p className="text-xs text-slate-400">
               Validated registration credentials &bull; Code-a-Nova National Hackathon 2026-27
             </p>
           </div>
@@ -176,7 +177,7 @@ const MyRegistration = () => {
             onClick={handlePrint}
             className="gap-1.5"
           >
-            <Printer className="w-3.5 h-3.5 text-[#6B7280]" />
+            <Printer className="w-3.5 h-3.5 text-slate-400" />
             Print Pass
           </Button>
 
@@ -184,7 +185,7 @@ const MyRegistration = () => {
             variant="outline"
             size="sm"
             onClick={() => setIsEditModalOpen(true)}
-            className="gap-1.5"
+            className="gap-1.5 border-white/20 text-slate-200 hover:text-white hover:border-cyan-400"
           >
             <Edit3 className="w-3.5 h-3.5" />
             Update Links
@@ -194,44 +195,45 @@ const MyRegistration = () => {
 
       {/* Printable Event Pass Card */}
       <div id="printable-pass">
-        <Card className="border-2 border-[#17243A] shadow-md p-0 overflow-hidden bg-white">
+        <Card className="border border-white/15 shadow-2xl p-0 overflow-hidden bg-[#0F172A] relative">
           {/* Header Banner */}
-          <div className="bg-[#17243A] text-white p-6 sm:p-8 border-b-4 border-[#D6A64F] flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-dark-grid">
-            <div className="flex items-center gap-4">
+          <div className="bg-[#0B0F19] text-white p-6 sm:p-8 border-b-2 border-cyan-400/60 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 relative overflow-hidden">
+            <div className="ambient-glow-cyan top-0 right-0 opacity-25 pointer-events-none" />
+            <div className="flex items-center gap-4 relative z-10">
               <img
                 src="/logo.png"
                 alt="Code-a-Nova"
-                className="w-12 h-12 rounded-[8px] object-contain border border-white/20 shrink-0"
+                className="w-12 h-12 rounded-[10px] object-contain border border-white/20 shadow-[0_0_15px_rgba(56,189,248,0.3)] shrink-0"
               />
               <div>
-                <div className="text-[10px] font-mono tracking-widest uppercase text-[#D6A64F] font-bold">
+                <div className="text-[10px] font-mono tracking-widest uppercase text-cyan-400 font-bold">
                   OFFICIAL PARTICIPANT PASS &bull; CODE-A-NOVA 2026-27
                 </div>
                 <h2 className="text-2xl sm:text-3xl font-extrabold font-display tracking-tight text-white mt-1">
                   {registration.projectName}
                 </h2>
-                <div className="text-xs text-[#D1D5DB] mt-1 flex items-center gap-2">
+                <div className="text-xs text-slate-300 mt-1 flex items-center gap-2">
                   <span>Domain Track:</span>
-                  <span className="font-bold text-white bg-white/10 px-2 py-0.5 rounded text-[11px] font-mono">
+                  <span className="font-bold text-cyan-300 bg-cyan-500/15 border border-cyan-500/30 px-2 py-0.5 rounded text-[11px] font-mono">
                     {registration.domain}
                   </span>
                 </div>
               </div>
             </div>
 
-            <div className="bg-white/10 border border-white/20 p-3.5 rounded-[5px] text-right font-mono">
-              <div className="text-[10px] text-[#D6A64F] uppercase tracking-wider font-bold">
+            <div className="bg-white/5 border border-white/10 p-3.5 rounded-[8px] text-right font-mono relative z-10">
+              <div className="text-[10px] text-cyan-400 uppercase tracking-wider font-bold">
                 Registration Reference
               </div>
               <div className="text-xl sm:text-2xl font-bold text-white tracking-wider flex items-center gap-2 justify-end">
                 <span>{registration.registrationId}</span>
                 <button
                   onClick={handleCopyId}
-                  className="p-1 hover:text-[#D6A64F] transition-colors"
+                  className="p-1 hover:text-cyan-400 transition-colors cursor-pointer"
                   title="Copy ID"
                 >
                   {copied ? (
-                    <Check className="w-3.5 h-3.5 text-[#21845B]" />
+                    <Check className="w-3.5 h-3.5 text-emerald-400" />
                   ) : (
                     <Copy className="w-3.5 h-3.5" />
                   )}
@@ -243,9 +245,9 @@ const MyRegistration = () => {
           {/* Pass Body */}
           <div className="p-6 sm:p-8 space-y-6">
             {/* Status & Date */}
-            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#F7F7F4] pb-4">
+            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/[0.08] pb-4">
               <div className="flex items-center gap-3">
-                <span className="text-xs font-semibold text-[#6B7280]">
+                <span className="text-xs font-semibold text-slate-400 font-mono">
                   Verification Status:
                 </span>
                 <Badge variant="success" size="md">
@@ -253,9 +255,9 @@ const MyRegistration = () => {
                 </Badge>
               </div>
 
-              <div className="text-xs text-[#6B7280]">
+              <div className="text-xs text-slate-400">
                 Submitted:{' '}
-                <strong className="text-[#17243A] font-mono">
+                <strong className="text-white font-mono">
                   {formatSafeDate(registration.submittedAt || registration.createdAt)}
                 </strong>
               </div>
@@ -264,95 +266,95 @@ const MyRegistration = () => {
             {/* Leader & Academic Details */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 text-xs">
               <div className="space-y-1">
-                <div className="text-[#6B7280] font-medium font-mono text-[10px] uppercase">
+                <div className="text-slate-400 font-medium font-mono text-[10px] uppercase">
                   Team Leader
                 </div>
-                <div className="text-sm font-bold text-[#17243A]">
+                <div className="text-sm font-bold text-white">
                   {registration.participantName}
                 </div>
               </div>
 
               <div className="space-y-1">
-                <div className="text-[#6B7280] font-medium font-mono text-[10px] uppercase">
+                <div className="text-slate-400 font-medium font-mono text-[10px] uppercase">
                   Contact Email
                 </div>
-                <div className="text-sm font-semibold text-[#17243A] font-mono">
+                <div className="text-sm font-semibold text-cyan-300 font-mono">
                   {registration.email}
                 </div>
               </div>
 
               <div className="space-y-1">
-                <div className="text-[#6B7280] font-medium font-mono text-[10px] uppercase">
+                <div className="text-slate-400 font-medium font-mono text-[10px] uppercase">
                   Mobile Number
                 </div>
-                <div className="text-sm font-mono font-semibold text-[#17243A]">
+                <div className="text-sm font-mono font-semibold text-white">
                   +91 {registration.mobileNumber}
                 </div>
               </div>
 
               <div className="space-y-1">
-                <div className="text-[#6B7280] font-medium font-mono text-[10px] uppercase">
+                <div className="text-slate-400 font-medium font-mono text-[10px] uppercase">
                   Institution / College
                 </div>
-                <div className="text-sm font-semibold text-[#17243A]">
+                <div className="text-sm font-semibold text-slate-200">
                   {registration.collegeName}
                 </div>
               </div>
 
               <div className="space-y-1">
-                <div className="text-[#6B7280] font-medium font-mono text-[10px] uppercase">
+                <div className="text-slate-400 font-medium font-mono text-[10px] uppercase">
                   Academic Program
                 </div>
-                <div className="text-sm font-semibold text-[#17243A]">
+                <div className="text-sm font-semibold text-slate-200">
                   {registration.course} ({registration.branch})
                 </div>
               </div>
 
               <div className="space-y-1">
-                <div className="text-[#6B7280] font-medium font-mono text-[10px] uppercase">
+                <div className="text-slate-400 font-medium font-mono text-[10px] uppercase">
                   Current Year
                 </div>
-                <div className="text-sm font-semibold text-[#17243A]">
+                <div className="text-sm font-semibold text-slate-200">
                   {registration.yearOfStudy}
                 </div>
               </div>
             </div>
 
             {/* Team Roster */}
-            <div className="space-y-3 pt-4 border-t border-[#F7F7F4]">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-[#17243A] font-mono">
+            <div className="space-y-3 pt-4 border-t border-white/[0.08]">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-cyan-400 font-mono">
                 Team Roster ({registration.teamSize} Member{registration.teamSize > 1 ? 's' : ''})
               </h4>
 
-              <div className="border border-[#E5E7EB] rounded-[5px] overflow-hidden">
+              <div className="border border-white/10 rounded-[8px] overflow-hidden">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-[#FAFAFA] border-b border-[#E5E7EB] text-[#17243A] font-semibold">
+                  <thead className="bg-[#0B0F19] border-b border-white/10 text-slate-300 font-semibold font-mono text-[11px]">
                     <tr>
-                      <th className="py-2.5 px-4 font-mono">ROLE</th>
+                      <th className="py-2.5 px-4">ROLE</th>
                       <th className="py-2.5 px-4">PARTICIPANT NAME</th>
                       <th className="py-2.5 px-4">EMAIL ADDRESS</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#E5E7EB] text-[#4B5563]">
+                  <tbody className="divide-y divide-white/[0.06] text-slate-300 bg-[#0F172A]/80">
                     <tr>
                       <td className="py-2.5 px-4">
-                        <span className="font-bold text-[#17243A] font-mono">LEAD</span>
+                        <span className="font-bold text-cyan-400 font-mono">LEAD</span>
                       </td>
-                      <td className="py-2.5 px-4 font-bold text-[#17243A]">
+                      <td className="py-2.5 px-4 font-bold text-white">
                         {registration.participantName}
                       </td>
-                      <td className="py-2.5 px-4 font-mono">{registration.email}</td>
+                      <td className="py-2.5 px-4 font-mono text-cyan-300">{registration.email}</td>
                     </tr>
                     {registration.teamMembers &&
                       registration.teamMembers.map((m, idx) => (
                         <tr key={idx}>
-                          <td className="py-2.5 px-4 text-[#6B7280] font-mono">
+                          <td className="py-2.5 px-4 text-slate-500 font-mono">
                             MBR #{idx + 2}
                           </td>
-                          <td className="py-2.5 px-4 font-semibold text-[#17243A]">
+                          <td className="py-2.5 px-4 font-semibold text-slate-200">
                             {m.name}
                           </td>
-                          <td className="py-2.5 px-4 font-mono">{m.email}</td>
+                          <td className="py-2.5 px-4 font-mono text-slate-400">{m.email}</td>
                         </tr>
                       ))}
                   </tbody>
@@ -361,58 +363,58 @@ const MyRegistration = () => {
             </div>
 
             {/* Project Deliverables Links */}
-            <div className="space-y-3 pt-4 border-t border-[#F7F7F4]">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-[#17243A] font-mono">
+            <div className="space-y-3 pt-4 border-t border-white/[0.08]">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-cyan-400 font-mono">
                 Submitted Project Deliverables
               </h4>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div className="p-3.5 bg-[#F7F7F4] border border-[#E5E7EB] rounded-[5px] space-y-1">
-                  <div className="text-[10px] text-[#6B7280] font-mono uppercase font-semibold flex items-center justify-between">
+                <div className="p-3.5 bg-[#0B0F19] border border-white/10 rounded-[8px] space-y-1">
+                  <div className="text-[10px] text-slate-400 font-mono uppercase font-semibold flex items-center justify-between">
                     <span>Presentation Deck (PPT)</span>
-                    <FileText className="w-3.5 h-3.5 text-[#17243A]" />
+                    <FileText className="w-3.5 h-3.5 text-cyan-400" />
                   </div>
                   <a
                     href={registration.pptLink}
                     target="_blank"
                     rel="noreferrer"
-                    className="text-xs font-bold text-[#17243A] hover:underline truncate block"
+                    className="text-xs font-bold text-cyan-400 hover:text-cyan-300 truncate block"
                   >
                     Open Slides Link &rarr;
                   </a>
                 </div>
 
-                <div className="p-3.5 bg-[#F7F7F4] border border-[#E5E7EB] rounded-[5px] space-y-1">
-                  <div className="text-[10px] text-[#6B7280] font-mono uppercase font-semibold flex items-center justify-between">
+                <div className="p-3.5 bg-[#0B0F19] border border-white/10 rounded-[8px] space-y-1">
+                  <div className="text-[10px] text-slate-400 font-mono uppercase font-semibold flex items-center justify-between">
                     <span>Prototype Repository</span>
-                    <FolderGit2 className="w-3.5 h-3.5 text-[#17243A]" />
+                    <FolderGit2 className="w-3.5 h-3.5 text-cyan-400" />
                   </div>
                   <a
                     href={registration.prototypeLink}
                     target="_blank"
                     rel="noreferrer"
-                    className="text-xs font-bold text-[#17243A] hover:underline truncate block"
+                    className="text-xs font-bold text-cyan-400 hover:text-cyan-300 truncate block"
                   >
                     Open Repository &rarr;
                   </a>
                 </div>
 
                 {registration.demoVideoLink ? (
-                  <div className="p-3.5 bg-[#F7F7F4] border border-[#E5E7EB] rounded-[5px] space-y-1">
-                    <div className="text-[10px] text-[#6B7280] font-mono uppercase font-semibold flex items-center justify-between">
+                  <div className="p-3.5 bg-[#0B0F19] border border-white/10 rounded-[8px] space-y-1">
+                    <div className="text-[10px] text-slate-400 font-mono uppercase font-semibold flex items-center justify-between">
                       <span>Video Walkthrough</span>
-                      <ExternalLink className="w-3.5 h-3.5 text-[#17243A]" />
+                      <ExternalLink className="w-3.5 h-3.5 text-cyan-400" />
                     </div>
                     <a
                       href={registration.demoVideoLink}
                       target="_blank"
                       rel="noreferrer"
-                      className="text-xs font-bold text-[#17243A] hover:underline truncate block"
+                      className="text-xs font-bold text-cyan-400 hover:text-cyan-300 truncate block"
                     >
                       Watch Video &rarr;
                     </a>
                   </div>
                 ) : (
-                  <div className="p-3.5 bg-[#FAFAFA] border border-[#E5E7EB] rounded-[5px] text-xs text-[#9CA3AF] flex items-center">
+                  <div className="p-3.5 bg-[#0B0F19] border border-white/10 rounded-[8px] text-xs text-slate-500 flex items-center font-mono">
                     No demo video submitted
                   </div>
                 )}
@@ -420,12 +422,12 @@ const MyRegistration = () => {
             </div>
 
             {/* Verification Footer Note */}
-            <div className="pt-4 border-t border-[#E5E7EB] flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-[#9CA3AF]">
+            <div className="pt-4 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-slate-400">
               <span className="flex items-center gap-1.5">
-                <ShieldCheck className="w-4 h-4 text-[#21845B]" />
+                <ShieldCheck className="w-4 h-4 text-emerald-400" />
                 Cryptographically authenticated through Code-a-Nova automated OTP system
               </span>
-              <span className="font-mono">PASS REF: {registration.registrationId}</span>
+              <span className="font-mono text-cyan-400 font-bold">PASS REF: {registration.registrationId}</span>
             </div>
           </div>
         </Card>
