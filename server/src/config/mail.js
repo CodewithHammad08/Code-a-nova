@@ -13,24 +13,14 @@ const createMailTransporter = async () => {
     const cleanPass = pass.replace(/\s+/g, '');
     try {
       transporter = nodemailer.createTransport({
-        host,
-        port,
-        secure,
+        service: 'gmail',
         auth: {
           user: cleanUser,
           pass: cleanPass,
         },
-        connectionTimeout: 4000,
-        greetingTimeout: 4000,
-        socketTimeout: 4000,
       });
 
-      // Verify connection in background with timeout protection so startup/requests never hang
-      transporter
-        .verify()
-        .then(() => console.log('[Mail] SMTP Transporter ready and verified with configured credentials.'))
-        .catch((err) => console.warn(`[Mail] Configured SMTP verification notice: ${err.message}`));
-
+      console.log('[Mail] SMTP Transporter initialized with Gmail service.');
       return transporter;
     } catch (err) {
       console.warn(`[Mail] Configured SMTP creation failed: ${err.message}. Falling back to resilient mode.`);
