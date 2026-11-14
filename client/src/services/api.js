@@ -2,10 +2,11 @@ import axios from 'axios';
 
 // Normalize base URL: handles missing /api, trailing slashes, or empty env
 const getBaseUrl = () => {
-  const envUrl = import.meta.env.VITE_API_URL;
-  if (!envUrl) {
-    return '/api';
-  }
+  // In production, fallback directly to the deployed Render backend if VITE_API_URL is unset
+  const envUrl =
+    import.meta.env.VITE_API_URL ||
+    (import.meta.env.PROD ? 'https://code-a-nova-ugwo.onrender.com/api' : '/api');
+
   const trimmed = envUrl.trim().replace(/\/+$/, '');
   // If the URL already ends with /api, keep it; otherwise append /api
   return trimmed.endsWith('/api') ? trimmed : `${trimmed}/api`;
