@@ -5,14 +5,6 @@
  */
 
 const getOtpEmailTemplate = (fullName, otp) => {
-  const otpDigits = String(otp).split('');
-  const digitsHtml = otpDigits
-    .map(
-      (d) =>
-        `<span style="display:inline-block; width:44px; height:52px; line-height:52px; background:#FFFFFF; border:2px solid #17243A; border-radius:6px; font-size:28px; font-weight:800; color:#17243A; margin:0 4px; font-family:'Courier New', Courier, monospace; box-shadow:0 2px 4px rgba(0,0,0,0.06); text-align:center;">${d}</span>`
-    )
-    .join('');
-
   return `
 <!DOCTYPE html>
 <html lang="en">
@@ -21,83 +13,40 @@ const getOtpEmailTemplate = (fullName, otp) => {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Your Code-a-Nova Verification Code</title>
 </head>
-<body style="font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color:#F7F7F4; margin:0; padding:40px 16px; color:#20242B;">
-  <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0">
-    <tr>
-      <td align="center">
-        <!-- Main Card Container -->
-        <table role="presentation" width="100%" style="max-width:580px; background:#FFFFFF; border:1px solid #E5E7EB; border-radius:8px; overflow:hidden; box-shadow:0 4px 12px rgba(0,0,0,0.05);" border="0" cellspacing="0" cellpadding="0">
-          
-          <!-- Brand Header -->
-          <tr>
-            <td style="background:#17243A; padding:32px 36px; border-bottom:3px solid #D6A64F;">
-              <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0">
-                <tr>
-                  <td>
-                    <div style="font-size:22px; font-weight:800; color:#FFFFFF; letter-spacing:0.08em; text-transform:uppercase; margin:0;">CODE-A-NOVA</div>
-                    <div style="font-size:11px; font-weight:600; color:#D6A64F; letter-spacing:0.12em; text-transform:uppercase; margin-top:4px;">Hackathon Identity & Access Management</div>
-                  </td>
-                  <td align="right">
-                    <span style="display:inline-block; background:rgba(214,166,79,0.15); border:1px solid #D6A64F; color:#D6A64F; font-size:10px; font-weight:700; padding:4px 10px; border-radius:4px; text-transform:uppercase; letter-spacing:0.06em;">SECURE AUTH</span>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
+<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f8fafc; margin: 0; padding: 24px 12px; color: #0f172a;">
+  <div style="max-width: 480px; margin: 0 auto; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 32px 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+    
+    <div style="text-align: center; margin-bottom: 24px;">
+      <h2 style="margin: 0; font-size: 20px; font-weight: 800; letter-spacing: -0.02em; color: #0f172a;">Code-a-Nova 2026</h2>
+      <p style="margin: 4px 0 0; font-size: 13px; color: #64748b;">Account Verification</p>
+    </div>
 
-          <!-- Content Body -->
-          <tr>
-            <td style="padding:40px 36px;">
-              <div style="font-size:18px; font-weight:700; color:#17243A; margin-bottom:12px;">Email Verification Code</div>
-              <p style="font-size:14px; line-height:1.6; color:#4B5563; margin:0 0 24px;">
-                Hello <strong>${fullName || 'Participant'}</strong>,<br>
-                Welcome to <strong>Code-a-Nova 2026</strong>. Use the 6-digit One-Time Password (OTP) below to authenticate your account and access the participant portal.
-              </p>
+    <p style="font-size: 15px; line-height: 1.5; color: #334155; margin: 0 0 20px;">
+      Hello <strong>${fullName || 'Participant'}</strong>,
+    </p>
 
-              <!-- OTP Digits Box -->
-              <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="margin:28px 0;">
-                <tr>
-                  <td align="center" style="background:#F7F7F4; border:1px solid #E5E7EB; border-radius:8px; padding:28px 16px;">
-                    <div style="font-size:11px; text-transform:uppercase; font-weight:700; color:#6B7280; letter-spacing:0.1em; margin-bottom:14px;">ONE-TIME VERIFICATION CODE</div>
-                    <div style="white-space:nowrap; margin-bottom:12px;">
-                      ${digitsHtml}
-                    </div>
-                    <div style="font-size:12px; color:#6B7280; margin-top:12px;">
-                      ⏱ This passcode expires in <strong style="color:#17243A;">10 minutes</strong> &bull; Single-use security token
-                    </div>
-                  </td>
-                </tr>
-              </table>
+    <p style="font-size: 14px; line-height: 1.5; color: #475569; margin: 0 0 24px;">
+      Use this 6-digit verification code to complete your registration:
+    </p>
 
-              <!-- Security Notice -->
-              <div style="background:#F9FAFB; border-left:3px solid #17243A; padding:14px 18px; border-radius:0 6px 6px 0; margin-top:24px;">
-                <div style="font-size:12px; font-weight:700; color:#17243A; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:4px;">🔒 Security Advisory</div>
-                <div style="font-size:12px; line-height:1.5; color:#6B7280;">
-                  Never share your verification code with anyone. Code-a-Nova organizers will never ask for your password or OTP. If you did not request this verification, you can safely ignore this email.
-                </div>
-              </div>
-            </td>
-          </tr>
+    <div style="text-align: center; margin: 28px 0; padding: 18px; background: #f1f5f9; border-radius: 8px; border: 1px dashed #cbd5e1;">
+      <span style="font-size: 34px; font-weight: 800; letter-spacing: 8px; color: #0f172a; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;">${otp}</span>
+    </div>
 
-          <!-- Footer -->
-          <tr>
-            <td style="background:#FAFAFA; border-top:1px solid #E5E7EB; padding:20px 36px; text-align:center;">
-              <div style="font-size:12px; color:#6B7280; margin-bottom:4px;">
-                <strong>Code-a-Nova Hackathon 2026</strong> &bull; Build Something That Moves The Future
-              </div>
-              <div style="font-size:11px; color:#9CA3AF;">
-                This is an automated system dispatch. Please do not reply directly to this email.
-              </div>
-            </td>
-          </tr>
+    <p style="font-size: 12px; color: #64748b; line-height: 1.5; margin: 0 0 20px; text-align: center;">
+      This code is valid for 10 minutes. If you did not request this, please ignore this email.
+    </p>
 
-        </table>
-      </td>
-    </tr>
-  </table>
+    <div style="border-top: 1px solid #f1f5f9; padding-top: 16px; text-align: center;">
+      <p style="font-size: 11px; color: #94a3b8; margin: 0;">
+        &copy; 2026 Code-a-Nova Hackathon. All rights reserved.
+      </p>
+    </div>
+
+  </div>
 </body>
 </html>
-  `;
+  `.trim();
 };
 
 const getRegistrationConfirmationTemplate = (registration) => {

@@ -42,13 +42,15 @@ const signup = async ({ fullName, email, password }) => {
       await existingUser.save();
 
       const { plainOtp } = await createAndSaveOtp(existingUser);
-      // Send OTP email
-      await sendOtpEmail(existingUser.email, existingUser.fullName, plainOtp);
+      // Dispatch email in background so user transitions to OTP page instantly
+      sendOtpEmail(existingUser.email, existingUser.fullName, plainOtp).catch((err) =>
+        console.error('[Auth Service] Async OTP dispatch notice:', err.message)
+      );
 
       return {
         user: existingUser.toJSON(),
         email: existingUser.email,
-        message: 'Account was already registered but unverified. A new verification code has been dispatched to your email.',
+        message: 'A verification code has been dispatched to your email.',
       };
     }
   }
@@ -66,14 +68,16 @@ const signup = async ({ fullName, email, password }) => {
 
   await newUser.save();
 
-  // Create OTP and send email directly to user inbox
+  // Create OTP and dispatch email asynchronously so signup responds in milliseconds
   const { plainOtp } = await createAndSaveOtp(newUser);
-  await sendOtpEmail(newUser.email, newUser.fullName, plainOtp);
+  sendOtpEmail(newUser.email, newUser.fullName, plainOtp).catch((err) =>
+    console.error('[Auth Service] Async OTP dispatch notice:', err.message)
+  );
 
   return {
     user: newUser.toJSON(),
     email: newUser.email,
-    message: 'Account created. Verification code sent to your email address.',
+    message: 'Account created! Verification code sent to your email.',
   };
 };
 
