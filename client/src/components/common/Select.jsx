@@ -22,25 +22,25 @@ const Select = forwardRef(
         {label && (
           <label
             htmlFor={selectId}
-            className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5"
+            className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5"
           >
             {label}
-            {required && <span className="text-rose-400 ml-1">*</span>}
+            {required && <span className="text-rose-500 ml-1">*</span>}
           </label>
         )}
         <div className="relative">
           <select
             id={selectId}
             ref={ref}
-            className={`w-full rounded-[6px] border px-3.5 py-2.5 text-sm text-white bg-[#0B0F19] transition-all duration-150 focus:outline-none focus:ring-1 focus:ring-cyan-500/30 appearance-none cursor-pointer ${
+            className={`w-full rounded-xl border px-3.5 py-2.5 text-sm text-slate-900 bg-white transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-slate-900/10 appearance-none cursor-pointer ${
               error
-                ? 'border-rose-500/80 focus:border-rose-500 focus:ring-rose-500/20'
-                : 'border-white/10 hover:border-white/20 focus:border-cyan-400'
-            } disabled:bg-[#080C14] disabled:text-slate-600 disabled:cursor-not-allowed ${className}`}
+                ? 'border-rose-500 focus:border-rose-500 focus:ring-rose-500/10'
+                : 'border-slate-200/90 hover:border-slate-300 focus:border-slate-800'
+            } disabled:bg-slate-50 disabled:text-slate-400 disabled:cursor-not-allowed ${className}`}
             {...props}
           >
             {placeholder && (
-              <option value="" disabled className="bg-[#0B0F19] text-slate-400">
+              <option value="" disabled className="text-slate-400">
                 {placeholder}
               </option>
             )}
@@ -48,14 +48,14 @@ const Select = forwardRef(
               const value = typeof opt === 'object' ? opt.value : opt;
               const label = typeof opt === 'object' ? opt.label : opt;
               return (
-                <option key={value} value={value} className="bg-[#0B0F19] text-white">
+                <option key={value} value={value} className="text-slate-900">
                   {label}
                 </option>
               );
             })}
           </select>
           {/* Custom subtle chevron */}
-          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-400">
+          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-500">
             <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20">
               <path
                 fillRule="evenodd"
@@ -66,9 +66,9 @@ const Select = forwardRef(
           </div>
         </div>
         {error ? (
-          <p className="mt-1.5 text-xs text-rose-400 font-medium">{error}</p>
+          <p className="mt-1.5 text-xs text-rose-600 font-medium">{error}</p>
         ) : helperText ? (
-          <p className="mt-1.5 text-xs text-slate-400">{helperText}</p>
+          <p className="mt-1.5 text-xs text-slate-500">{helperText}</p>
         ) : null}
       </div>
     );

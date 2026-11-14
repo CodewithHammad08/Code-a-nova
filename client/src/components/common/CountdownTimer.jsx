@@ -42,49 +42,47 @@ const CountdownTimer = ({
     return () => clearInterval(interval);
   }, [targetDate]);
 
-  const isDark = variant === 'dark';
-
   return (
     <div className={`inline-flex flex-col ${className}`}>
       {label && (
-        <div className="text-[10px] font-mono uppercase tracking-widest mb-1.5 font-bold flex items-center gap-1.5 text-slate-300">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+        <div className="text-[10px] font-mono uppercase tracking-widest mb-1.5 font-bold flex items-center gap-1.5 text-slate-600">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
           {label}
         </div>
       )}
       <div className="flex items-center gap-1 sm:gap-1.5">
-        <div className="px-2.5 py-1.5 rounded-[6px] border border-white/10 bg-[#0F172A]/90 text-center shadow-md">
-          <span className="block text-base sm:text-lg font-bold font-mono leading-none tracking-tight text-white">
+        <div className="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-center shadow-xs">
+          <span className="block text-base sm:text-lg font-bold font-mono leading-none tracking-tight text-slate-900">
             {timeLeft.days}
           </span>
-          <span className="block text-[8px] uppercase tracking-wider text-slate-400 font-sans font-bold mt-1">
+          <span className="block text-[8px] uppercase tracking-wider text-slate-500 font-sans font-bold mt-1">
             Days
           </span>
         </div>
-        <span className="font-mono font-bold text-xs text-cyan-400/60">:</span>
-        <div className="px-2.5 py-1.5 rounded-[6px] border border-white/10 bg-[#0F172A]/90 text-center shadow-md">
-          <span className="block text-base sm:text-lg font-bold font-mono leading-none tracking-tight text-white">
+        <span className="font-mono font-bold text-xs text-slate-400">:</span>
+        <div className="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-center shadow-xs">
+          <span className="block text-base sm:text-lg font-bold font-mono leading-none tracking-tight text-slate-900">
             {timeLeft.hours}
           </span>
-          <span className="block text-[8px] uppercase tracking-wider text-slate-400 font-sans font-bold mt-1">
+          <span className="block text-[8px] uppercase tracking-wider text-slate-500 font-sans font-bold mt-1">
             Hours
           </span>
         </div>
-        <span className="font-mono font-bold text-xs text-cyan-400/60">:</span>
-        <div className="px-2.5 py-1.5 rounded-[6px] border border-white/10 bg-[#0F172A]/90 text-center shadow-md">
-          <span className="block text-base sm:text-lg font-bold font-mono leading-none tracking-tight text-white">
+        <span className="font-mono font-bold text-xs text-slate-400">:</span>
+        <div className="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-center shadow-xs">
+          <span className="block text-base sm:text-lg font-bold font-mono leading-none tracking-tight text-slate-900">
             {timeLeft.minutes}
           </span>
-          <span className="block text-[8px] uppercase tracking-wider text-slate-400 font-sans font-bold mt-1">
+          <span className="block text-[8px] uppercase tracking-wider text-slate-500 font-sans font-bold mt-1">
             Mins
           </span>
         </div>
-        <span className="font-mono font-bold text-xs text-cyan-400/60">:</span>
-        <div className="px-2.5 py-1.5 rounded-[6px] border border-cyan-500/30 bg-[#0F172A]/90 text-center shadow-[0_0_15px_rgba(56,189,248,0.15)]">
-          <span className="block text-base sm:text-lg font-bold font-mono leading-none tracking-tight text-cyan-400">
+        <span className="font-mono font-bold text-xs text-slate-400">:</span>
+        <div className="px-2.5 py-1.5 rounded-lg border border-slate-900 bg-slate-900 text-center shadow-xs">
+          <span className="block text-base sm:text-lg font-bold font-mono leading-none tracking-tight text-white">
             {timeLeft.seconds}
           </span>
-          <span className="block text-[8px] uppercase tracking-wider text-slate-400 font-sans font-bold mt-1">
+          <span className="block text-[8px] uppercase tracking-wider text-slate-300 font-sans font-bold mt-1">
             Secs
           </span>
         </div>
@@ -94,4 +92,3 @@ const CountdownTimer = ({
 };
 
 export default CountdownTimer;
-

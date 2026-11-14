@@ -6,28 +6,28 @@ import { Toaster } from 'react-hot-toast';
 
 const PublicLayout = () => {
   return (
-    <div className="flex flex-col min-h-screen bg-[#080C14] text-slate-100 selection:bg-cyan-500/25 selection:text-cyan-200">
+    <div className="flex flex-col min-h-screen bg-[#F8FAFC] text-slate-900 selection:bg-slate-900 selection:text-white">
       <Toaster
         position="top-right"
         toastOptions={{
           style: {
-            background: '#0F172A',
-            color: '#F8FAFC',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
-            borderRadius: '8px',
+            background: '#FFFFFF',
+            color: '#0F172A',
+            border: '1px solid #E2E8F0',
+            borderRadius: '12px',
             fontSize: '13px',
-            boxShadow: '0 8px 30px rgba(0,0,0,0.5)',
+            boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.08)',
           },
           success: {
             iconTheme: {
-              primary: '#10B981',
-              secondary: '#0F172A',
+              primary: '#059669',
+              secondary: '#FFFFFF',
             },
           },
           error: {
             iconTheme: {
-              primary: '#EF4444',
-              secondary: '#0F172A',
+              primary: '#E11D48',
+              secondary: '#FFFFFF',
             },
           },
         }}

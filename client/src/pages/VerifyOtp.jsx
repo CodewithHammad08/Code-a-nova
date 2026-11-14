@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useSearchParams, useNavigate, useLocation, Link } from 'react-router-dom';
-import { KeyRound, RotateCw, CheckCircle2, ArrowRight } from 'lucide-react';
+import { useSearchParams, useNavigate, Link } from 'react-router-dom';
+import { RotateCw, CheckCircle2, ArrowRight } from 'lucide-react';
 import Button from '../components/common/Button';
 import Card from '../components/common/Card';
 import useAuth from '../hooks/useAuth';
@@ -8,7 +8,6 @@ import toast from 'react-hot-toast';
 
 const VerifyOtp = () => {
   const [searchParams] = useSearchParams();
-  const location = useLocation();
   const emailParam = searchParams.get('email') || '';
 
   const [email, setEmail] = useState(emailParam);
@@ -44,14 +43,12 @@ const VerifyOtp = () => {
   };
 
   const handleOtpChange = (index, value) => {
-    // Only accept numeric input
     if (value && !/^\d+$/.test(value)) return;
 
     const newOtp = [...otp];
-    newOtp[index] = value.slice(-1); // Take latest typed digit
+    newOtp[index] = value.slice(-1);
     setOtp(newOtp);
 
-    // Auto-advance focus
     if (value && index < 5) {
       inputRefs.current[index + 1]?.focus();
     }
@@ -128,39 +125,35 @@ const VerifyOtp = () => {
   };
 
   return (
-    <div className="relative min-h-[calc(100vh-4rem)] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-[#080C14] bg-tech-dots overflow-hidden">
-      {/* Ambient background glows */}
-      <div className="ambient-glow-navy -top-20 -left-20 opacity-60" />
-      <div className="ambient-glow-cyan -bottom-20 -right-20 opacity-50" />
-
+    <div className="relative min-h-[calc(100vh-6rem)] flex items-center justify-center py-10 px-4 sm:px-6 lg:px-8 bg-[#F8FAFC]">
       <div className="relative w-full max-w-md space-y-6">
         <div className="text-center space-y-2">
           <Link to="/" className="inline-block group mb-1">
             <img
               src="/logo.png"
               alt="Code-a-Nova Logo"
-              className="w-14 h-14 rounded-[10px] object-contain mx-auto shadow-[0_0_20px_rgba(56,189,248,0.3)] group-hover:scale-105 transition-transform"
+              className="w-14 h-14 rounded-2xl object-contain mx-auto border border-slate-200 shadow-sm group-hover:scale-105 transition-transform"
             />
           </Link>
-          <h1 className="text-2xl font-extrabold text-white tracking-tight font-display">
+          <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight font-display">
             Verify Your Email Address
           </h1>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-slate-500">
             We dispatched a 6-digit confirmation code to{' '}
-            <strong className="text-cyan-300 font-mono">
+            <strong className="text-slate-900 font-mono">
               {email || 'your email'}
             </strong>
           </p>
         </div>
 
-        <Card className="shadow-2xl border-white/10 bg-[#0F172A]/90 backdrop-blur-md">
+        <Card className="shadow-sm border-slate-200 bg-white">
           {isSuccess ? (
             <div className="py-8 text-center space-y-4">
-              <div className="w-12 h-12 bg-emerald-500/10 border border-emerald-500/30 rounded-full flex items-center justify-center mx-auto text-emerald-400">
+              <div className="w-12 h-12 bg-emerald-50 border border-emerald-200 rounded-full flex items-center justify-center mx-auto text-emerald-600">
                 <CheckCircle2 className="w-6 h-6" />
               </div>
-              <h3 className="text-lg font-bold text-white font-display">Verification Confirmed!</h3>
-              <p className="text-xs text-slate-400">
+              <h3 className="text-lg font-bold text-slate-900 font-display">Verification Confirmed!</h3>
+              <p className="text-xs text-slate-600">
                 Your account is now activated. Redirecting you to login...
               </p>
               <Link to="/login">
@@ -174,7 +167,7 @@ const VerifyOtp = () => {
             <form onSubmit={handleSubmit} className="space-y-6">
               {!emailParam && (
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5 font-mono">
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5 font-mono">
                     Confirm Email Address
                   </label>
                   <input
@@ -183,14 +176,14 @@ const VerifyOtp = () => {
                     onChange={(e) => setEmail(e.target.value)}
                     required
                     placeholder="Enter the registered email"
-                    className="w-full rounded-[6px] border border-white/10 px-3.5 py-2.5 text-sm text-white bg-[#0B0F19] focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-500/30"
+                    className="w-full rounded-lg border border-slate-200 px-3.5 py-2.5 text-sm text-slate-900 bg-white focus:outline-none focus:border-slate-800 focus:ring-2 focus:ring-slate-900/10"
                   />
                 </div>
               )}
 
               {/* 6 Individual OTP inputs */}
               <div className="space-y-2.5">
-                <label className="block text-center text-xs font-semibold uppercase tracking-wider text-cyan-400 font-mono">
+                <label className="block text-center text-xs font-semibold uppercase tracking-wider text-slate-700 font-mono">
                   Enter 6-Digit Code
                 </label>
                 <div className="flex justify-center gap-2 sm:gap-3" onPaste={handlePaste}>
@@ -205,23 +198,23 @@ const VerifyOtp = () => {
                       onChange={(e) => handleOtpChange(index, e.target.value)}
                       onKeyDown={(e) => handleKeyDown(index, e)}
                       autoFocus={index === 0}
-                      className="w-11 h-12 sm:w-12 sm:h-14 text-center font-mono font-bold text-lg sm:text-xl text-white bg-[#0B0F19] border border-white/10 rounded-[8px] focus:outline-none focus:ring-2 focus:ring-cyan-500/30 focus:border-cyan-400 transition-all shadow-inner"
+                      className="w-11 h-12 sm:w-12 sm:h-14 text-center font-mono font-bold text-lg sm:text-xl text-slate-900 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-800 transition-all shadow-xs"
                     />
                   ))}
                 </div>
               </div>
 
               {/* Expiry Notice */}
-              <div className="text-center text-xs text-slate-400">
+              <div className="text-center text-xs text-slate-500">
                 {expirySeconds > 0 ? (
                   <span>
                     Code expires in{' '}
-                    <strong className="text-amber-300 font-mono">
+                    <strong className="text-amber-700 font-mono">
                       {formatTime(expirySeconds)}
                     </strong>
                   </span>
                 ) : (
-                  <span className="text-rose-400 font-semibold font-mono">
+                  <span className="text-rose-600 font-semibold font-mono">
                     Code expired. Please request a new code.
                   </span>
                 )}
@@ -233,19 +226,19 @@ const VerifyOtp = () => {
                 size="md"
                 isLoading={isVerifying}
                 disabled={otp.join('').length !== 6 || expirySeconds === 0}
-                className="w-full font-bold shadow-[0_0_20px_rgba(56,189,248,0.3)]"
+                className="w-full font-bold shadow-xs"
               >
                 Verify &amp; Activate Account
               </Button>
 
               {/* Resend OTP */}
-              <div className="border-t border-white/[0.08] pt-4 flex items-center justify-between text-xs">
-                <span className="text-slate-400">Didn't receive the email?</span>
+              <div className="border-t border-slate-100 pt-4 flex items-center justify-between text-xs">
+                <span className="text-slate-500">Didn't receive the email?</span>
                 <button
                   type="button"
                   onClick={handleResend}
                   disabled={cooldownSeconds > 0 || isResending}
-                  className="font-semibold text-cyan-400 hover:text-cyan-300 disabled:text-slate-600 disabled:no-underline inline-flex items-center gap-1.5 cursor-pointer font-mono"
+                  className="font-semibold text-slate-900 hover:text-slate-700 disabled:text-slate-400 disabled:no-underline inline-flex items-center gap-1.5 cursor-pointer font-mono"
                 >
                   <RotateCw className={`w-3.5 h-3.5 ${isResending ? 'animate-spin' : ''}`} />
                   {cooldownSeconds > 0
@@ -254,7 +247,7 @@ const VerifyOtp = () => {
                 </button>
               </div>
 
-              <div className="bg-[#0B0F19] p-3 rounded-[6px] border border-white/10 text-[11px] text-slate-400 text-center leading-normal">
+              <div className="bg-slate-50 p-3 rounded-lg border border-slate-200 text-[11px] text-slate-600 text-center leading-normal">
                 Check your inbox (or spam folder) for the 6-digit verification code.
               </div>
             </form>
@@ -262,7 +255,7 @@ const VerifyOtp = () => {
         </Card>
 
         <div className="text-center">
-          <Link to="/login" className="text-xs text-slate-400 hover:text-cyan-300 underline font-mono">
+          <Link to="/login" className="text-xs text-slate-600 hover:text-slate-900 underline font-mono">
             Back to Sign In
           </Link>
         </div>

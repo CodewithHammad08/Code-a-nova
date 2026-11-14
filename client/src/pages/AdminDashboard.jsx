@@ -2,24 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   ShieldAlert,
-  Users,
-  FileSpreadsheet,
   Search,
-  Filter,
-  ExternalLink,
   ChevronLeft,
   ChevronRight,
   Download,
-  Layers,
-  Database,
-  BarChart3,
-  Award,
   Eye,
   Trash2,
   AlertTriangle,
-  FileText,
-  Mail,
-  GraduationCap,
+  ExternalLink,
 } from 'lucide-react';
 import Button from '../components/common/Button';
 import Card from '../components/common/Card';
@@ -120,29 +110,29 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="space-y-8 py-4 text-slate-100">
+    <div className="space-y-8 py-4 text-slate-900">
       {/* Admin Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-5">
         <div>
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-[10px] font-bold uppercase tracking-wider rounded-[6px] font-mono mb-2">
-            <img src="/logo.png" alt="Logo" className="w-3.5 h-3.5 rounded-[2px] object-contain" />
-            <ShieldAlert className="w-3.5 h-3.5 text-cyan-400" />
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-slate-100 border border-slate-200 text-slate-700 text-[10px] font-bold uppercase tracking-wider rounded-md font-mono mb-2">
+            <img src="/logo.png" alt="Logo" className="w-3.5 h-3.5 rounded-sm object-contain" />
+            <ShieldAlert className="w-3.5 h-3.5 text-slate-700" />
             Administrative Command
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight font-display">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight font-display">
             Registrations &amp; Participant Console
           </h1>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-slate-500">
             Global participant records &bull; Real-time domain breakdown &bull; One-click CSV export
           </p>
         </div>
 
         <div>
           <Button
-            variant="primary"
+            variant="accent"
             size="sm"
             onClick={handleExportCsv}
-            className="gap-2 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 font-bold shadow-[0_0_15px_rgba(16,185,129,0.25)]"
+            className="gap-2 font-bold shadow-xs"
           >
             <Download className="w-4 h-4" />
             Export All Entries (CSV)
@@ -152,39 +142,39 @@ const AdminDashboard = () => {
 
       {/* Metrics Row */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-        <Card className="p-5 space-y-1 bg-[#0F172A]/90 border-white/10 shadow-xl">
-          <div className="text-[11px] uppercase tracking-wider font-semibold text-slate-400 font-mono">
+        <Card className="p-5 space-y-1 bg-white border-slate-200 shadow-xs">
+          <div className="text-[11px] uppercase tracking-wider font-semibold text-slate-500 font-mono">
             Total Team Projects
           </div>
-          <div className="text-3xl font-extrabold text-white font-display">
+          <div className="text-3xl font-extrabold text-slate-900 font-display">
             {stats ? stats.totalRegistrations : '--'}
           </div>
-          <div className="text-xs text-slate-400">Verified MongoDB entries</div>
+          <div className="text-xs text-slate-500">Verified MongoDB entries</div>
         </Card>
 
-        <Card className="p-5 space-y-1 bg-[#0F172A]/90 border-white/10 shadow-xl">
-          <div className="text-[11px] uppercase tracking-wider font-semibold text-slate-400 font-mono">
+        <Card className="p-5 space-y-1 bg-white border-slate-200 shadow-xs">
+          <div className="text-[11px] uppercase tracking-wider font-semibold text-slate-500 font-mono">
             Total Enrolled Innovators
           </div>
-          <div className="text-3xl font-extrabold text-white font-display">
+          <div className="text-3xl font-extrabold text-slate-900 font-display">
             {stats ? stats.totalParticipants : '--'}
           </div>
-          <div className="text-xs text-slate-400">Leaders + team members count</div>
+          <div className="text-xs text-slate-500">Leaders + team members count</div>
         </Card>
 
-        <Card className="p-5 space-y-1 bg-[#0F172A]/90 border-white/10 shadow-xl">
-          <div className="text-[11px] uppercase tracking-wider font-semibold text-slate-400 font-mono">
+        <Card className="p-5 space-y-1 bg-white border-slate-200 shadow-xs">
+          <div className="text-[11px] uppercase tracking-wider font-semibold text-slate-500 font-mono">
             Active Domains
           </div>
-          <div className="text-3xl font-extrabold text-cyan-400 font-display font-mono">
+          <div className="text-3xl font-extrabold text-slate-900 font-display font-mono">
             {stats?.domainBreakdown?.length || 5} / 5
           </div>
-          <div className="text-xs text-slate-400">All competition tracks active</div>
+          <div className="text-xs text-slate-500">All competition tracks active</div>
         </Card>
       </div>
 
       {/* Filter and Search Bar */}
-      <Card className="p-4 shadow-xl border-white/10 bg-[#0F172A]/90">
+      <Card className="p-4 shadow-xs border-slate-200 bg-white">
         <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
           <form onSubmit={handleSearchSubmit} className="flex-1 w-full flex gap-2">
             <div className="relative flex-1">
@@ -193,7 +183,7 @@ const AdminDashboard = () => {
                 placeholder="Search candidate name, project title, email, ref ID, or college..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full rounded-[6px] border border-white/10 pl-9 pr-3.5 py-2 text-xs sm:text-sm text-white bg-[#0B0F19] focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-500/30"
+                className="w-full rounded-lg border border-slate-200 pl-9 pr-3.5 py-2 text-xs sm:text-sm text-slate-900 bg-white focus:outline-none focus:border-slate-800 focus:ring-2 focus:ring-slate-900/10"
               />
               <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
             </div>
@@ -209,11 +199,11 @@ const AdminDashboard = () => {
                 setSelectedDomain(e.target.value);
                 setPage(1);
               }}
-              className="w-full rounded-[6px] border border-white/10 px-3 py-2 text-xs sm:text-sm text-white bg-[#0B0F19] focus:outline-none focus:border-cyan-400"
+              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs sm:text-sm text-slate-900 bg-white focus:outline-none focus:border-slate-800"
             >
-              <option value="All" className="bg-[#0B0F19] text-white">All Competition Tracks</option>
+              <option value="All">All Competition Tracks</option>
               {DOMAINS.map((d) => (
-                <option key={d.id} value={d.id} className="bg-[#0B0F19] text-white">
+                <option key={d.id} value={d.id}>
                   {d.title}
                 </option>
               ))}
@@ -223,10 +213,10 @@ const AdminDashboard = () => {
       </Card>
 
       {/* Registrations Table */}
-      <div className="bg-[#0F172A]/90 border border-white/10 rounded-[10px] overflow-hidden shadow-2xl">
+      <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-xs">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-[#0B0F19] text-cyan-300 uppercase font-mono text-[11px] border-b border-white/10">
+            <thead className="bg-slate-50 text-slate-700 uppercase font-mono text-[11px] border-b border-slate-200">
               <tr>
                 <th className="py-3 px-4">Ref ID</th>
                 <th className="py-3 px-4">Team Leader</th>
@@ -239,7 +229,7 @@ const AdminDashboard = () => {
                 <th className="py-3 px-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/[0.06] text-slate-300">
+            <tbody className="divide-y divide-slate-100 text-slate-700">
               {isLoading ? (
                 <tr>
                   <td colSpan="9" className="py-10 text-center">
@@ -248,23 +238,23 @@ const AdminDashboard = () => {
                 </tr>
               ) : registrations.length === 0 ? (
                 <tr>
-                  <td colSpan="9" className="py-10 text-center text-slate-400">
+                  <td colSpan="9" className="py-10 text-center text-slate-500">
                     No registrations found matching the specified search parameters.
                   </td>
                 </tr>
               ) : (
                 registrations.map((reg) => (
-                  <tr key={reg._id} className="hover:bg-white/[0.03] transition-colors">
-                    <td className="py-3 px-4 font-mono font-bold text-cyan-400">
+                  <tr key={reg._id} className="hover:bg-slate-50/70 transition-colors">
+                    <td className="py-3 px-4 font-mono font-bold text-slate-900">
                       {reg.registrationId}
                     </td>
                     <td className="py-3 px-4">
-                      <div className="font-bold text-white">
+                      <div className="font-bold text-slate-900">
                         {reg.participantName}
                       </div>
-                      <div className="text-[11px] text-slate-400 font-mono">{reg.email}</div>
+                      <div className="text-[11px] text-slate-500 font-mono">{reg.email}</div>
                     </td>
-                    <td className="py-3 px-4 font-semibold text-slate-200 max-w-xs truncate">
+                    <td className="py-3 px-4 font-semibold text-slate-800 max-w-xs truncate">
                       {reg.projectName}
                     </td>
                     <td className="py-3 px-4">
@@ -275,7 +265,7 @@ const AdminDashboard = () => {
                     <td className="py-3 px-4 font-mono font-medium">
                       {reg.teamSize} {reg.teamSize === 1 ? 'Solo' : 'Mbrs'}
                     </td>
-                    <td className="py-3 px-4 text-slate-400 max-w-xs truncate">
+                    <td className="py-3 px-4 text-slate-600 max-w-xs truncate">
                       {reg.collegeName}
                     </td>
                     <td className="py-3 px-4">
@@ -285,7 +275,7 @@ const AdminDashboard = () => {
                             href={reg.pptLink}
                             target="_blank"
                             rel="noreferrer"
-                            className="text-cyan-400 hover:text-cyan-300 font-mono text-[11px] underline"
+                            className="text-slate-900 hover:underline font-mono text-[11px]"
                             title="PPT Link"
                           >
                             PPT
@@ -296,7 +286,7 @@ const AdminDashboard = () => {
                             href={reg.prototypeLink}
                             target="_blank"
                             rel="noreferrer"
-                            className="text-cyan-400 hover:text-cyan-300 font-mono text-[11px] underline"
+                            className="text-slate-900 hover:underline font-mono text-[11px]"
                             title="Code Link"
                           >
                             Code
@@ -304,7 +294,7 @@ const AdminDashboard = () => {
                         )}
                       </div>
                     </td>
-                    <td className="py-3 px-4 text-[11px] text-slate-400 font-mono whitespace-nowrap">
+                    <td className="py-3 px-4 text-[11px] text-slate-500 font-mono whitespace-nowrap">
                       {new Date(reg.submittedAt || reg.createdAt || Date.now()).toLocaleDateString()}
                     </td>
                     <td className="py-3 px-4 text-right">
@@ -312,7 +302,7 @@ const AdminDashboard = () => {
                         <button
                           type="button"
                           onClick={() => setSelectedReg(reg)}
-                          className="p-1.5 text-slate-400 hover:text-white hover:bg-white/10 rounded-[4px] transition-colors cursor-pointer"
+                          className="p-1.5 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
                           title="View Details"
                         >
                           <Eye className="w-4 h-4" />
@@ -320,7 +310,7 @@ const AdminDashboard = () => {
                         <button
                           type="button"
                           onClick={() => setDeletingId(reg.registrationId)}
-                          className="p-1.5 text-rose-400 hover:bg-rose-500/10 rounded-[4px] transition-colors cursor-pointer"
+                          className="p-1.5 text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
                           title="Delete Registration"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -335,13 +325,13 @@ const AdminDashboard = () => {
         </div>
 
         {/* Pagination controls */}
-        <div className="p-4 border-t border-white/10 flex items-center justify-between text-xs text-slate-400 bg-[#0B0F19]">
+        <div className="p-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500 bg-slate-50/50">
           <div>
             Displaying{' '}
-            <strong className="text-white font-semibold">
+            <strong className="text-slate-900 font-semibold">
               {registrations.length}
             </strong>{' '}
-            of <strong className="text-white">{pagination.total}</strong> total entries
+            of <strong className="text-slate-900">{pagination.total}</strong> total entries
           </div>
 
           <div className="flex items-center gap-2">
@@ -354,7 +344,7 @@ const AdminDashboard = () => {
             >
               <ChevronLeft className="w-4 h-4" />
             </Button>
-            <span className="font-mono text-cyan-300">
+            <span className="font-mono text-slate-700">
               Page {pagination.page} of {pagination.totalPages || 1}
             </span>
             <Button
@@ -378,64 +368,64 @@ const AdminDashboard = () => {
           title={`Entry Details: ${selectedReg.registrationId}`}
           maxWidth="max-w-2xl"
         >
-          <div className="space-y-5 text-xs text-slate-300">
-            <div className="grid grid-cols-2 gap-4 pb-4 border-b border-white/10">
+          <div className="space-y-5 text-xs text-slate-700">
+            <div className="grid grid-cols-2 gap-4 pb-4 border-b border-slate-100">
               <div>
-                <span className="text-[10px] uppercase font-bold text-slate-400 font-mono">Project Title</span>
-                <p className="text-sm font-bold text-white mt-0.5">{selectedReg.projectName}</p>
+                <span className="text-[10px] uppercase font-bold text-slate-500 font-mono">Project Title</span>
+                <p className="text-sm font-bold text-slate-900 mt-0.5">{selectedReg.projectName}</p>
               </div>
               <div>
-                <span className="text-[10px] uppercase font-bold text-slate-400 font-mono">Domain / Track</span>
-                <p className="font-semibold text-cyan-300 mt-0.5">{selectedReg.domain}</p>
+                <span className="text-[10px] uppercase font-bold text-slate-500 font-mono">Domain / Track</span>
+                <p className="font-semibold text-slate-900 mt-0.5">{selectedReg.domain}</p>
               </div>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pb-4 border-b border-white/10">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pb-4 border-b border-slate-100">
               <div>
-                <span className="text-[10px] uppercase font-bold text-slate-400 font-mono">Team Leader</span>
-                <p className="font-semibold text-white mt-0.5">{selectedReg.participantName}</p>
-                <p className="font-mono text-[11px] text-cyan-400">{selectedReg.email}</p>
+                <span className="text-[10px] uppercase font-bold text-slate-500 font-mono">Team Leader</span>
+                <p className="font-semibold text-slate-900 mt-0.5">{selectedReg.participantName}</p>
+                <p className="font-mono text-[11px] text-slate-600">{selectedReg.email}</p>
               </div>
               <div>
-                <span className="text-[10px] uppercase font-bold text-slate-400 font-mono">Contact Number</span>
-                <p className="font-mono text-slate-200 mt-0.5">{selectedReg.mobileNumber}</p>
+                <span className="text-[10px] uppercase font-bold text-slate-500 font-mono">Contact Number</span>
+                <p className="font-mono text-slate-800 mt-0.5">{selectedReg.mobileNumber}</p>
               </div>
               <div>
-                <span className="text-[10px] uppercase font-bold text-slate-400 font-mono">Institution</span>
-                <p className="font-medium text-white mt-0.5">{selectedReg.collegeName}</p>
-                <p className="text-[11px] text-slate-400">{selectedReg.course} &bull; {selectedReg.branch} ({selectedReg.yearOfStudy})</p>
+                <span className="text-[10px] uppercase font-bold text-slate-500 font-mono">Institution</span>
+                <p className="font-medium text-slate-900 mt-0.5">{selectedReg.collegeName}</p>
+                <p className="text-[11px] text-slate-500">{selectedReg.course} &bull; {selectedReg.branch} ({selectedReg.yearOfStudy})</p>
               </div>
             </div>
 
             {/* Team Roster */}
             <div>
-              <span className="text-[10px] uppercase font-bold text-cyan-400 font-mono block mb-2">
+              <span className="text-[10px] uppercase font-bold text-slate-900 font-mono block mb-2">
                 Team Roster ({selectedReg.teamSize} Member{selectedReg.teamSize > 1 ? 's' : ''})
               </span>
-              <div className="bg-[#0B0F19] rounded-[8px] p-3 space-y-2 border border-white/10">
+              <div className="bg-slate-50 rounded-xl p-3 space-y-2 border border-slate-200">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="font-bold text-white">{selectedReg.participantName} (Leader)</span>
-                  <span className="font-mono text-cyan-300">{selectedReg.email}</span>
+                  <span className="font-bold text-slate-900">{selectedReg.participantName} (Leader)</span>
+                  <span className="font-mono text-slate-700">{selectedReg.email}</span>
                 </div>
                 {selectedReg.teamMembers && selectedReg.teamMembers.map((m, idx) => (
-                  <div key={idx} className="flex items-center justify-between text-xs border-t border-white/[0.08] pt-1.5">
-                    <span className="text-slate-300">Member {idx + 2}: {m.name}</span>
-                    <span className="font-mono text-slate-400">{m.email}</span>
+                  <div key={idx} className="flex items-center justify-between text-xs border-t border-slate-200 pt-1.5">
+                    <span className="text-slate-700">Member {idx + 2}: {m.name}</span>
+                    <span className="font-mono text-slate-600">{m.email}</span>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Deliverables */}
-            <div className="space-y-2 pt-2 border-t border-white/10">
-              <span className="text-[10px] uppercase font-bold text-slate-400 font-mono block">Submission Links</span>
+            <div className="space-y-2 pt-2 border-t border-slate-100">
+              <span className="text-[10px] uppercase font-bold text-slate-500 font-mono block">Submission Links</span>
               <div className="flex flex-wrap gap-3">
                 {selectedReg.pptLink && (
                   <a
                     href={selectedReg.pptLink}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#0B0F19] border border-white/10 rounded-[6px] font-mono text-xs text-cyan-400 hover:text-cyan-300 hover:border-cyan-500/40 transition-colors"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg font-mono text-xs text-slate-900 hover:bg-slate-100 transition-colors"
                   >
                     <span>Presentation Deck</span>
                     <ExternalLink className="w-3.5 h-3.5" />
@@ -446,7 +436,7 @@ const AdminDashboard = () => {
                     href={selectedReg.prototypeLink}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#0B0F19] border border-white/10 rounded-[6px] font-mono text-xs text-cyan-400 hover:text-cyan-300 hover:border-cyan-500/40 transition-colors"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg font-mono text-xs text-slate-900 hover:bg-slate-100 transition-colors"
                   >
                     <span>Prototype Repository</span>
                     <ExternalLink className="w-3.5 h-3.5" />
@@ -457,7 +447,7 @@ const AdminDashboard = () => {
                     href={selectedReg.demoVideoLink}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#0B0F19] border border-white/10 rounded-[6px] font-mono text-xs text-cyan-400 hover:text-cyan-300 hover:border-cyan-500/40 transition-colors"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg font-mono text-xs text-slate-900 hover:bg-slate-100 transition-colors"
                   >
                     <span>Demo Video</span>
                     <ExternalLink className="w-3.5 h-3.5" />
@@ -487,13 +477,13 @@ const AdminDashboard = () => {
           title="Confirm Registration Removal"
           maxWidth="max-w-md"
         >
-          <div className="space-y-4 text-xs text-slate-300">
-            <div className="p-3 bg-rose-950/40 border border-rose-500/40 rounded-[8px] flex items-start gap-2.5">
-              <AlertTriangle className="w-5 h-5 text-rose-400 shrink-0 mt-0.5" />
+          <div className="space-y-4 text-xs text-slate-700">
+            <div className="p-3 bg-rose-50 border border-rose-200 rounded-xl flex items-start gap-2.5">
+              <AlertTriangle className="w-5 h-5 text-rose-600 shrink-0 mt-0.5" />
               <div>
-                <p className="font-bold text-rose-300">Permanent Record Deletion</p>
-                <p className="text-rose-200/80 mt-0.5">
-                  Are you certain you want to remove registration <strong className="font-mono text-white">{deletingId}</strong>? This action cannot be undone.
+                <p className="font-bold text-rose-800">Permanent Record Deletion</p>
+                <p className="text-rose-700 mt-0.5">
+                  Are you certain you want to remove registration <strong className="font-mono text-slate-900">{deletingId}</strong>? This action cannot be undone.
                 </p>
               </div>
             </div>

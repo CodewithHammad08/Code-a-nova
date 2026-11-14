@@ -21,11 +21,13 @@ const Card = ({
   return (
     <div
       className={[
-        'bg-[#0F172A]/80 backdrop-blur-md rounded-[10px] overflow-hidden text-slate-100',
-        bordered ? 'border border-white/10' : '',
-        elevated ? 'shadow-[0_12px_32px_rgba(0,0,0,0.45)]' : 'shadow-md',
+        'bg-white rounded-xl overflow-hidden text-slate-900 transition-all duration-200',
+        bordered ? 'border border-slate-200/90' : '',
+        elevated
+          ? 'shadow-[0_10px_25px_-5px_rgba(15,23,42,0.08),0_8px_10px_-6px_rgba(15,23,42,0.04)]'
+          : 'shadow-[0_1px_3px_rgba(15,23,42,0.04),0_1px_2px_rgba(15,23,42,0.02)]',
         hover
-          ? 'transition-all duration-300 hover:shadow-[0_16px_40px_rgba(56,189,248,0.12)] hover:border-cyan-500/40 hover:-translate-y-1 cursor-pointer'
+          ? 'hover:border-slate-300 hover:shadow-[0_12px_28px_-4px_rgba(15,23,42,0.08)] hover:-translate-y-0.5 cursor-pointer'
           : '',
         className,
       ]
@@ -34,11 +36,11 @@ const Card = ({
       {...props}
     >
       {header && (
-        <div className="border-b border-white/10 px-6 py-4 bg-[#131C2E]/90">{header}</div>
+        <div className="border-b border-slate-100 px-6 py-4 bg-slate-50/70 font-semibold">{header}</div>
       )}
       <div className={paddingMap[padding] ?? paddingMap.md}>{children}</div>
       {footer && (
-        <div className="border-t border-white/10 px-6 py-3.5 bg-[#131C2E]/90">{footer}</div>
+        <div className="border-t border-slate-100 px-6 py-3.5 bg-slate-50/70 text-sm text-slate-600">{footer}</div>
       )}
     </div>
   );

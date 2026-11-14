@@ -3,16 +3,16 @@
 @tailwind utilities;
 
 /* ============================================================
-   CODE-A-NOVA — HIGH-OCTANE CYBER/DARK DESIGN SYSTEM
-   Color palette
-     Obsidian Canvas:  #080C14 / #0B0F19
-     Card Surface:     #0F172A / #131C2E
-     Borders:          rgba(255, 255, 255, 0.08)
-     Neon Accent:      #38BDF8 (Electric Cyan - from logo)
-     Cyber Violet:     #6366F1 / #818CF8
-     Grand Gold:       #F59E0B / #FBBF24
-     Success:          #10B981
-     Error:            #EF4444
+   CODE-A-NOVA — NEO-ARCHITECTURAL LIGHT DESIGN SYSTEM
+   Color palette:
+     Canvas:          #F8FAFC (Luminous Slate-50)
+     Surface:         #FFFFFF (Pure Card Surface)
+     Borders:         #E2E8F0 (Subtle Slate-200 Hairline)
+     Ink Text:        #0F172A (Deep Obsidian Slate-900)
+     Muted Text:      #64748B (Slate-500)
+     Primary Solid:   #0F172A (Deep Sharp Monolith)
+     Unique Accent:   #059669 (Emerald Core) / #D97706 (Amber Accent)
+     NO BLUE GRADIENTS ANYWHERE.
    ============================================================ */
 
 /* ----------------------------------------------------------
@@ -22,18 +22,23 @@
   html {
     font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont,
       'Segoe UI', Roboto, sans-serif;
-    background-color: #080C14;
-    color: #E2E8F0;
+    background-color: #F8FAFC;
+    color: #0F172A;
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
   }
 
+  body {
+    background-color: #F8FAFC;
+    color: #0F172A;
+  }
+
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Manrope', 'Inter', system-ui, sans-serif;
-    color: #FFFFFF;
-    letter-spacing: -0.02em;
+    font-family: 'Space Grotesk', 'Manrope', 'Inter', system-ui, sans-serif;
+    color: #0F172A;
+    letter-spacing: -0.03em;
   }
 
   /* Responsive base type scale */
@@ -43,121 +48,63 @@
   h4 { font-size: clamp(1rem, 1.5vw, 1.25rem);   line-height: 1.4; font-weight: 600; }
 
   a {
-    color: #38BDF8;
+    color: #0F172A;
     text-decoration: none;
-    transition: all 0.2s ease;
+    transition: all 0.15s ease;
   }
-  a:hover { color: #7DD3FC; }
+  a:hover {
+    color: #059669;
+  }
 
   *:focus-visible {
-    outline: 2px solid #38BDF8;
+    outline: 2px solid #0F172A;
     outline-offset: 2px;
   }
 }
 
 /* ----------------------------------------------------------
-   SCROLLBAR STYLING
+   SCROLLBAR STYLING (LIGHT THEME)
    ---------------------------------------------------------- */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #080C14;
+  background: #F8FAFC;
 }
 ::-webkit-scrollbar-thumb {
-  background: #1E293B;
+  background: #CBD5E1;
   border-radius: 9999px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid #F1F5F9;
   transition: background 0.2s ease;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background: #94A3B8;
 }
-/* Firefox */
 * {
   scrollbar-width: thin;
-  scrollbar-color: #1E293B #080C14;
+  scrollbar-color: #CBD5E1 #F8FAFC;
 }
 
 /* Selection */
 ::selection {
-  background-color: rgba(56, 189, 248, 0.25);
-  color: #F0F9FF;
+  background-color: #0F172A;
+  color: #FFFFFF;
 }
 
 /* ----------------------------------------------------------
-   BACKGROUND PATTERN & GLOW UTILITIES
+   CLEAN LIGHT BACKGROUND PATTERN
    ---------------------------------------------------------- */
 .bg-tech-grid {
-  background-size: 36px 36px;
+  background-size: 32px 32px;
   background-image:
-    linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+    linear-gradient(to right, rgba(15, 23, 42, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(15, 23, 42, 0.04) 1px, transparent 1px);
 }
 
 .bg-tech-dots {
   background-size: 24px 24px;
-  background-image: radial-gradient(rgba(56, 189, 248, 0.12) 1px, transparent 1px);
-}
-
-.bg-dark-grid {
-  background-size: 32px 32px;
-  background-image:
-    linear-gradient(to right, rgba(56, 189, 248, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(56, 189, 248, 0.04) 1px, transparent 1px);
-}
-
-/* Ambient glow orbs */
-.ambient-glow-cyan {
-  position: absolute;
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(circle, rgba(56, 189, 248, 0.14) 0%, rgba(99, 102, 241, 0.04) 50%, transparent 70%);
-  filter: blur(80px);
-  pointer-events: none;
-}
-
-.ambient-glow-indigo {
-  position: absolute;
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
-  filter: blur(80px);
-  pointer-events: none;
-}
-
-.ambient-glow-gold {
-  position: absolute;
-  width: 450px;
-  height: 450px;
-  background: radial-gradient(circle, rgba(245, 158, 11, 0.14) 0%, transparent 70%);
-  filter: blur(70px);
-  pointer-events: none;
-}
-
-/* Shimmer animation utility */
-@keyframes shimmerKeyframes {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(200%); }
-}
-
-.animate-shimmer {
-  position: relative;
-  overflow: hidden;
-}
-.animate-shimmer::after {
-  content: '';
-  position: absolute;
-  top: 0; right: 0; bottom: 0; left: 0;
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.15) 50%,
-    rgba(255, 255, 255, 0) 100%
-  );
-  transform: translateX(-100%);
-  animation: shimmerKeyframes 2.5s infinite;
+  background-image: radial-gradient(rgba(15, 23, 42, 0.08) 1px, transparent 1px);
 }
 
 /* ----------------------------------------------------------
@@ -167,259 +114,63 @@
 
   /* ---- Card hover ---------------------------------------- */
   .card-hover {
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.25s ease, box-shadow 0.25s ease;
     will-change: transform, box-shadow;
   }
   .card-hover:hover {
-    transform: translateY(-3px);
-    border-color: rgba(56, 189, 248, 0.4);
-    box-shadow:
-      0 12px 32px -4px rgba(56, 189, 248, 0.15),
-      0 4px 12px rgba(0, 0, 0, 0.4);
+    transform: translateY(-2px);
+    border-color: #94A3B8;
+    box-shadow: 0 12px 28px -4px rgba(15, 23, 42, 0.08), 0 4px 10px rgba(0, 0, 0, 0.03);
   }
 
   /* ---- Focus ring ---------------------------------------- */
   .focus-ring {
     outline: none;
-    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.35);
+    box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.15);
   }
 
   /* ---- Input focus --------------------------------------- */
   .input-focus {
-    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
   }
   .input-focus:focus {
-    border-color: #38BDF8;
-    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25);
+    border-color: #0F172A;
+    box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.10);
     outline: none;
   }
 
-  /* ---- Glass effect -------------------------------------- */
-  .glass-effect {
-    background: rgba(15, 23, 42, 0.8);
-    backdrop-filter: blur(16px) saturate(1.4);
-    -webkit-backdrop-filter: blur(16px) saturate(1.4);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+  /* ---- Floating Glass Navbar ----------------------------- */
+  .floating-navbar {
+    background: rgba(255, 255, 255, 0.90);
+    backdrop-filter: blur(14px) saturate(1.6);
+    -webkit-backdrop-filter: blur(14px) saturate(1.6);
+    border: 1px solid rgba(226, 232, 240, 0.95);
+    box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.06), 0 4px 12px rgba(0, 0, 0, 0.02);
   }
-
-  /* ---- Cyan text treatment ------------------------------- */
-  .text-gradient-cyan {
-    background: linear-gradient(135deg, #FFFFFF 0%, #BAE6FD 50%, #38BDF8 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    color: #FFFFFF;
-  }
-
-  .text-gradient-gold {
-    background: linear-gradient(135deg, #FEF08A 0%, #F59E0B 60%, #D97706 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    color: #F59E0B;
-  }
-
-  /* ---- Skeleton pulse ------------------------------------ */
-  .skeleton-pulse {
-    background: linear-gradient(
-      90deg,
-      #1E293B 25%,
-      #334155 50%,
-      #1E293B 75%
-    );
-    background-size: 200% 100%;
-    animation: skeletonPulse 1.6s ease-in-out infinite;
-    border-radius: 4px;
-  }
-
-  /* ---- Badge pulse --------------------------------------- */
-  .badge-pulse {
-    position: relative;
-  }
-  .badge-pulse::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    animation: badgePulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  }
-  .badge-pulse.badge-success::before { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.6); }
-  .badge-pulse.badge-error::before   { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6); }
-  .badge-pulse.badge-accent::before  { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.6); }
 
   /* ---- Page transition ----------------------------------- */
   .page-transition {
     animation: fadeIn 0.25s ease forwards;
   }
-
-  /* ---- Responsive typography utilities ------------------- */
-  .text-display-xl {
-    font-family: 'Manrope', 'Inter', system-ui, sans-serif;
-    font-size: clamp(2.5rem, 6vw, 4rem);
-    font-weight: 800;
-    line-height: 1.1;
-    letter-spacing: -0.025em;
-    color: #17243A;
-  }
-  .text-display-lg {
-    font-family: 'Manrope', 'Inter', system-ui, sans-serif;
-    font-size: clamp(2rem, 4.5vw, 3rem);
-    font-weight: 800;
-    line-height: 1.15;
-    letter-spacing: -0.02em;
-    color: #17243A;
-  }
-  .text-display-md {
-    font-family: 'Manrope', 'Inter', system-ui, sans-serif;
-    font-size: clamp(1.5rem, 3vw, 2.25rem);
-    font-weight: 700;
-    line-height: 1.2;
-    letter-spacing: -0.015em;
-    color: #17243A;
-  }
-  .text-body-lg  { font-size: 1.125rem; line-height: 1.75; }
-  .text-body-sm  { font-size: 0.875rem; line-height: 1.6;  }
-  .text-label    { font-size: 0.75rem;  line-height: 1.4; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; color: #6B7280; }
-  .text-mono     { font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace; font-size: 0.875em; }
-
 }
 
 /* ----------------------------------------------------------
-   ANIMATION CLASSES (outside @layer so they're always present)
+   ANIMATIONS
    ---------------------------------------------------------- */
+@keyframes marquee {
+  0%   { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
 
-/* Entry animations */
-.animate-fadeIn      { animation: fadeIn      0.4s ease both; }
-.animate-slideUp     { animation: slideUp     0.4s ease both; }
-.animate-slideInLeft { animation: slideInLeft 0.4s ease both; }
-.animate-slideInRight{ animation: slideInRight 0.4s ease both; }
+.animate-marquee {
+  animation: marquee 28s linear infinite;
+}
 
-/* Stagger delays */
-.stagger-1 { animation-delay: 0.05s; }
-.stagger-2 { animation-delay: 0.10s; }
-.stagger-3 { animation-delay: 0.18s; }
-.stagger-4 { animation-delay: 0.28s; }
-.stagger-5 { animation-delay: 0.40s; }
+.animate-fadeIn {
+  animation: fadeIn 0.35s ease both;
+}
 
-/* ----------------------------------------------------------
-   KEYFRAMES
-   ---------------------------------------------------------- */
 @keyframes fadeIn {
   from { opacity: 0; }
   to   { opacity: 1; }
-}
-
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes slideInLeft {
-  from { opacity: 0; transform: translateX(-20px); }
-  to   { opacity: 1; transform: translateX(0); }
-}
-
-@keyframes slideInRight {
-  from { opacity: 0; transform: translateX(20px); }
-  to   { opacity: 1; transform: translateX(0); }
-}
-
-@keyframes skeletonPulse {
-  0%   { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
-
-@keyframes badgePulse {
-  0%   { transform: scale(1);    opacity: 0.8; }
-  70%  { transform: scale(1.9);  opacity: 0;   }
-  100% { transform: scale(1.9);  opacity: 0;   }
-}
-
-/* ----------------------------------------------------------
-   PRINT STYLES — Registration Pass
-   ---------------------------------------------------------- */
-@media print {
-  /* Hide everything by default */
-  body * { visibility: hidden; }
-
-  /* Show only the pass */
-  #printable-pass,
-  #printable-pass * { visibility: visible; }
-
-  #printable-pass {
-    position: fixed;
-    inset: 0;
-    width: 100%;
-    height: auto;
-    margin: 0;
-    padding: 32px 40px;
-    box-shadow: none !important;
-    border: 2px solid #17243A;
-    border-radius: 0;
-    background: #ffffff !important;
-    color: #20242B !important;
-    font-family: 'Inter', system-ui, sans-serif;
-  }
-
-  /* Pass header */
-  #printable-pass .pass-title {
-    font-family: 'Manrope', 'Inter', system-ui, sans-serif;
-    font-size: 22pt;
-    font-weight: 800;
-    color: #17243A !important;
-    margin-bottom: 8pt;
-  }
-  #printable-pass .pass-accent {
-    color: #D6A64F !important;
-  }
-
-  /* Divider */
-  #printable-pass .pass-divider {
-    border: none;
-    border-top: 2px solid #17243A;
-    margin: 16pt 0;
-  }
-
-  /* Info rows */
-  #printable-pass .pass-label {
-    font-size: 7pt;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: #6B7280 !important;
-    font-weight: 600;
-    margin-bottom: 2pt;
-  }
-  #printable-pass .pass-value {
-    font-size: 12pt;
-    font-weight: 600;
-    color: #20242B !important;
-    margin-bottom: 10pt;
-  }
-
-  /* QR / barcode area */
-  #printable-pass .pass-qr {
-    border: 1px solid #E5E7EB;
-    padding: 8pt;
-    display: inline-block;
-  }
-
-  /* Footer */
-  #printable-pass .pass-footer {
-    margin-top: 20pt;
-    font-size: 7pt;
-    color: #6B7280 !important;
-    text-align: center;
-    border-top: 1px solid #E5E7EB;
-    padding-top: 8pt;
-  }
-
-  /* Suppress nav, buttons, backgrounds in print */
-  nav, aside, header, footer,
-  button:not(.pass-action),
-  .no-print { display: none !important; }
-
-  @page {
-    size: A4 portrait;
-    margin: 10mm;
-  }
 }
